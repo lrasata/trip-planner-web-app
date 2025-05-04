@@ -3,6 +3,7 @@ import {Box, Container, ThemeProvider} from "@mui/material";
 import theme from "./theme.ts";
 import CreateTripContainer from "./containers/CreateTripContainer.tsx";
 import MainNavigationContainer from "./containers/MainNavigationContainer.tsx";
+import PlannedTripContainer from "./containers/PlannedTripContainer.tsx";
 
 function App() {
 
@@ -11,6 +12,7 @@ function App() {
         <Container maxWidth="lg">
             <MainNavigationContainer />
             <Box sx={{ my: 4}}><Brand /></Box>
+            <PlannedTripContainer />
             <CreateTripContainer />
         </Container>
     </ThemeProvider>

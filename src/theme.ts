@@ -28,6 +28,11 @@ const themeOptions: ThemeOptions = {
             fontWeight: 600,
             color: '#4AA397',
         },
+        h3: {
+            fontSize: '1.50rem',
+            fontWeight: 600,
+            color: '#4AA397',
+        },
         body1: {
             fontSize: '1rem',
             color: '#333',
@@ -36,6 +41,24 @@ const themeOptions: ThemeOptions = {
     shape: {
         borderRadius: 12,
     },
+    components: {
+        MuiButton: {
+            styleOverrides: {
+                root: {
+                    borderRadius: '20px',
+                    padding: '8px 16px',
+                },
+            },
+        },
+        MuiCard: {
+            styleOverrides: {
+                root: {
+                    borderRadius: '16px',
+                    boxShadow: '0px 10px 15px rgba(0,0,0,0.15)',
+                },
+            },
+        }
+    }
 };
 
 // Create and export the theme
