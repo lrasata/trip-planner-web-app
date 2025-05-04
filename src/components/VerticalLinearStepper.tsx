@@ -32,7 +32,7 @@ const VerticalLinearStepper = ( { steps } : VerticalLinearStepperProps ) => {
     };
 
     return (
-        <Box sx={{ maxWidth: isMobile ? '100%': '50%', my: 3 }}>
+        <Box sx={{ width: isMobile ? '100%' : '400px', my: 2 }}>
             <Stepper activeStep={activeStep} orientation="vertical">
                 {steps.map((step, index) => (
                     <Step key={step.label}>

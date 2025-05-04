@@ -19,12 +19,12 @@ const themeOptions: ThemeOptions = {
     typography: {
         fontFamily: '"Baloo 2", "Poppins", "Quicksand", sans-serif',
         h1: {
-            fontSize: '3rem',
+            fontSize: '2rem',
             fontWeight: 700,
             color: '#4AA397',
         },
         h2: {
-            fontSize: '2.25rem',
+            fontSize: '1.75rem',
             fontWeight: 600,
             color: '#4AA397',
         },

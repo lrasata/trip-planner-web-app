@@ -1,4 +1,4 @@
-import logo from '../assets/trip-planner-logo.png';
+import logo from '/trip-planner-logo.png';
 import {Box, styled} from "@mui/material";
 
 const StyledBox = styled(Box)`
@@ -8,7 +8,7 @@ const StyledBox = styled(Box)`
     align-items: center;
 `;
 
-const Brand = ({height = 300}) => {
+const Brand = ({height = 350}) => {
     return <StyledBox>
         <img src={logo} alt="Trip planner logo" height={height}/>
     </StyledBox>

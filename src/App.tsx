@@ -1,14 +1,16 @@
 import Brand from "./components/Brand.tsx";
-import {Container, ThemeProvider} from "@mui/material";
+import {Box, Container, ThemeProvider} from "@mui/material";
 import theme from "./theme.ts";
 import CreateTripContainer from "./containers/CreateTripContainer.tsx";
+import MainNavigationContainer from "./containers/MainNavigationContainer.tsx";
 
 function App() {
 
   return (
     <ThemeProvider theme={theme}>
         <Container maxWidth="lg">
-            <Brand />
+            <MainNavigationContainer />
+            <Box sx={{ my: 4}}><Brand /></Box>
             <CreateTripContainer />
         </Container>
     </ThemeProvider>
