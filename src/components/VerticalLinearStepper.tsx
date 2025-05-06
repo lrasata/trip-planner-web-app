@@ -12,15 +12,23 @@ import {useMediaQuery, useTheme} from "@mui/material";
 
 interface VerticalLinearStepperProps {
     steps: IStep[];
+    handleOnClickNextStep: () => void;
+    handleOnSubmitStep: () => void;
 }
-const VerticalLinearStepper = ( { steps } : VerticalLinearStepperProps ) => {
+const VerticalLinearStepper = ( { steps, handleOnClickNextStep, handleOnSubmitStep } : VerticalLinearStepperProps ) => {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
     const [activeStep, setActiveStep] = useState(0);
 
     const handleNext = () => {
+        if (activeStep === steps.length - 1) {
+            handleOnSubmitStep();
+        } else {
+            handleOnClickNextStep();
+        }
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
+
     };
 
     const handleBack = () => {

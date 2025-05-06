@@ -5,3 +5,13 @@ export interface IStep {
     description?: string;
     component?: ReactElement
 }
+
+export interface ITrip {
+    name: string;
+    description?: string;
+    city?: string;
+    region?: string;
+    country?: string;
+    departureDate?: string;
+    returnDate?: string;
+}

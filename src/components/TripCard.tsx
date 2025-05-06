@@ -1,18 +1,19 @@
-import {Box, Card, CardActionArea, CardContent} from "@mui/material";
+import {Card, CardActionArea, CardContent} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import IconWithLabel from "./IconWithLabel.tsx";
 import PlaceIcon from '@mui/icons-material/Place';
 import InsertInvitationIcon from '@mui/icons-material/InsertInvitation';
 import Stack from "@mui/material/Stack";
+import {ITrip} from "../types.ts";
 
-export interface ITripCardProps {
-    name: string;
-    description?: string;
-    location?: string;
-    departureDate?: string;
-    returnDate?: string;
-}
-const TripCard = ({ name, description, location , departureDate, returnDate}: ITripCardProps) => {
+const TripCard = ({
+                      name,
+                      description,
+                      city = '',
+                      region = '',
+                      country = '',
+                      departureDate,
+                      returnDate}: ITrip) => {
 
     return <Card>
         <CardActionArea
@@ -33,7 +34,7 @@ const TripCard = ({ name, description, location , departureDate, returnDate}: IT
                         departureDate && returnDate && (<IconWithLabel icon={<InsertInvitationIcon color="secondary"  />} label={`${departureDate} - ${returnDate}`} />)
                     }
                     {
-                        location && (<IconWithLabel icon={<PlaceIcon color="secondary" />} label={location} />)
+                        (city || region || country) && (<IconWithLabel icon={<PlaceIcon color="secondary" />} label={`${city} ${region} ${country}`} />)
                     }
                     {
                         description && (<Typography variant="body1" component="div" gutterBottom>{description}</Typography>)

@@ -7,7 +7,8 @@ const PlannedTripContainer = () => {
         <Typography variant="h2" gutterBottom color="textSecondary">Your planned trip</Typography>
         <TripCard name="Travel to vietnam"
                   description="exploring Asia"
-                  location="Hanoi, Vietnam"
+                  city="Hanoi"
+                  country="Vietnam"
                   departureDate="04/05/2025"
                   returnDate="04/05/2025"
         />
