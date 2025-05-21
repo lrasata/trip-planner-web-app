@@ -13,7 +13,8 @@ const TripCard = ({
                       region = '',
                       country = '',
                       departureDate,
-                      returnDate}: ITrip) => {
+                      returnDate
+                  }: ITrip) => {
 
     return <Card>
         <CardActionArea
@@ -27,17 +28,19 @@ const TripCard = ({
                 },
             }}
         >
-            <CardContent sx={{ height: '100%', padding: 3 }}>
-                <Stack direction="column" spacing={1}>
+            <CardContent sx={{height: '100%', padding: 2}}>
+                <Stack direction="column" spacing={1} sx={{ flexWrap: 'wrap', overflow: 'hidden' }}>
                     <Typography variant="h3" gutterBottom>{name}</Typography>
                     {
-                        departureDate && returnDate && (<IconWithLabel icon={<InsertInvitationIcon color="secondary"  />} label={`${departureDate} - ${returnDate}`} />)
+                        departureDate && returnDate && (<IconWithLabel icon={<InsertInvitationIcon color="secondary"/>}
+                                                                       label={`${departureDate} - ${returnDate}`}/>)
                     }
                     {
-                        (city || region || country) && (<IconWithLabel icon={<PlaceIcon color="secondary" />} label={`${city} ${region} ${country}`} />)
+                        (city || region || country) && (
+                            <IconWithLabel icon={<PlaceIcon color="secondary"/>} label={`${city} ${region} ${country}`}/>)
                     }
                     {
-                        description && (<Typography variant="body1" component="div" gutterBottom>{description}</Typography>)
+                        departureDate && (<Typography variant="body1">{description}</Typography>)
                     }
                 </Stack>
             </CardContent>

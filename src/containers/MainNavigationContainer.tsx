@@ -15,10 +15,11 @@ const navItems = [{
     title: 'Log out',
     url: '/log-out',
 }];
+
 const MainNavigationContainer = () => {
     const navigate = useNavigate();
 
-    const handleOnClickNavigate = (href: string)=> {
+    const handleOnClickNavigate = (href: string) => {
         navigate(href);
     }
 
@@ -27,7 +28,8 @@ const MainNavigationContainer = () => {
 
 
     return (
-        <DrawerAppBar appName={APP_NAME} navItems={navItems} handleOnClickNavigate={handleOnClickNavigate} handleOnClickLogout={handleOnClickLogout}/>
+        <DrawerAppBar appName={APP_NAME} navItems={navItems} handleOnClickNavigate={handleOnClickNavigate}
+                      handleOnClickLogout={handleOnClickLogout}/>
     );
 }
 

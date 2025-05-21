@@ -1,5 +1,4 @@
 import {Box, Button, styled} from "@mui/material";
-import axios from "axios";
 import VerticalLinearStepper from "../components/VerticalLinearStepper.tsx";
 import {IStep, ITrip} from "../types.ts";
 import TripNameAndDescriptionInputForm from "../components/TripNameAndDescriptionInputForm.tsx";
@@ -9,7 +8,7 @@ import TripDateInputForm from "../components/TripDateInputForm.tsx";
 import Typography from "@mui/material/Typography";
 import Dialog from "../components/Dialog.tsx";
 import {useContext, useState} from "react";
-import {CreateTripContext} from "../store/CreateTripContext.tsx";
+import {CreateTripContext} from "../store/context/CreateTripContext.tsx";
 import {API_BACKEND_URL} from "../constants/constants.ts";
 import { toast } from 'react-toastify';
 
@@ -92,15 +91,17 @@ const CreateTripContainer = () => {
 
     const handleOnSubmit = async () => {
         try {
-            await axios.post(
-                `${API_BACKEND_URL}/trips`,
-                {
+            await fetch(`${API_BACKEND_URL}/trips`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
                     name: editTrip.name,
                     description: editTrip.description,
                     departureLocation: `${editTrip.city} ${editTrip.region} ${editTrip.country}`,
-                },
-                { headers: {"Content-Type": "application/json"}}
-            );
+                })
+            })
             toast.success('Trip created successfully!');
         } catch (error) {
             console.error("Error creating trips:", error);

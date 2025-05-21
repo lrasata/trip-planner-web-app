@@ -1,5 +1,5 @@
 import {createContext, useReducer} from 'react';
-import {ITrip} from "../types.ts";
+import {ITrip} from "../../types.ts";
 
 
 export const CreateTripContext = createContext({
