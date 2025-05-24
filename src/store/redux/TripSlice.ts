@@ -29,6 +29,41 @@ export const fetchPlannedTrips = createAsyncThunk(
   },
 );
 
+export const createTrip = createAsyncThunk(
+  "trips/createTrip",
+  async (
+    arg: {
+      name?: string;
+      description?: string;
+      city?: string;
+      region?: string;
+      country?: string;
+    },
+    { rejectWithValue },
+  ) => {
+    try {
+      const response = await fetch(`${API_BACKEND_URL}/trips`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: arg.name,
+          description: arg.description,
+          departureLocation: `${arg.city} ${arg.region} ${arg.country}`,
+        }),
+      });
+      const data = await response.json();
+      return {
+        trip: data,
+      };
+    } catch (error) {
+      console.error("Error creating trip:", error);
+      return rejectWithValue("Oops unable to create trip");
+    }
+  },
+);
+
 const tripSlice = createSlice({
   name: "tasks",
   initialState: initialTripState,
@@ -43,6 +78,19 @@ const tripSlice = createSlice({
       state.plannedTrips = action.payload.plannedTrips;
     });
     builder.addCase(fetchPlannedTrips.rejected, (state, action) => {
+      state.isLoading = false;
+      // @ts-ignore
+      state.error = action.error.message;
+    });
+    builder.addCase(createTrip.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(createTrip.fulfilled, (state, action) => {
+      state.isLoading = false;
+      // @ts-ignore
+      state.plannedTrips = [...state.plannedTrips, action.payload.trip];
+    });
+    builder.addCase(createTrip.rejected, (state, action) => {
       state.isLoading = false;
       // @ts-ignore
       state.error = action.error.message;

@@ -9,8 +9,8 @@ import Typography from "@mui/material/Typography";
 import Dialog from "../components/Dialog.tsx";
 import { useContext, useState } from "react";
 import { CreateTripContext } from "../store/context/CreateTripContext.tsx";
-import { API_BACKEND_URL } from "../constants/constants.ts";
-import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { createTrip } from "../store/redux/TripSlice.ts";
 
 const StyledBox = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -20,15 +20,12 @@ const StyledBox = styled(Box)(({ theme }) => ({
   backgroundColor: theme.palette.background.default,
   paddingTop: theme.spacing(6),
   paddingBottom: theme.spacing(6),
-  width: "100vw",
+  maxWidth: "100vw",
   position: "relative",
-  left: "50%",
-  right: "50%",
-  marginLeft: "-50vw",
-  marginRight: "-50vw",
 }));
 
 const CreateTripContainer = () => {
+  const dispatch = useDispatch();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const {
     name,
@@ -75,7 +72,7 @@ const CreateTripContainer = () => {
         <TripLocationInputForm
           city={editTrip.city}
           country={editTrip.country}
-          region={editTrip.country}
+          region={editTrip.region}
           handleCityChange={(e) => handleEditTrip("city", e.target.value)}
           handleRegionChange={(e) => handleEditTrip("region", e.target.value)}
           handleCountryChange={(e) => handleEditTrip("country", e.target.value)}
@@ -107,23 +104,8 @@ const CreateTripContainer = () => {
   };
 
   const handleOnSubmit = async () => {
-    try {
-      await fetch(`${API_BACKEND_URL}/trips`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: editTrip.name,
-          description: editTrip.description,
-          departureLocation: `${editTrip.city} ${editTrip.region} ${editTrip.country}`,
-        }),
-      });
-      toast.success("Trip created successfully!");
-    } catch (error) {
-      console.error("Error creating trips:", error);
-      toast.error("Something went wrong!");
-    }
+    // @ts-ignore
+    dispatch(createTrip(editTrip));
   };
 
   return (

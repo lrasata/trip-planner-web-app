@@ -23,8 +23,8 @@ const PlannedTripContainer = () => {
       </Typography>
       {plannedTrips &&
         plannedTrips.length > 0 &&
-        plannedTrips.map((trip: ITrip) => (
-          <Box my={2}>
+        plannedTrips.map((trip: ITrip, index: number) => (
+          <Box my={2} key={index}>
             <TripCard {...trip} />
           </Box>
         ))}

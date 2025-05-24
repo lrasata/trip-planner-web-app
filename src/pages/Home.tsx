@@ -7,7 +7,7 @@ import Brand from "../components/Brand.tsx";
 const Home = () => {
   return (
     <CreateTripContextProvider>
-      <Box sx={{ my: 4 }}>
+      <Box my={4}>
         <Brand />
       </Box>
       <PlannedTripContainer />
