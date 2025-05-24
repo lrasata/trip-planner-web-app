@@ -4,6 +4,7 @@ import IconWithLabel from "./IconWithLabel.tsx";
 import PlaceIcon from "@mui/icons-material/Place";
 import InsertInvitationIcon from "@mui/icons-material/InsertInvitation";
 import { ITrip } from "../types.ts";
+import dayjs from "dayjs";
 
 const TripCard = ({
   name,
@@ -33,7 +34,7 @@ const TripCard = ({
           {departureDate && returnDate && (
             <IconWithLabel
               icon={<InsertInvitationIcon color="secondary" />}
-              label={`${departureDate} - ${returnDate}`}
+              label={`${dayjs(departureDate).format("DD/MM/YYYY")} - ${dayjs(returnDate).format("DD/MM/YYYY")}`}
             />
           )}
           {(city || region || country) && (

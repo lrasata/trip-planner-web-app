@@ -11,6 +11,8 @@ import { useContext, useState } from "react";
 import { CreateTripContext } from "../store/context/CreateTripContext.tsx";
 import { useDispatch } from "react-redux";
 import { createTrip } from "../store/redux/TripSlice.ts";
+import { Dayjs } from "dayjs";
+import { formatDate } from "../utils/utils.ts";
 
 const StyledBox = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -87,7 +89,18 @@ const CreateTripContainer = () => {
     {
       label: "Dates of departure and return",
       description: `You can update those information later`,
-      component: <TripDateInputForm />,
+      component: (
+        <TripDateInputForm
+          returnDate={editTrip.returnDate}
+          departureDate={editTrip.departureDate}
+          handleDepartureDateChange={(date: Dayjs | null) =>
+            handleEditTrip("departureDate", date ? formatDate(date) : "")
+          }
+          handleReturnDateChange={(date: Dayjs | null) =>
+            date && handleEditTrip("returnDate", date ? formatDate(date) : "")
+          }
+        />
+      ),
     },
   ];
 

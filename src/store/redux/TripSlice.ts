@@ -38,6 +38,8 @@ export const createTrip = createAsyncThunk(
       city?: string;
       region?: string;
       country?: string;
+      departureDate?: string;
+      returnDate?: string;
     },
     { rejectWithValue },
   ) => {
@@ -51,6 +53,8 @@ export const createTrip = createAsyncThunk(
           name: arg.name,
           description: arg.description,
           departureLocation: `${arg.city} ${arg.region} ${arg.country}`,
+          departureDate: `${arg.departureDate}`,
+          returnDate: `${arg.returnDate}`,
         }),
       });
       const data = await response.json();
