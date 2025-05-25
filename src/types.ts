@@ -9,9 +9,8 @@ export interface IStep {
 export interface ITrip {
   name: string;
   description?: string;
-  city?: string;
-  region?: string;
-  country?: string;
+  departureLocation?: string;
+  arrivalLocation?: string;
   departureDate?: string;
   returnDate?: string;
 }

@@ -35,9 +35,8 @@ export const createTrip = createAsyncThunk(
     arg: {
       name?: string;
       description?: string;
-      city?: string;
-      region?: string;
-      country?: string;
+      departureLocation?: string;
+      arrivalLocation?: string;
       departureDate?: string;
       returnDate?: string;
     },
@@ -52,7 +51,8 @@ export const createTrip = createAsyncThunk(
         body: JSON.stringify({
           name: arg.name,
           description: arg.description,
-          departureLocation: `${arg.city} ${arg.region} ${arg.country}`,
+          departureLocation: arg.departureLocation,
+          arrivalLocation: arg.arrivalLocation,
           departureDate: `${arg.departureDate}`,
           returnDate: `${arg.returnDate}`,
         }),

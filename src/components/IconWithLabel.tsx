@@ -1,20 +1,18 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import { Box, Typography } from "@mui/material";
 
 interface IconWithLabelProps {
-  icon: React.ReactNode;
-  label: string;
+  icon: ReactNode;
+  label: ReactNode;
 }
 
 const IconWithLabel: React.FC<IconWithLabelProps> = ({ icon, label }) => {
   return (
-    <Box display="flex" flexDirection="column" justifyContent="flex-end">
-      <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-        {icon}
-        <Typography variant="body1" color="textSecondary">
-          {label}
-        </Typography>
-      </Box>
+    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+      {icon}
+      <Typography variant="body1" color="textSecondary" sx={{ lineHeight: 1 }}>
+        {label}
+      </Typography>
     </Box>
   );
 };

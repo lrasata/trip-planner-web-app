@@ -4,9 +4,8 @@ import { ITrip } from "../../types.ts";
 export const CreateTripContext = createContext({
   name: "",
   description: "",
-  city: "",
-  region: "",
-  country: "",
+  departureLocation: "",
+  arrivalLocation: "",
   departureDate: "",
   returnDate: "",
   // @ts-ignore
@@ -31,10 +30,10 @@ export default function UpdateTripContextProvider({ children }) {
   const [contextState, contextDispatch] = useReducer(updateTripContextReducer, {
     name: "",
     description: "",
-    city: "",
-    region: "",
-    country: "",
+    departureLocation: "",
+    arrivalLocation: "",
     departureDate: "",
+    returnDate: "",
   });
 
   const handleUpdateTripContext = (trip: ITrip) => {
@@ -47,9 +46,8 @@ export default function UpdateTripContextProvider({ children }) {
   const ctxValue = {
     name: contextState.name,
     description: contextState.description,
-    city: contextState.city,
-    region: contextState.region,
-    country: contextState.country,
+    departureLocation: contextState.departureLocation,
+    arrivalLocation: contextState.arrivalLocation,
     departureDate: contextState.departureDate,
     returnDate: contextState.returnDate,
     updateTripContext: handleUpdateTripContext,

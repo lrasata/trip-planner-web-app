@@ -5,20 +5,16 @@ import PlaceIcon from "@mui/icons-material/Place";
 import { ChangeEvent } from "react";
 
 interface Props {
-  city?: string;
-  region?: string;
-  country?: string;
-  handleCityChange: (event: ChangeEvent<HTMLInputElement>) => void;
-  handleRegionChange: (event: ChangeEvent<HTMLInputElement>) => void;
-  handleCountryChange: (event: ChangeEvent<HTMLInputElement>) => void;
+  departureLocation?: string;
+  arrivalLocation?: string;
+  handleDepartureChange: (event: ChangeEvent<HTMLInputElement>) => void;
+  handleArrivalChange: (event: ChangeEvent<HTMLInputElement>) => void;
 }
 const TripLocationInputForm = ({
-  city = "",
-  region = "",
-  country = "",
-  handleCityChange,
-  handleRegionChange,
-  handleCountryChange,
+  departureLocation = "",
+  arrivalLocation = "",
+  handleDepartureChange,
+  handleArrivalChange,
 }: Props) => {
   return (
     <Stack spacing={3} sx={{ my: 3 }}>
@@ -30,9 +26,9 @@ const TripLocationInputForm = ({
             <PlaceIcon />
           </InputAdornment>
         }
-        placeholder="City"
-        value={city}
-        onChange={handleCityChange}
+        placeholder="Departure"
+        value={departureLocation}
+        onChange={handleDepartureChange}
       />
       <OutlinedInput
         id={`trip-region-input`}
@@ -42,21 +38,9 @@ const TripLocationInputForm = ({
             <PlaceIcon />
           </InputAdornment>
         }
-        placeholder="Region"
-        value={region}
-        onChange={handleRegionChange}
-      />
-      <OutlinedInput
-        id={`trip-country-input`}
-        key={`trip-country-input`}
-        startAdornment={
-          <InputAdornment position="start">
-            <PlaceIcon />
-          </InputAdornment>
-        }
-        placeholder="Country"
-        value={country}
-        onChange={handleCountryChange}
+        placeholder="Arrival"
+        value={arrivalLocation}
+        onChange={handleArrivalChange}
       />
     </Stack>
   );

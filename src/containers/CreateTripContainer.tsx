@@ -7,7 +7,7 @@ import TripParticipantInputForm from "../components/TripParticipantInputForm.tsx
 import TripDateInputForm from "../components/TripDateInputForm.tsx";
 import Typography from "@mui/material/Typography";
 import Dialog from "../components/Dialog.tsx";
-import { useContext, useState } from "react";
+import { ChangeEvent, useContext, useState } from "react";
 import { CreateTripContext } from "../store/context/CreateTripContext.tsx";
 import { useDispatch } from "react-redux";
 import { createTrip } from "../store/redux/TripSlice.ts";
@@ -32,9 +32,8 @@ const CreateTripContainer = () => {
   const {
     name,
     description,
-    city,
-    region,
-    country,
+    departureLocation,
+    arrivalLocation,
     departureDate,
     returnDate,
     updateTripContext,
@@ -42,9 +41,8 @@ const CreateTripContainer = () => {
   const [editTrip, setEditTrip] = useState<ITrip>({
     name,
     description,
-    city,
-    region,
-    country,
+    departureLocation,
+    arrivalLocation,
     departureDate,
     returnDate,
   });
@@ -53,6 +51,15 @@ const CreateTripContainer = () => {
     setEditTrip((prevState) => ({ ...prevState, [key]: value }));
   };
 
+  const handleDateChange = (key: string) => (date: Dayjs | null) => {
+    handleEditTrip(key, date ? formatDate(date) : "");
+  };
+
+  const handleInputChange =
+    (key: string) => (e: ChangeEvent<HTMLInputElement>) => {
+      handleEditTrip(key, e.target.value);
+    };
+
   const steps: IStep[] = [
     {
       label: "Name and description",
@@ -60,10 +67,8 @@ const CreateTripContainer = () => {
         <TripNameAndDescriptionInputForm
           name={editTrip.name}
           description={editTrip.description}
-          handleInputNameChange={(e) => handleEditTrip("name", e.target.value)}
-          handleInputDescriptionChange={(e) =>
-            handleEditTrip("description", e.target.value)
-          }
+          handleInputNameChange={handleInputChange("name")}
+          handleInputDescriptionChange={handleInputChange("description")}
         />
       ),
     },
@@ -72,12 +77,10 @@ const CreateTripContainer = () => {
       description: `You can update those information later`,
       component: (
         <TripLocationInputForm
-          city={editTrip.city}
-          country={editTrip.country}
-          region={editTrip.region}
-          handleCityChange={(e) => handleEditTrip("city", e.target.value)}
-          handleRegionChange={(e) => handleEditTrip("region", e.target.value)}
-          handleCountryChange={(e) => handleEditTrip("country", e.target.value)}
+          departureLocation={editTrip.departureLocation}
+          arrivalLocation={editTrip.arrivalLocation}
+          handleDepartureChange={handleInputChange("departureLocation")}
+          handleArrivalChange={handleInputChange("arrivalLocation")}
         />
       ),
     },
@@ -93,12 +96,8 @@ const CreateTripContainer = () => {
         <TripDateInputForm
           returnDate={editTrip.returnDate}
           departureDate={editTrip.departureDate}
-          handleDepartureDateChange={(date: Dayjs | null) =>
-            handleEditTrip("departureDate", date ? formatDate(date) : "")
-          }
-          handleReturnDateChange={(date: Dayjs | null) =>
-            date && handleEditTrip("returnDate", date ? formatDate(date) : "")
-          }
+          handleDepartureDateChange={handleDateChange("departureDate")}
+          handleReturnDateChange={handleDateChange("returnDate")}
         />
       ),
     },

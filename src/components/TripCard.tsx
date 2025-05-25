@@ -1,17 +1,18 @@
 import { Card, CardActionArea, CardContent } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import IconWithLabel from "./IconWithLabel.tsx";
-import PlaceIcon from "@mui/icons-material/Place";
+import FlightTakeoffIcon from "@mui/icons-material/FlightTakeoff";
+import FlightLandIcon from "@mui/icons-material/FlightLand";
 import InsertInvitationIcon from "@mui/icons-material/InsertInvitation";
 import { ITrip } from "../types.ts";
 import dayjs from "dayjs";
+import Stack from "@mui/material/Stack";
 
 const TripCard = ({
   name,
   description,
-  city = "",
-  region = "",
-  country = "",
+  departureLocation = "",
+  arrivalLocation = "",
   departureDate,
   returnDate,
 }: ITrip) => {
@@ -27,25 +28,45 @@ const TripCard = ({
           },
         }}
       >
-        <CardContent>
-          <Typography variant="h3" gutterBottom>
-            {name}
-          </Typography>
-          {departureDate && returnDate && (
-            <IconWithLabel
-              icon={<InsertInvitationIcon color="secondary" />}
-              label={`${dayjs(departureDate).format("DD/MM/YYYY")} - ${dayjs(returnDate).format("DD/MM/YYYY")}`}
-            />
-          )}
-          {(city || region || country) && (
-            <IconWithLabel
-              icon={<PlaceIcon color="secondary" />}
-              label={`${city} ${region} ${country}`}
-            />
-          )}
-          {description && (
-            <Typography variant="body1">{description}</Typography>
-          )}
+        <CardContent sx={{ padding: 3 }}>
+          <Stack direction="column" spacing={1}>
+            <Typography variant="h3" gutterBottom>
+              {name}
+            </Typography>
+            {description && (
+              <Typography variant="body1" gutterBottom>
+                {description}
+              </Typography>
+            )}
+            {departureDate && returnDate && (
+              <IconWithLabel
+                icon={
+                  <InsertInvitationIcon color="secondary" fontSize="small" />
+                }
+                label={`${dayjs(departureDate).format("DD MMMM  YYYY")} - ${dayjs(returnDate).format("DD MMMM YYYY")}`}
+              />
+            )}
+            {departureLocation && (
+              <IconWithLabel
+                icon={<FlightTakeoffIcon color="secondary" fontSize="small" />}
+                label={
+                  <>
+                    <strong>Departure:</strong> {departureLocation}
+                  </>
+                }
+              />
+            )}
+            {arrivalLocation && (
+              <IconWithLabel
+                icon={<FlightLandIcon color="secondary" fontSize="small" />}
+                label={
+                  <>
+                    <strong>Arrival:</strong> {arrivalLocation}
+                  </>
+                }
+              />
+            )}
+          </Stack>
         </CardContent>
       </CardActionArea>
     </Card>

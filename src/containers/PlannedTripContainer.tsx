@@ -24,7 +24,7 @@ const PlannedTripContainer = () => {
       {plannedTrips &&
         plannedTrips.length > 0 &&
         plannedTrips.map((trip: ITrip, index: number) => (
-          <Box my={2} key={index}>
+          <Box my={2} key={`${trip.name}-${index}`}>
             <TripCard {...trip} />
           </Box>
         ))}
