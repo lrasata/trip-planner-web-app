@@ -1,4 +1,4 @@
-import { Card, CardActionArea, CardContent } from "@mui/material";
+import { Box, Card, CardContent } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import IconWithLabel from "./IconWithLabel.tsx";
 import FlightTakeoffIcon from "@mui/icons-material/FlightTakeoff";
@@ -7,6 +7,8 @@ import InsertInvitationIcon from "@mui/icons-material/InsertInvitation";
 import { ITrip } from "../types.ts";
 import dayjs from "dayjs";
 import Stack from "@mui/material/Stack";
+import Button from "@mui/material/Button";
+import BorderColorIcon from "@mui/icons-material/BorderColor";
 
 const TripCard = ({
   name,
@@ -18,17 +20,8 @@ const TripCard = ({
 }: ITrip) => {
   return (
     <Card>
-      <CardActionArea
-        sx={{
-          "&[data-active]": {
-            backgroundColor: "action.selected",
-            "&:hover": {
-              backgroundColor: "action.selectedHover",
-            },
-          },
-        }}
-      >
-        <CardContent sx={{ padding: 3 }}>
+      <CardContent sx={{ padding: 3 }}>
+        <Box display="flex" justifyContent="space-between">
           <Stack direction="column" spacing={1}>
             <Typography variant="h3" gutterBottom>
               {name}
@@ -67,8 +60,11 @@ const TripCard = ({
               />
             )}
           </Stack>
-        </CardContent>
-      </CardActionArea>
+          <Button variant="text" startIcon={<BorderColorIcon />}>
+            Manage
+          </Button>
+        </Box>
+      </CardContent>
     </Card>
   );
 };
