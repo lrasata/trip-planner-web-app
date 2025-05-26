@@ -2,6 +2,7 @@ import ErrorPage from "./pages/ErrorPage";
 import MainLayout from "./pages/MainLayout";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./pages/Home.tsx";
+import AllTrips from "./pages/AllTrips.tsx";
 
 const router = createBrowserRouter([
   {
@@ -15,7 +16,7 @@ const router = createBrowserRouter([
       },
       {
         path: "all-trips",
-        element: <></>,
+        element: <AllTrips />,
       },
       {
         path: "settings",
