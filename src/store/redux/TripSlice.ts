@@ -10,9 +10,15 @@ const initialTripState = {
 
 export const fetchPlannedTrips = createAsyncThunk(
   "trips/fetchPlannedTrips",
-  async (_, { rejectWithValue }) => {
+  async (arg: { dateFilter?: string }, { rejectWithValue }) => {
+    const url = new URL(`${API_BACKEND_URL}/trips`);
+
+    if (arg && arg.dateFilter) {
+      url.searchParams.set("dateFilter", arg.dateFilter);
+    }
+
     try {
-      const response = await fetch(`${API_BACKEND_URL}/trips`, {
+      const response = await fetch(url.toString(), {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

@@ -13,7 +13,7 @@ const PlannedTripContainer = () => {
 
   useEffect(() => {
     // @ts-ignore
-    dispatch(fetchPlannedTrips());
+    dispatch(fetchPlannedTrips({ dateFilter: "future" }));
   }, []);
 
   return (
