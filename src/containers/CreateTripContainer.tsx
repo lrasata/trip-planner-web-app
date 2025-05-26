@@ -1,18 +1,31 @@
 import { Box, Button, styled } from "@mui/material";
-import VerticalLinearStepper from "../components/VerticalLinearStepper.tsx";
 import { IStep, ITrip } from "../types.ts";
-import TripNameAndDescriptionInputForm from "../components/TripNameAndDescriptionInputForm.tsx";
-import TripLocationInputForm from "../components/TripLocationInputForm.tsx";
-import TripParticipantInputForm from "../components/TripParticipantInputForm.tsx";
-import TripDateInputForm from "../components/TripDateInputForm.tsx";
 import Typography from "@mui/material/Typography";
-import Dialog from "../components/Dialog.tsx";
-import { ChangeEvent, useContext, useState } from "react";
+import { ChangeEvent, lazy, Suspense, useContext, useState } from "react";
 import { CreateTripContext } from "../store/context/CreateTripContext.tsx";
 import { useDispatch } from "react-redux";
 import { createTrip } from "../store/redux/TripSlice.ts";
 import { Dayjs } from "dayjs";
 import { formatDate } from "../utils/utils.ts";
+import Spinner from "../components/Spinner.tsx";
+
+// Lazy import
+const Dialog = lazy(() => import("../components/Dialog.tsx"));
+const VerticalLinearStepper = lazy(
+  () => import("../components/VerticalLinearStepper.tsx"),
+);
+const TripNameAndDescriptionInputForm = lazy(
+  () => import("../components/TripNameAndDescriptionInputForm.tsx"),
+);
+const TripLocationInputForm = lazy(
+  () => import("../components/TripLocationInputForm.tsx"),
+);
+const TripParticipantInputForm = lazy(
+  () => import("../components/TripParticipantInputForm.tsx"),
+);
+const TripDateInputForm = lazy(
+  () => import("../components/TripDateInputForm.tsx"),
+);
 
 const StyledBox = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -64,41 +77,51 @@ const CreateTripContainer = () => {
     {
       label: "Name and description",
       component: (
-        <TripNameAndDescriptionInputForm
-          name={editTrip.name}
-          description={editTrip.description}
-          handleInputNameChange={handleInputChange("name")}
-          handleInputDescriptionChange={handleInputChange("description")}
-        />
+        <Suspense fallback={<Spinner />}>
+          <TripNameAndDescriptionInputForm
+            name={editTrip.name}
+            description={editTrip.description}
+            handleInputNameChange={handleInputChange("name")}
+            handleInputDescriptionChange={handleInputChange("description")}
+          />
+        </Suspense>
       ),
     },
     {
       label: "Destination",
       description: `You can update those information later`,
       component: (
-        <TripLocationInputForm
-          departureLocation={editTrip.departureLocation}
-          arrivalLocation={editTrip.arrivalLocation}
-          handleDepartureChange={handleInputChange("departureLocation")}
-          handleArrivalChange={handleInputChange("arrivalLocation")}
-        />
+        <Suspense fallback={<Spinner />}>
+          <TripLocationInputForm
+            departureLocation={editTrip.departureLocation}
+            arrivalLocation={editTrip.arrivalLocation}
+            handleDepartureChange={handleInputChange("departureLocation")}
+            handleArrivalChange={handleInputChange("arrivalLocation")}
+          />
+        </Suspense>
       ),
     },
     {
       label: "Number of participants",
       description: `You can update those information later`,
-      component: <TripParticipantInputForm />,
+      component: (
+        <Suspense fallback={<Spinner />}>
+          <TripParticipantInputForm />
+        </Suspense>
+      ),
     },
     {
       label: "Dates of departure and return",
       description: `You can update those information later`,
       component: (
-        <TripDateInputForm
-          returnDate={editTrip.returnDate}
-          departureDate={editTrip.departureDate}
-          handleDepartureDateChange={handleDateChange("departureDate")}
-          handleReturnDateChange={handleDateChange("returnDate")}
-        />
+        <Suspense fallback={<Spinner />}>
+          <TripDateInputForm
+            returnDate={editTrip.returnDate}
+            departureDate={editTrip.departureDate}
+            handleDepartureDateChange={handleDateChange("departureDate")}
+            handleReturnDateChange={handleDateChange("returnDate")}
+          />
+        </Suspense>
       ),
     },
   ];
@@ -136,18 +159,22 @@ const CreateTripContainer = () => {
         </Button>
       </StyledBox>
 
-      <Dialog
-        open={isDialogOpen}
-        onClose={handleOnCloseDialog}
-        title="Create a trip"
-        content={
-          <VerticalLinearStepper
-            steps={steps}
-            handleOnClickNextStep={handleStateUpdate}
-            handleOnSubmitStep={handleOnSubmit}
+      {isDialogOpen && (
+        <Suspense fallback={<Spinner />}>
+          <Dialog
+            open={isDialogOpen}
+            onClose={handleOnCloseDialog}
+            title="Create a trip"
+            content={
+              <VerticalLinearStepper
+                steps={steps}
+                handleOnClickNextStep={handleStateUpdate}
+                handleOnSubmitStep={handleOnSubmit}
+              />
+            }
           />
-        }
-      />
+        </Suspense>
+      )}
     </>
   );
 };
