@@ -17,7 +17,10 @@ const TripCard = ({
   arrivalLocation = "",
   departureDate,
   returnDate,
-}: ITrip) => {
+  onClick,
+}: ITrip & {
+  onClick: () => void;
+}) => {
   return (
     <Card>
       <CardContent sx={{ padding: 3 }}>
@@ -60,7 +63,11 @@ const TripCard = ({
               />
             )}
           </Stack>
-          <Button variant="text" startIcon={<BorderColorIcon />}>
+          <Button
+            variant="text"
+            startIcon={<BorderColorIcon />}
+            onClick={onClick}
+          >
             Manage
           </Button>
         </Box>

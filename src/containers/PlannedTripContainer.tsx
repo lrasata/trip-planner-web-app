@@ -5,8 +5,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { fetchPlannedTrips } from "../store/redux/TripSlice.ts";
 import { ITrip } from "../types.ts";
+import { useNavigate } from "react-router-dom";
 
 const PlannedTripContainer = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   // @ts-ignore
   const plannedTrips = useSelector((state) => state.trips.plannedTrips);
@@ -15,6 +17,12 @@ const PlannedTripContainer = () => {
     // @ts-ignore
     dispatch(fetchPlannedTrips({ dateFilter: "future" }));
   }, []);
+
+  const handleOnClickNavigate = (taskId: number | undefined) => {
+    if (taskId) {
+      navigate(`/trips/${taskId}`);
+    }
+  };
 
   return (
     <Box my={3}>
@@ -25,7 +33,10 @@ const PlannedTripContainer = () => {
         plannedTrips.length > 0 &&
         plannedTrips.map((trip: ITrip, index: number) => (
           <Box my={2} key={`${trip.name}-${index}`}>
-            <TripCard {...trip} />
+            <TripCard
+              {...trip}
+              onClick={() => handleOnClickNavigate(trip.id)}
+            />
           </Box>
         ))}
     </Box>

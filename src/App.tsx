@@ -6,18 +6,18 @@ const MainLayout = lazy(() => import("./pages/MainLayout.tsx"));
 const ErrorPage = lazy(() => import("./pages/ErrorPage.tsx"));
 const Home = lazy(() => import("./pages/Home.tsx"));
 const AllTrips = lazy(() => import("./pages/AllTrips.tsx"));
+const EditTripPage = lazy(() => import("./pages/EditTripPage.tsx"));
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: (
       <Suspense fallback={<Spinner />}>
-        <MainLayout />{" "}
+        <MainLayout />
       </Suspense>
     ),
     errorElement: (
       <Suspense fallback={<Spinner />}>
-        {" "}
         <ErrorPage />
       </Suspense>
     ),
@@ -26,16 +26,23 @@ const router = createBrowserRouter([
         index: true,
         element: (
           <Suspense fallback={<Spinner />}>
-            <Home />{" "}
+            <Home />
           </Suspense>
         ),
       },
       {
-        path: "all-trips",
+        path: "trips",
         element: (
           <Suspense fallback={<Spinner />}>
-            {" "}
-            <AllTrips />{" "}
+            <AllTrips />
+          </Suspense>
+        ),
+      },
+      {
+        path: "trips/:id",
+        element: (
+          <Suspense fallback={<Spinner />}>
+            <EditTripPage />
           </Suspense>
         ),
       },

@@ -7,6 +7,7 @@ export interface IStep {
 }
 
 export interface ITrip {
+  id?: number;
   name: string;
   description?: string;
   departureLocation?: string;

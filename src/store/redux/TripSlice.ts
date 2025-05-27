@@ -2,11 +2,33 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { API_BACKEND_URL } from "../../constants/constants.ts";
 
 const initialTripState = {
+  editingTrip: null,
   plannedTrips: [],
   pastTrips: [],
   isLoading: false,
   error: null,
 };
+
+export const fetchTrip = createAsyncThunk(
+  "trips/fetchTrip",
+  async (arg: { id: number }, { rejectWithValue }) => {
+    try {
+      const response = await fetch(`${API_BACKEND_URL}/trips/${arg.id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await response.json();
+      return {
+        trip: data,
+      };
+    } catch (error) {
+      console.error("Error fetching trip with id: ", error);
+      return rejectWithValue("Oops unable to fetch trip from API");
+    }
+  },
+);
 
 export const fetchPlannedTrips = createAsyncThunk(
   "trips/fetchPlannedTrips",
@@ -101,6 +123,19 @@ const tripSlice = createSlice({
       state.plannedTrips = [...state.plannedTrips, action.payload.trip];
     });
     builder.addCase(createTrip.rejected, (state, action) => {
+      state.isLoading = false;
+      // @ts-ignore
+      state.error = action.error.message;
+    });
+    builder.addCase(fetchTrip.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(fetchTrip.fulfilled, (state, action) => {
+      state.isLoading = false;
+      // @ts-ignore
+      state.editingTrip = { ...action.payload.trip };
+    });
+    builder.addCase(fetchTrip.rejected, (state, action) => {
       state.isLoading = false;
       // @ts-ignore
       state.error = action.error.message;

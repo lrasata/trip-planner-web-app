@@ -9,7 +9,7 @@ const navItems = [
   },
   {
     title: "All trips",
-    url: "/all-trips",
+    url: "/trips",
   },
   {
     title: "Settings",
