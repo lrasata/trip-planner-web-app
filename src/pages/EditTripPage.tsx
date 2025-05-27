@@ -9,13 +9,17 @@ const EditTripPage = () => {
   const dispatch = useDispatch();
   // @ts-ignore
   const trip = useSelector((state) => state.trips.editingTrip);
+  // @ts-ignore
+  const status = useSelector((state) => state.trips.status);
+  // @ts-ignore
+  const error = useSelector((state) => state.trips.error);
 
   useEffect(() => {
     // @ts-ignore
     dispatch(fetchTrip({ id }));
   }, []);
 
-  return <EditTripContainer trip={trip} />;
+  return <EditTripContainer trip={trip} status={status} error={error} />;
 };
 
 export default EditTripPage;
