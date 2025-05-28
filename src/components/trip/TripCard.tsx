@@ -1,10 +1,10 @@
 import { Box, Card, CardContent } from "@mui/material";
 import Typography from "@mui/material/Typography";
-import IconWithLabel from "./IconWithLabel.tsx";
+import IconWithLabel from "../IconWithLabel.tsx";
 import FlightTakeoffIcon from "@mui/icons-material/FlightTakeoff";
 import FlightLandIcon from "@mui/icons-material/FlightLand";
 import InsertInvitationIcon from "@mui/icons-material/InsertInvitation";
-import { ITrip } from "../types.ts";
+import { ITrip } from "../../types.ts";
 import dayjs from "dayjs";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";

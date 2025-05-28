@@ -18,3 +18,8 @@ export const updateItemById = (
 
 export const existsById = (list: ITrip[], id: ITrip["id"]): boolean =>
   list.some((item) => item.id === id);
+
+export const removeItemById = (
+  items: ITrip[],
+  idToRemove: ITrip["id"],
+): ITrip[] => items.filter((item) => item.id !== idToRemove);

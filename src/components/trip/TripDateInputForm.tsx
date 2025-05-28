@@ -1,5 +1,5 @@
 import Stack from "@mui/material/Stack";
-import BasicDatePicker from "./BasicDatePicker.tsx";
+import BasicDatePicker from "../BasicDatePicker.tsx";
 import dayjs, { Dayjs } from "dayjs";
 
 interface ITripDateInputFormProps {

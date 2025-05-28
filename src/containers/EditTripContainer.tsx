@@ -5,12 +5,18 @@ import Stack from "@mui/material/Stack";
 import BasicDatePicker from "../components/BasicDatePicker.tsx";
 import dayjs, { Dayjs } from "dayjs";
 import Button from "@mui/material/Button";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, lazy, Suspense, useEffect, useState } from "react";
 import { formatDate } from "../utils/utils.ts";
 import { useDispatch } from "react-redux";
-import { updateTrip } from "../store/redux/TripSlice.ts";
+import { deleteTrip, updateTrip } from "../store/redux/TripSlice.ts";
 import { useNavigate } from "react-router-dom";
 import AutoDismissAlert from "../components/AutoDismissAlert.tsx";
+import Divider from "@mui/material/Divider";
+import Spinner from "../components/Spinner.tsx";
+import Box from "@mui/material/Box";
+import { useTheme } from "@mui/material";
+
+const Dialog = lazy(() => import("../components/Dialog.tsx"));
 
 interface EditTripContainerProps {
   trip: ITrip;
@@ -18,9 +24,11 @@ interface EditTripContainerProps {
   error?: string;
 }
 const EditTripContainer = ({ trip, status, error }: EditTripContainerProps) => {
+  const theme = useTheme();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [editingTrip, setEditingTrip] = useState<ITrip>(trip);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   useEffect(() => {
     setEditingTrip(trip);
@@ -49,6 +57,21 @@ const EditTripContainer = ({ trip, status, error }: EditTripContainerProps) => {
   const handleOnSave = () => {
     // @ts-ignore
     dispatch(updateTrip(editingTrip));
+  };
+
+  const handleOnDelete = () => {
+    // @ts-ignore
+    dispatch(deleteTrip({ id: editingTrip.id }));
+    handleOnCloseDialog();
+    navigate("/trips");
+  };
+
+  const handleOnOpenDialog = () => {
+    setIsDialogOpen(true);
+  };
+
+  const handleOnCloseDialog = () => {
+    setIsDialogOpen(false);
   };
 
   return (
@@ -113,7 +136,48 @@ const EditTripContainer = ({ trip, status, error }: EditTripContainerProps) => {
               Back
             </Button>
           </Stack>
+          <Divider />
+          <Stack direction="row" spacing={1}>
+            <Button
+              variant="outlined"
+              onClick={handleOnOpenDialog}
+              color="error"
+            >
+              Permanently delete
+            </Button>
+          </Stack>
         </Stack>
+      )}
+      {isDialogOpen && (
+        <Suspense fallback={<Spinner />}>
+          <Dialog
+            open={isDialogOpen}
+            onClose={handleOnCloseDialog}
+            title="Delete a trip"
+            content={
+              <Box py={1} sx={{ minWidth: theme.spacing(56) }}>
+                <Typography variant="body1" gutterBottom>
+                  Please confirm the deletion of this trip.
+                </Typography>
+                <Typography variant="body1" color="error" gutterBottom>
+                  Be aware that this action cannot be undone
+                </Typography>
+                <Stack direction="row" spacing={1} mt={3}>
+                  <Button
+                    variant="contained"
+                    onClick={handleOnDelete}
+                    color="error"
+                  >
+                    Permanently delete
+                  </Button>
+                  <Button variant="outlined" onClick={handleOnCloseDialog}>
+                    Cancel
+                  </Button>
+                </Stack>
+              </Box>
+            }
+          />
+        </Suspense>
       )}
     </>
   );

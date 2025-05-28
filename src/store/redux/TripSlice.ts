@@ -1,12 +1,16 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { API_BACKEND_URL } from "../../constants/constants.ts";
-import { existsById, updateItemById } from "../../utils/utils.ts";
+import {
+  existsById,
+  removeItemById,
+  updateItemById,
+} from "../../utils/utils.ts";
 
 const initialTripState = {
   editingTrip: null,
   plannedTrips: [],
   pastTrips: [],
-  status: "idle", // 'idle' | 'loading' | 'succeeded' | 'failed' | 'created' | 'updated'
+  status: "idle", // 'idle' | 'loading' | 'succeeded' | 'failed' | 'created' | 'updated' | 'deleted'
   error: null,
 };
 
@@ -138,6 +142,26 @@ export const updateTrip = createAsyncThunk(
   },
 );
 
+export const deleteTrip = createAsyncThunk(
+  "trips/deleteTrip",
+  async (arg: { id: number }, { rejectWithValue }) => {
+    try {
+      await fetch(`${API_BACKEND_URL}/trips/${arg.id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      return {
+        trip: { id: arg.id },
+      };
+    } catch (error) {
+      console.error("Error deleting trip with id: ", error);
+      return rejectWithValue("Oops unable to delete trip from API");
+    }
+  },
+);
+
 const tripSlice = createSlice({
   name: "tasks",
   initialState: initialTripState,
@@ -210,6 +234,27 @@ const tripSlice = createSlice({
       state.editingTrip = { ...action.payload.trip };
     });
     builder.addCase(fetchTrip.rejected, (state, action) => {
+      state.status = "failed";
+      // @ts-ignore
+      state.error = action.error.message || "Something went wrong";
+    });
+    builder.addCase(deleteTrip.pending, (state) => {
+      state.status = "loading";
+    });
+    builder.addCase(deleteTrip.fulfilled, (state, action) => {
+      state.status = "deleted";
+      const deletedId = action.payload.trip.id;
+      if (existsById(state.plannedTrips, deletedId)) {
+        // @ts-ignore
+        state.plannedTrips = removeItemById([...state.plannedTrips], deletedId);
+      }
+
+      if (existsById(state.pastTrips, deletedId)) {
+        // @ts-ignore
+        state.pastTrips = removeItemById([...state.pastTrips], deletedId);
+      }
+    });
+    builder.addCase(deleteTrip.rejected, (state, action) => {
       state.status = "failed";
       // @ts-ignore
       state.error = action.error.message || "Something went wrong";

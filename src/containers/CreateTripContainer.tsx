@@ -15,16 +15,16 @@ const VerticalLinearStepper = lazy(
   () => import("../components/VerticalLinearStepper.tsx"),
 );
 const TripNameAndDescriptionInputForm = lazy(
-  () => import("../components/TripNameAndDescriptionInputForm.tsx"),
+  () => import("../components/trip/TripNameAndDescriptionInputForm.tsx"),
 );
 const TripLocationInputForm = lazy(
-  () => import("../components/TripLocationInputForm.tsx"),
+  () => import("../components/trip/TripLocationInputForm.tsx"),
 );
 const TripParticipantInputForm = lazy(
-  () => import("../components/TripParticipantInputForm.tsx"),
+  () => import("../components/trip/TripParticipantInputForm.tsx"),
 );
 const TripDateInputForm = lazy(
-  () => import("../components/TripDateInputForm.tsx"),
+  () => import("../components/trip/TripDateInputForm.tsx"),
 );
 
 const StyledBox = styled(Box)(({ theme }) => ({
