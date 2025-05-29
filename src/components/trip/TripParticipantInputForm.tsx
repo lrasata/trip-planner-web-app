@@ -21,6 +21,7 @@ const TripParticipantInputForm = () => {
         required
         value={numberOfMembers}
         onChange={handleOnInputChange}
+        error={!numberOfMembers}
       />
       {[...Array(numberOfMembers)].map((_, index) => (
         <OutlinedInput

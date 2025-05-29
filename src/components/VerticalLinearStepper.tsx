@@ -9,20 +9,22 @@ import Typography from "@mui/material/Typography";
 import { IStep } from "../types.ts";
 import { useState } from "react";
 import { useMediaQuery, useTheme } from "@mui/material";
+import Stack from "@mui/material/Stack";
 
 interface VerticalLinearStepperProps {
   steps: IStep[];
   handleOnClickNextStep: () => void;
   handleOnSubmitStep: () => void;
+  requiredFieldMissing: boolean;
 }
 const VerticalLinearStepper = ({
   steps,
   handleOnClickNextStep,
   handleOnSubmitStep,
+  requiredFieldMissing = false,
 }: VerticalLinearStepperProps) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-
   const [activeStep, setActiveStep] = useState(0);
 
   const handleNext = () => {
@@ -36,10 +38,6 @@ const VerticalLinearStepper = ({
 
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
-
-  const handleReset = () => {
-    setActiveStep(0);
   };
 
   return (
@@ -59,11 +57,11 @@ const VerticalLinearStepper = ({
             <StepContent>
               {step.component && step.component}
               <Typography>{step.description}</Typography>
-              <Box sx={{ my: 1 }}>
+              <Stack direction="row" spacing={1} mt={1}>
                 <Button
                   variant="contained"
                   onClick={handleNext}
-                  sx={{ mt: 1, mr: 1 }}
+                  disabled={requiredFieldMissing}
                 >
                   {index === steps.length - 1 ? "Finish" : "Continue"}
                 </Button>
@@ -71,11 +69,10 @@ const VerticalLinearStepper = ({
                   variant="outlined"
                   disabled={index === 0}
                   onClick={handleBack}
-                  sx={{ mt: 1, mr: 1 }}
                 >
                   Back
                 </Button>
-              </Box>
+              </Stack>
             </StepContent>
           </Step>
         ))}
@@ -83,13 +80,6 @@ const VerticalLinearStepper = ({
       {activeStep === steps.length && (
         <Paper square elevation={0} sx={{ p: 3 }}>
           <Typography>All steps completed</Typography>
-          <Button
-            variant="outlined"
-            onClick={handleReset}
-            sx={{ mt: 1, mr: 1 }}
-          >
-            Reset
-          </Button>
         </Paper>
       )}
     </Box>

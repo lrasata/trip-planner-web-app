@@ -1,13 +1,13 @@
 import { Box, Button, styled } from "@mui/material";
 import { IStep, ITrip } from "../types.ts";
 import Typography from "@mui/material/Typography";
-import { ChangeEvent, lazy, Suspense, useContext, useState } from "react";
-import { CreateTripContext } from "../store/context/CreateTripContext.tsx";
-import { useDispatch } from "react-redux";
+import { ChangeEvent, lazy, Suspense, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { createTrip } from "../store/redux/TripSlice.ts";
 import { Dayjs } from "dayjs";
 import { formatDate } from "../utils/utils.ts";
 import Spinner from "../components/Spinner.tsx";
+import { draftTripActions } from "../store/redux/DraftTripSlice.ts";
 
 // Lazy import
 const Dialog = lazy(() => import("../components/Dialog.tsx"));
@@ -42,23 +42,14 @@ const StyledBox = styled(Box)(({ theme }) => ({
 const CreateTripContainer = () => {
   const dispatch = useDispatch();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const {
-    name,
-    description,
-    departureLocation,
-    arrivalLocation,
-    departureDate,
-    returnDate,
-    updateTripContext,
-  } = useContext(CreateTripContext);
-  const [editTrip, setEditTrip] = useState<ITrip>({
-    name,
-    description,
-    departureLocation,
-    arrivalLocation,
-    departureDate,
-    returnDate,
-  });
+  const [isRequiredFieldMissing, setIsRequiredFieldMissing] = useState(false);
+  // @ts-ignore
+  const draftTrip = useSelector((state) => state.draftTrip);
+  const [editTrip, setEditTrip] = useState<ITrip>(draftTrip);
+
+  useEffect(() => {
+    setEditTrip(draftTrip);
+  }, [draftTrip]);
 
   const handleEditTrip = (key: string, value: string) => {
     setEditTrip((prevState) => ({ ...prevState, [key]: value }));
@@ -127,7 +118,12 @@ const CreateTripContainer = () => {
   ];
 
   const handleStateUpdate = () => {
-    updateTripContext(editTrip);
+    if (!editTrip.name) {
+      setIsRequiredFieldMissing(true);
+    } else {
+      setIsRequiredFieldMissing(false);
+    }
+    dispatch(draftTripActions.update(editTrip));
   };
 
   const handleOnOpenDialog = () => {
@@ -135,6 +131,7 @@ const CreateTripContainer = () => {
   };
 
   const handleOnCloseDialog = () => {
+    dispatch(draftTripActions.reset());
     setIsDialogOpen(false);
   };
 
@@ -170,6 +167,7 @@ const CreateTripContainer = () => {
                 steps={steps}
                 handleOnClickNextStep={handleStateUpdate}
                 handleOnSubmitStep={handleOnSubmit}
+                requiredFieldMissing={isRequiredFieldMissing}
               />
             }
           />

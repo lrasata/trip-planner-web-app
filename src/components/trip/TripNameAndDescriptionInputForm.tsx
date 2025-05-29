@@ -24,6 +24,7 @@ const TripNameAndDescriptionInputForm = ({
         required
         value={name}
         onChange={handleInputNameChange}
+        error={!name}
       />
       <TextField
         id="trip-description-input"
