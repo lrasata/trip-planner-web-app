@@ -42,7 +42,6 @@ const StyledBox = styled(Box)(({ theme }) => ({
 const CreateTripContainer = () => {
   const dispatch = useDispatch();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [isRequiredFieldMissing, setIsRequiredFieldMissing] = useState(false);
   // @ts-ignore
   const draftTrip = useSelector((state) => state.draftTrip);
   const [editTrip, setEditTrip] = useState<ITrip>(draftTrip);
@@ -118,11 +117,6 @@ const CreateTripContainer = () => {
   ];
 
   const handleStateUpdate = () => {
-    if (!editTrip.name) {
-      setIsRequiredFieldMissing(true);
-    } else {
-      setIsRequiredFieldMissing(false);
-    }
     dispatch(draftTripActions.update(editTrip));
   };
 
@@ -167,7 +161,7 @@ const CreateTripContainer = () => {
                 steps={steps}
                 handleOnClickNextStep={handleStateUpdate}
                 handleOnSubmitStep={handleOnSubmit}
-                requiredFieldMissing={isRequiredFieldMissing}
+                requiredFieldMissing={!editTrip.name}
               />
             }
           />

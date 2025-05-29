@@ -27,11 +27,11 @@ const EditTripContainer = ({ trip, status, error }: EditTripContainerProps) => {
   const theme = useTheme();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [editingTrip, setEditingTrip] = useState<ITrip>(trip);
+  const [tripFormData, setTripFormData] = useState<ITrip>(trip);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   useEffect(() => {
-    setEditingTrip(trip);
+    setTripFormData(trip);
   }, [trip]);
 
   const handleEditTrip = <K extends string, V>(param: {
@@ -40,7 +40,7 @@ const EditTripContainer = ({ trip, status, error }: EditTripContainerProps) => {
     const key = Object.keys(param)[0] as K;
     const value = param[key];
 
-    setEditingTrip((prevState) => {
+    setTripFormData((prevState) => {
       return { ...prevState, [key]: value };
     });
   };
@@ -56,12 +56,12 @@ const EditTripContainer = ({ trip, status, error }: EditTripContainerProps) => {
 
   const handleOnSave = () => {
     // @ts-ignore
-    dispatch(updateTrip(editingTrip));
+    dispatch(updateTrip(tripFormData));
   };
 
   const handleOnDelete = () => {
     // @ts-ignore
-    dispatch(deleteTrip({ id: editingTrip.id }));
+    dispatch(deleteTrip({ id: tripFormData.id }));
     handleOnCloseDialog();
     navigate("/trips");
   };
@@ -76,7 +76,7 @@ const EditTripContainer = ({ trip, status, error }: EditTripContainerProps) => {
 
   return (
     <>
-      {editingTrip && (
+      {tripFormData && (
         <Stack direction="column" spacing={3}>
           <Typography variant="h2" gutterBottom color="textSecondary">
             Manage your trip
@@ -84,34 +84,36 @@ const EditTripContainer = ({ trip, status, error }: EditTripContainerProps) => {
           <TextField
             type="text"
             label="Name"
-            value={editingTrip.name || ""}
+            value={tripFormData.name || ""}
             onChange={handleInputChange("name")}
+            required
+            error={!tripFormData.name}
           />
           <TextField
             type="text"
             label="Description"
-            value={editingTrip.description}
+            value={tripFormData.description}
             onChange={handleInputChange("description")}
           />
           <TextField
             type="text"
             label="Departure location"
-            value={editingTrip.departureLocation || ""}
+            value={tripFormData.departureLocation || ""}
             onChange={handleInputChange("departureLocation")}
           />
           <TextField
             type="text"
             label="Arrival location"
-            value={editingTrip.arrivalLocation || ""}
+            value={tripFormData.arrivalLocation || ""}
             onChange={handleInputChange("arrivalLocation")}
           />
           <BasicDatePicker
-            value={dayjs(editingTrip.departureDate) ?? ""}
+            value={dayjs(tripFormData.departureDate) ?? ""}
             label="Departure date"
             onChange={handleDateChange("departureDate")}
           />
           <BasicDatePicker
-            value={dayjs(editingTrip.returnDate) ?? ""}
+            value={dayjs(tripFormData.returnDate) ?? ""}
             label="Return date"
             onChange={handleDateChange("returnDate")}
           />
@@ -129,7 +131,11 @@ const EditTripContainer = ({ trip, status, error }: EditTripContainerProps) => {
           )}
 
           <Stack direction="row" spacing={1}>
-            <Button variant="contained" onClick={handleOnSave}>
+            <Button
+              variant="contained"
+              onClick={handleOnSave}
+              disabled={!tripFormData.name}
+            >
               Save
             </Button>
             <Button variant="outlined" onClick={() => navigate(-1)}>
