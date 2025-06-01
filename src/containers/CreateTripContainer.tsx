@@ -1,11 +1,15 @@
 import { Box, Button, styled } from "@mui/material";
-import { IStep, ITrip } from "../types.ts";
+import { City, IStep, ITrip } from "../types.ts";
 import Typography from "@mui/material/Typography";
 import { ChangeEvent, lazy, Suspense, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createTrip } from "../store/redux/TripSlice.ts";
 import { Dayjs } from "dayjs";
-import { formatDate } from "../utils/utils.ts";
+import {
+  formatDate,
+  transformCityToString,
+  transformStringToCity,
+} from "../utils/utils.ts";
 import Spinner from "../components/Spinner.tsx";
 import { draftTripActions } from "../store/redux/DraftTripSlice.ts";
 
@@ -63,6 +67,13 @@ const CreateTripContainer = () => {
       handleEditTrip(key, e.target.value);
     };
 
+  const handleLocationInputChange =
+    (key: string) => (_event: any, selectedCity: City | null) => {
+      if (selectedCity) {
+        handleEditTrip(key, transformCityToString(selectedCity));
+      }
+    };
+
   const steps: IStep[] = [
     {
       label: "Name and description",
@@ -83,10 +94,18 @@ const CreateTripContainer = () => {
       component: (
         <Suspense fallback={<Spinner />}>
           <TripLocationInputForm
-            departureLocation={editTrip.departureLocation}
-            arrivalLocation={editTrip.arrivalLocation}
-            handleDepartureChange={handleInputChange("departureLocation")}
-            handleArrivalChange={handleInputChange("arrivalLocation")}
+            {...(editTrip.departureLocation && {
+              departureLocation: transformStringToCity(
+                editTrip.departureLocation,
+              ),
+            })}
+            {...(editTrip.arrivalLocation && {
+              arrivalLocation: transformStringToCity(editTrip.arrivalLocation),
+            })}
+            handleDepartureChange={handleLocationInputChange(
+              "departureLocation",
+            )}
+            handleArrivalChange={handleLocationInputChange("arrivalLocation")}
           />
         </Suspense>
       ),

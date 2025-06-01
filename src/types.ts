@@ -15,3 +15,9 @@ export interface ITrip {
   departureDate?: string;
   returnDate?: string;
 }
+
+export interface City {
+  id?: number;
+  name: string;
+  country: string;
+}
