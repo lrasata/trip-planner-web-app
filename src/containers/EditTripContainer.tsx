@@ -98,13 +98,13 @@ const EditTripContainer = ({ trip, status, error }: EditTripContainerProps) => {
           <TextField
             type="text"
             label="Departure location"
-            value={tripFormData.departureLocation || ""}
+            value={tripFormData.departureCity || ""}
             onChange={handleInputChange("departureLocation")}
           />
           <TextField
             type="text"
             label="Arrival location"
-            value={tripFormData.arrivalLocation || ""}
+            value={tripFormData.arrivalCity || ""}
             onChange={handleInputChange("arrivalLocation")}
           />
           <BasicDatePicker

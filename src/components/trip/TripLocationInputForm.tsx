@@ -1,9 +1,9 @@
 import Stack from "@mui/material/Stack";
-import { forwardRef } from "react";
+import React, { forwardRef } from "react";
 import withLocationAutocomplete from "../../hoc/withLocationAutocomplete.tsx";
 import InputAdornment from "@mui/material/InputAdornment";
 import PlaceIcon from "@mui/icons-material/Place";
-import { City } from "../../types.ts";
+import { ILocation } from "../../types.ts";
 import TextField, { TextFieldProps } from "@mui/material/TextField";
 
 const LocationInput = forwardRef<HTMLInputElement, TextFieldProps>(
@@ -29,10 +29,16 @@ const LocationInput = forwardRef<HTMLInputElement, TextFieldProps>(
 );
 
 interface TripLocationInputFormProps {
-  departureLocation?: City;
-  arrivalLocation?: City;
-  handleDepartureChange: (_event: any, selectedCity: City | null) => void;
-  handleArrivalChange: (_event: any, selectedCity: City | null) => void;
+  departureLocation?: ILocation;
+  arrivalLocation?: ILocation;
+  handleDepartureChange: (
+    _event: React.SyntheticEvent,
+    value: ILocation | null,
+  ) => void;
+  handleArrivalChange: (
+    _event: React.SyntheticEvent,
+    value: ILocation | null,
+  ) => void;
 }
 
 const TripLocationInputForm = ({
@@ -41,21 +47,29 @@ const TripLocationInputForm = ({
   handleDepartureChange,
   handleArrivalChange,
 }: TripLocationInputFormProps) => {
-  const EnhancedDepartureInput = withLocationAutocomplete(LocationInput);
-  const EnhancedArrivalInput = withLocationAutocomplete(LocationInput);
+  const EnhancedDepartureInput = withLocationAutocomplete(
+    LocationInput,
+    "city",
+    "FR",
+  );
+  const EnhancedArrivalInput = withLocationAutocomplete(
+    LocationInput,
+    "city",
+    "FR",
+  );
   return (
     <Stack spacing={3} sx={{ my: 3 }}>
       <EnhancedDepartureInput
-        id="departure-location-input"
+        id="departure-city-input"
         placeholder="Departure"
         value={departureLocation}
-        onSelect={handleDepartureChange}
+        onChange={handleDepartureChange}
       />
       <EnhancedArrivalInput
-        id="arrival-location-input"
+        id="arrival-city-input"
         placeholder="Arrival"
         value={arrivalLocation}
-        onSelect={handleArrivalChange}
+        onChange={handleArrivalChange}
       />
     </Stack>
   );

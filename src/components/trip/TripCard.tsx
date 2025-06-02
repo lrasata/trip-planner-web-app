@@ -13,8 +13,8 @@ import BorderColorIcon from "@mui/icons-material/BorderColor";
 const TripCard = ({
   name,
   description,
-  departureLocation = "",
-  arrivalLocation = "",
+  departureLocation,
+  arrivalLocation,
   departureDate,
   returnDate,
   onClick,
@@ -47,7 +47,8 @@ const TripCard = ({
                 icon={<FlightTakeoffIcon color="secondary" fontSize="small" />}
                 label={
                   <>
-                    <strong>Departure:</strong> {departureLocation}
+                    <strong>Departure:</strong> {departureLocation.city},&nbsp;
+                    {departureLocation.country}
                   </>
                 }
               />
@@ -57,7 +58,8 @@ const TripCard = ({
                 icon={<FlightLandIcon color="secondary" fontSize="small" />}
                 label={
                   <>
-                    <strong>Arrival:</strong> {arrivalLocation}
+                    <strong>Arrival:</strong> {arrivalLocation.city},&nbsp;
+                    {arrivalLocation.country}
                   </>
                 }
               />

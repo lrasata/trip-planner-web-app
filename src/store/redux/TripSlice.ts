@@ -5,6 +5,7 @@ import {
   removeItemById,
   updateItemById,
 } from "../../utils/utils.ts";
+import { ILocation } from "../../types.ts";
 
 const initialTripState = {
   editingTrip: null,
@@ -68,8 +69,8 @@ export const createTrip = createAsyncThunk(
     arg: {
       name?: string;
       description?: string;
-      departureLocation?: string;
-      arrivalLocation?: string;
+      departureLocation?: ILocation;
+      arrivalLocation?: ILocation;
       departureDate?: string;
       returnDate?: string;
     },
@@ -108,8 +109,8 @@ export const updateTrip = createAsyncThunk(
       id: number;
       name?: string;
       description?: string;
-      departureLocation?: string;
-      arrivalLocation?: string;
+      departureLocation?: ILocation;
+      arrivalLocation?: ILocation;
       departureDate?: string;
       returnDate?: string;
     },

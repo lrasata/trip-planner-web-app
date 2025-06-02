@@ -1,15 +1,11 @@
 import { Box, Button, styled } from "@mui/material";
-import { City, IStep, ITrip } from "../types.ts";
+import { ILocation, IStep, ITrip } from "../types.ts";
 import Typography from "@mui/material/Typography";
 import { ChangeEvent, lazy, Suspense, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createTrip } from "../store/redux/TripSlice.ts";
 import { Dayjs } from "dayjs";
-import {
-  formatDate,
-  transformCityToString,
-  transformStringToCity,
-} from "../utils/utils.ts";
+import { formatDate } from "../utils/utils.ts";
 import Spinner from "../components/Spinner.tsx";
 import { draftTripActions } from "../store/redux/DraftTripSlice.ts";
 
@@ -50,11 +46,13 @@ const CreateTripContainer = () => {
   const draftTrip = useSelector((state) => state.draftTrip);
   const [editTrip, setEditTrip] = useState<ITrip>(draftTrip);
 
+  console.log(editTrip);
+
   useEffect(() => {
     setEditTrip(draftTrip);
   }, [draftTrip]);
 
-  const handleEditTrip = (key: string, value: string) => {
+  const handleEditTrip = (key: string, value: string | ILocation) => {
     setEditTrip((prevState) => ({ ...prevState, [key]: value }));
   };
 
@@ -68,9 +66,11 @@ const CreateTripContainer = () => {
     };
 
   const handleLocationInputChange =
-    (key: string) => (_event: any, selectedCity: City | null) => {
-      if (selectedCity) {
-        handleEditTrip(key, transformCityToString(selectedCity));
+    (key: string) => (_event: any, selectedLocation: ILocation | null) => {
+      if (selectedLocation) {
+        console.log("reached this function");
+        console.log(selectedLocation);
+        handleEditTrip(key, selectedLocation);
       }
     };
 
@@ -95,12 +95,10 @@ const CreateTripContainer = () => {
         <Suspense fallback={<Spinner />}>
           <TripLocationInputForm
             {...(editTrip.departureLocation && {
-              departureLocation: transformStringToCity(
-                editTrip.departureLocation,
-              ),
+              departureLocation: editTrip.departureLocation,
             })}
             {...(editTrip.arrivalLocation && {
-              arrivalLocation: transformStringToCity(editTrip.arrivalLocation),
+              arrivalLocation: editTrip.arrivalLocation,
             })}
             handleDepartureChange={handleLocationInputChange(
               "departureLocation",

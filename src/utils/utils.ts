@@ -1,6 +1,6 @@
 import dayjs, { Dayjs } from "dayjs";
 import utc from "dayjs/plugin/utc";
-import { City, ITrip } from "../types.ts";
+import { ITrip } from "../types.ts";
 dayjs.extend(utc);
 
 export const formatDate = (date: Dayjs): string => {
@@ -23,15 +23,3 @@ export const removeItemById = (
   items: ITrip[],
   idToRemove: ITrip["id"],
 ): ITrip[] => items.filter((item) => item.id !== idToRemove);
-
-export const transformStringToCity = (location: string): City => {
-  const locationArray = location.split(",");
-  return {
-    name: locationArray[0].trim(),
-    country: locationArray[1] ? locationArray[1].trim() : "",
-  };
-};
-
-export const transformCityToString = (city: City): string => {
-  return `${city.name || ""}, ${city.country || ""}`;
-};

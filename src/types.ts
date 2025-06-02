@@ -10,14 +10,15 @@ export interface ITrip {
   id?: number;
   name: string;
   description?: string;
-  departureLocation?: string;
-  arrivalLocation?: string;
+  departureLocation?: ILocation;
+  arrivalLocation?: ILocation;
   departureDate?: string;
   returnDate?: string;
 }
 
-export interface City {
+export interface ILocation {
   id?: number;
-  name: string;
+  city: string;
   country: string;
+  countryCode: string;
 }

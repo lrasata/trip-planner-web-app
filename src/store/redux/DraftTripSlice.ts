@@ -4,8 +4,8 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 const initialState: ITrip = {
   name: "",
   description: "",
-  departureLocation: "",
-  arrivalLocation: "",
+  departureLocation: undefined,
+  arrivalLocation: undefined,
   departureDate: "",
   returnDate: "",
 };

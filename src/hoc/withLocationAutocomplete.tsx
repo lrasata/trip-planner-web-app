@@ -1,81 +1,111 @@
-import { ComponentType, memo, useEffect, useState } from "react";
+import React, {
+  ComponentType,
+  memo,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 import Autocomplete from "@mui/material/Autocomplete";
 import {
-  API_GEO_DB_URL,
+  API_CITIES_GEO_DB_URL,
+  API_COUNTRIES_GEO_DB_URL,
   GEO_DB_API_KEY,
   GEO_DB_HOST,
 } from "../constants/constants";
-import { City } from "../types";
+import { ILocation } from "../types";
 
-const DEBOUNCE_TIME = 500;
+const DEBOUNCE_TIME = 1000;
+
+type DataType = "city" | "country";
+
+interface WithLocationProps {
+  id: string;
+  placeholder: string;
+  value?: ILocation;
+  onChange?: (_event: React.SyntheticEvent, value: ILocation | null) => void;
+}
 
 const withLocationAutocomplete = <P extends object>(
   WrappedComponent: ComponentType<P>,
+  dataType: DataType,
+  countryCode?: string,
 ) => {
-  const AutocompleteWrapper = (
-    props: P & {
-      id: string;
-      placeholder: string;
-      value?: City;
-      onSelect?: (_event: any, value: City | null) => void;
-    },
-  ) => {
-    const [options, setOptions] = useState<City[]>([]);
+  const AutocompleteWrapper = (props: P & WithLocationProps) => {
+    const [options, setOptions] = useState<ILocation[]>([]);
     const [inputValue, setInputValue] = useState("");
 
+    const fetchLocations = useCallback(
+      async (query: string) => {
+        if (!query) return;
+
+        let url = "";
+        const urlQuery = `namePrefix=${encodeURIComponent(query)}&limit=10`;
+
+        switch (dataType) {
+          case "country":
+            url = `${API_COUNTRIES_GEO_DB_URL}?${urlQuery}`;
+            break;
+          case "city":
+            url = `${API_CITIES_GEO_DB_URL}?countryIds=${countryCode}&${urlQuery}`;
+            break;
+        }
+
+        try {
+          const response = await fetch(url, {
+            headers: {
+              "X-RapidAPI-Key": GEO_DB_API_KEY,
+              "X-RapidAPI-Host": GEO_DB_HOST,
+            },
+          });
+
+          const json = await response.json();
+          const data = json.data;
+
+          const formatted =
+            dataType === "country"
+              ? data.map((item: any) => ({
+                  country: item.name,
+                  countryCode: item.code,
+                }))
+              : data.map((item: any) => ({
+                  id: item.id,
+                  city: item.name,
+                  country: item.country,
+                  countryCode: countryCode,
+                }));
+
+          setOptions(formatted);
+        } catch (err) {
+          console.error("Failed to fetch locations:", err);
+        }
+      },
+      [dataType, countryCode],
+    );
+
     useEffect(() => {
-      const timeoutId = setTimeout(() => {
-        fetchCities(inputValue);
+      const timeout = setTimeout(() => {
+        fetchLocations(inputValue);
       }, DEBOUNCE_TIME);
 
-      return () => clearTimeout(timeoutId);
-    }, [inputValue]);
-
-    const fetchCities = async (query: string) => {
-      if (!query) return;
-
-      try {
-        const url = `${API_GEO_DB_URL}?namePrefix=${encodeURIComponent(query)}&limit=10`;
-
-        const response = await fetch(url, {
-          headers: {
-            "X-RapidAPI-Key": GEO_DB_API_KEY,
-            "X-RapidAPI-Host": GEO_DB_HOST,
-          },
-        });
-
-        const jsonData = await response.json();
-
-        const cities: City[] = jsonData.data.map((city: any) => ({
-          id: city.id,
-          name: `${city.name}, ${city.country}`,
-          country: city.country,
-        }));
-
-        setOptions(cities);
-      } catch (err) {
-        console.error("Failed to fetch cities:", err);
-      }
-    };
+      return () => clearTimeout(timeout);
+    }, [inputValue, fetchLocations]);
 
     return (
       <Autocomplete
         options={options}
-        getOptionLabel={(option) => option.name}
+        getOptionLabel={(option) => `${option.city || ""} ${option.country}`}
         value={props.value ?? null}
-        onInputChange={(_, value) => {
-          setInputValue(value);
-        }}
+        onChange={(event, value) => props.onChange?.(event, value)}
+        onInputChange={(_, value) => setInputValue(value)}
         renderInput={(params) => (
           <WrappedComponent
             {...(params as unknown as P)}
-            {...props}
-            id={params.id}
+            {...(props as P)}
             inputProps={params.inputProps}
             InputLabelProps={params.InputLabelProps}
             slotProps={{
               input: {
-                ref: params.InputProps.ref, // <-- Important
+                ref: params.InputProps?.ref,
               },
             }}
           />
