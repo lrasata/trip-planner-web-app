@@ -1,6 +1,6 @@
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
-import { ITrip } from "../types.ts";
+import { ILocation, ITrip } from "../types.ts";
 import Stack from "@mui/material/Stack";
 import BasicDatePicker from "../components/BasicDatePicker.tsx";
 import dayjs, { Dayjs } from "dayjs";
@@ -15,6 +15,7 @@ import Divider from "@mui/material/Divider";
 import Spinner from "../components/Spinner.tsx";
 import Box from "@mui/material/Box";
 import { useTheme } from "@mui/material";
+import TripLocationInputForm from "../components/trip/TripLocationInputForm.tsx";
 
 const Dialog = lazy(() => import("../components/Dialog.tsx"));
 
@@ -48,6 +49,13 @@ const EditTripContainer = ({ trip, status, error }: EditTripContainerProps) => {
   const handleInputChange =
     (key: string) => (e: ChangeEvent<HTMLInputElement>) => {
       handleEditTrip({ [key]: e.target.value });
+    };
+
+  const handleLocationInputChange =
+    (key: string) => (_event: any, selectedLocation: ILocation | null) => {
+      if (selectedLocation) {
+        handleEditTrip({ [key]: selectedLocation });
+      }
     };
 
   const handleDateChange = (key: string) => (date: Dayjs | null) => {
@@ -95,17 +103,17 @@ const EditTripContainer = ({ trip, status, error }: EditTripContainerProps) => {
             value={tripFormData.description}
             onChange={handleInputChange("description")}
           />
-          <TextField
-            type="text"
-            label="Departure location"
-            value={tripFormData.departureCity || ""}
-            onChange={handleInputChange("departureLocation")}
-          />
-          <TextField
-            type="text"
-            label="Arrival location"
-            value={tripFormData.arrivalCity || ""}
-            onChange={handleInputChange("arrivalLocation")}
+          <TripLocationInputForm
+            {...(tripFormData.departureLocation && {
+              departureLocation: tripFormData.departureLocation,
+            })}
+            {...(tripFormData.arrivalLocation && {
+              arrivalLocation: tripFormData.arrivalLocation,
+            })}
+            handleDepartureChange={handleLocationInputChange(
+              "departureLocation",
+            )}
+            handleArrivalChange={handleLocationInputChange("arrivalLocation")}
           />
           <BasicDatePicker
             value={dayjs(tripFormData.departureDate) ?? ""}

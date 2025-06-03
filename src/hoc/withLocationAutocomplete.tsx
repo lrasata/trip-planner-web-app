@@ -14,7 +14,7 @@ import {
 } from "../constants/constants";
 import { ILocation } from "../types";
 
-const DEBOUNCE_TIME = 1000;
+const DEBOUNCE_TIME = 700; // milliseconds
 
 type DataType = "city" | "country";
 
@@ -93,7 +93,13 @@ const withLocationAutocomplete = <P extends object>(
     return (
       <Autocomplete
         options={options}
-        getOptionLabel={(option) => `${option.city || ""} ${option.country}`}
+        getOptionLabel={(option) => {
+          if (dataType === "country") {
+            return option.country || "";
+          } else {
+            return option.city || "";
+          }
+        }}
         value={props.value ?? null}
         onChange={(event, value) => props.onChange?.(event, value)}
         onInputChange={(_, value) => setInputValue(value)}

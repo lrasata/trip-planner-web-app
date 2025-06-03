@@ -46,8 +46,6 @@ const CreateTripContainer = () => {
   const draftTrip = useSelector((state) => state.draftTrip);
   const [editTrip, setEditTrip] = useState<ITrip>(draftTrip);
 
-  console.log(editTrip);
-
   useEffect(() => {
     setEditTrip(draftTrip);
   }, [draftTrip]);
@@ -68,8 +66,6 @@ const CreateTripContainer = () => {
   const handleLocationInputChange =
     (key: string) => (_event: any, selectedLocation: ILocation | null) => {
       if (selectedLocation) {
-        console.log("reached this function");
-        console.log(selectedLocation);
         handleEditTrip(key, selectedLocation);
       }
     };

@@ -5,6 +5,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import PlaceIcon from "@mui/icons-material/Place";
 import { ILocation } from "../../types.ts";
 import TextField, { TextFieldProps } from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
 
 const LocationInput = forwardRef<HTMLInputElement, TextFieldProps>(
   (props, ref) => {
@@ -47,27 +48,49 @@ const TripLocationInputForm = ({
   handleDepartureChange,
   handleArrivalChange,
 }: TripLocationInputFormProps) => {
-  const EnhancedDepartureInput = withLocationAutocomplete(
+  const EnhancedDepartureCountryInput = withLocationAutocomplete(
     LocationInput,
-    "city",
-    "FR",
+    "country",
   );
-  const EnhancedArrivalInput = withLocationAutocomplete(
+  const EnhancedDepartureCityInput = withLocationAutocomplete(
     LocationInput,
     "city",
-    "FR",
+    departureLocation?.countryCode,
+  );
+  const EnhancedArrivalCountryInput = withLocationAutocomplete(
+    LocationInput,
+    "country",
+  );
+  const EnhancedArrivalCityInput = withLocationAutocomplete(
+    LocationInput,
+    "city",
+    arrivalLocation?.countryCode,
   );
   return (
     <Stack spacing={3} sx={{ my: 3 }}>
-      <EnhancedDepartureInput
-        id="departure-city-input"
-        placeholder="Departure"
+      <Typography variant="subtitle2">Departure location</Typography>
+      <EnhancedDepartureCountryInput
+        id="departure-country-input"
+        placeholder="Country"
         value={departureLocation}
         onChange={handleDepartureChange}
       />
-      <EnhancedArrivalInput
+      <EnhancedDepartureCityInput
+        id="departure-city-input"
+        placeholder="City"
+        value={departureLocation}
+        onChange={handleDepartureChange}
+      />
+      <Typography variant="subtitle2">Arrival location</Typography>
+      <EnhancedArrivalCountryInput
+        id="arrrival-country-input"
+        placeholder="Country"
+        value={arrivalLocation}
+        onChange={handleArrivalChange}
+      />
+      <EnhancedArrivalCityInput
         id="arrival-city-input"
-        placeholder="Arrival"
+        placeholder="City"
         value={arrivalLocation}
         onChange={handleArrivalChange}
       />
