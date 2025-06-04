@@ -70,6 +70,7 @@ const withLocationAutocomplete = <P extends object>(
               : data.map((item: any) => ({
                   id: item.id,
                   city: item.name,
+                  region: item.region,
                   country: item.country,
                   countryCode: countryCode,
                 }));
@@ -97,7 +98,9 @@ const withLocationAutocomplete = <P extends object>(
           if (dataType === "country") {
             return option.country || "";
           } else {
-            return option.city || "";
+            return option.city && option.region
+              ? `${option.city} (${option.region})`
+              : "";
           }
         }}
         value={props.value ?? null}

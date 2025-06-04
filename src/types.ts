@@ -19,6 +19,7 @@ export interface ITrip {
 export interface ILocation {
   id?: number;
   city: string;
+  region: string;
   country: string;
   countryCode: string;
 }

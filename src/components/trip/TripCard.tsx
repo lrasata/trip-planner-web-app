@@ -48,6 +48,7 @@ const TripCard = ({
                 label={
                   <>
                     <strong>Departure:</strong> {departureLocation.city},&nbsp;
+                    {departureLocation.region},&nbsp;
                     {departureLocation.country}
                   </>
                 }
@@ -59,6 +60,7 @@ const TripCard = ({
                 label={
                   <>
                     <strong>Arrival:</strong> {arrivalLocation.city},&nbsp;
+                    {arrivalLocation.region},&nbsp;
                     {arrivalLocation.country}
                   </>
                 }
