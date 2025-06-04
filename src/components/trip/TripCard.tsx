@@ -4,11 +4,20 @@ import IconWithLabel from "../IconWithLabel.tsx";
 import FlightTakeoffIcon from "@mui/icons-material/FlightTakeoff";
 import FlightLandIcon from "@mui/icons-material/FlightLand";
 import InsertInvitationIcon from "@mui/icons-material/InsertInvitation";
-import { ITrip } from "../../types.ts";
+import { ILocation, ITrip } from "../../types.ts";
 import dayjs from "dayjs";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
+
+const getLocationText = (location: ILocation | undefined) => {
+  if (location) {
+    return [location.city, location.region, location.country]
+      .filter(Boolean)
+      .join(", ");
+  }
+  return undefined;
+};
 
 const TripCard = ({
   name,
@@ -21,6 +30,9 @@ const TripCard = ({
 }: ITrip & {
   onClick: () => void;
 }) => {
+  const departureLocationText = getLocationText(departureLocation);
+  const arrivalLocationText = getLocationText(arrivalLocation);
+
   return (
     <Card>
       <CardContent sx={{ padding: 3 }}>
@@ -47,9 +59,7 @@ const TripCard = ({
                 icon={<FlightTakeoffIcon color="secondary" fontSize="small" />}
                 label={
                   <>
-                    <strong>Departure:</strong> {departureLocation.city},&nbsp;
-                    {departureLocation.region},&nbsp;
-                    {departureLocation.country}
+                    <strong>Departure:</strong> {departureLocationText}
                   </>
                 }
               />
@@ -59,9 +69,7 @@ const TripCard = ({
                 icon={<FlightLandIcon color="secondary" fontSize="small" />}
                 label={
                   <>
-                    <strong>Arrival:</strong> {arrivalLocation.city},&nbsp;
-                    {arrivalLocation.region},&nbsp;
-                    {arrivalLocation.country}
+                    <strong>Arrival:</strong> {arrivalLocationText}
                   </>
                 }
               />

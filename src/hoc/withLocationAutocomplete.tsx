@@ -22,6 +22,9 @@ interface WithLocationProps {
   id: string;
   placeholder: string;
   value?: ILocation;
+  error?: boolean;
+  helperText?: string;
+  disabled?: boolean;
   onChange?: (_event: React.SyntheticEvent, value: ILocation | null) => void;
 }
 
@@ -106,10 +109,12 @@ const withLocationAutocomplete = <P extends object>(
         value={props.value ?? null}
         onChange={(event, value) => props.onChange?.(event, value)}
         onInputChange={(_, value) => setInputValue(value)}
+        disabled={props.disabled}
         renderInput={(params) => (
           <WrappedComponent
             {...(params as unknown as P)}
             {...(props as P)}
+            disabled={props.disabled}
             inputProps={params.inputProps}
             InputLabelProps={params.InputLabelProps}
             slotProps={{
@@ -119,6 +124,7 @@ const withLocationAutocomplete = <P extends object>(
             }}
           />
         )}
+        noOptionsText="No matching locations - Please check spelling"
       />
     );
   };
