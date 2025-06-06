@@ -23,3 +23,10 @@ export interface ILocation {
   country: string;
   countryCode: string;
 }
+
+export interface IUser {
+  id: number;
+  name: string;
+  email: string;
+  role: "ADMIN" | "PARTICIPANT";
+}
