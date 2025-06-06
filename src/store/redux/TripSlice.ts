@@ -5,7 +5,7 @@ import {
   removeItemById,
   updateItemById,
 } from "../../utils/utils.ts";
-import { ILocation } from "../../types.ts";
+import { ITrip } from "../../types.ts";
 
 const initialTripState = {
   editingTrip: null,
@@ -65,17 +65,9 @@ export const fetchPlannedTrips = createAsyncThunk(
 
 export const createTrip = createAsyncThunk(
   "trips/createTrip",
-  async (
-    arg: {
-      name?: string;
-      description?: string;
-      departureLocation?: ILocation;
-      arrivalLocation?: ILocation;
-      departureDate?: string;
-      returnDate?: string;
-    },
-    { rejectWithValue },
-  ) => {
+  async (arg: Omit<ITrip, "id">, { rejectWithValue }) => {
+    const { participants, ...body } = arg;
+
     try {
       const response = await fetch(`${API_BACKEND_URL}/trips`, {
         method: "POST",
@@ -83,12 +75,10 @@ export const createTrip = createAsyncThunk(
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          name: arg.name,
-          description: arg.description,
-          departureLocation: arg.departureLocation,
-          arrivalLocation: arg.arrivalLocation,
-          departureDate: `${arg.departureDate}`,
-          returnDate: `${arg.returnDate}`,
+          ...body,
+          participantIds: [
+            ...new Set((participants ?? []).map((user) => user.id)),
+          ], // remove duplicates
         }),
       });
       const data = await response.json();
@@ -104,18 +94,9 @@ export const createTrip = createAsyncThunk(
 
 export const updateTrip = createAsyncThunk(
   "trips/updateTrip",
-  async (
-    arg: {
-      id: number;
-      name?: string;
-      description?: string;
-      departureLocation?: ILocation;
-      arrivalLocation?: ILocation;
-      departureDate?: string;
-      returnDate?: string;
-    },
-    { rejectWithValue },
-  ) => {
+  async (arg: ITrip, { rejectWithValue }) => {
+    const { participants, ...body } = arg;
+
     try {
       const response = await fetch(`${API_BACKEND_URL}/trips/${arg.id}`, {
         method: "PUT",
@@ -123,13 +104,10 @@ export const updateTrip = createAsyncThunk(
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          id: arg.id,
-          name: arg.name,
-          description: arg.description,
-          departureLocation: arg.departureLocation,
-          arrivalLocation: arg.arrivalLocation,
-          departureDate: `${arg.departureDate}`,
-          returnDate: `${arg.returnDate}`,
+          ...body,
+          participantIds: [
+            ...new Set((participants ?? []).map((user) => user.id)),
+          ],
         }),
       });
       const data = await response.json();

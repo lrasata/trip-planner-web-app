@@ -2,8 +2,9 @@ import Stack from "@mui/material/Stack";
 import InputAdornment from "@mui/material/InputAdornment";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import TextField, { TextFieldProps } from "@mui/material/TextField";
-import { ChangeEvent, forwardRef, useState } from "react";
+import React, { ChangeEvent, forwardRef } from "react";
 import withUserAutocomplete from "../../hoc/withUserAutocomplete.tsx";
+import { IUser } from "../../types.ts";
 
 const ParticipantInput = forwardRef<HTMLInputElement, TextFieldProps>(
   (props, ref) => {
@@ -27,13 +28,24 @@ const ParticipantInput = forwardRef<HTMLInputElement, TextFieldProps>(
   },
 );
 
-const TripParticipantInputForm = () => {
-  const [numberOfMembers, setNumberOfMembers] = useState<number>(1);
+interface Props {
+  participantCount?: number;
+  participants?: IUser[];
+  handleInputParticipantCountChange: (
+    event: ChangeEvent<HTMLInputElement>,
+  ) => void;
+  handleOnSelectParticipant: (
+    _event: React.SyntheticEvent,
+    value: IUser | null,
+  ) => void;
+}
 
-  const handleOnInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setNumberOfMembers(Number(event.target.value));
-  };
-
+const TripParticipantInputForm = ({
+  participantCount,
+  participants,
+  handleInputParticipantCountChange,
+  handleOnSelectParticipant,
+}: Props) => {
   const EnhancedParticipantInput = withUserAutocomplete(ParticipantInput);
 
   return (
@@ -43,15 +55,19 @@ const TripParticipantInputForm = () => {
         label="Number of participants"
         variant="outlined"
         required
-        value={numberOfMembers}
-        onChange={handleOnInputChange}
-        error={!numberOfMembers}
+        value={participantCount}
+        onChange={handleInputParticipantCountChange}
+        error={!participantCount}
       />
-      {[...Array(numberOfMembers)].map((_, index) => (
+      {[...Array(participantCount)].map((_, index) => (
         <EnhancedParticipantInput
-          id={`participant-name-${index + 1}-name-input`}
-          key={`participant-name-${index + 1}-input`}
+          id={`participant-name-${index}-name-input`}
+          key={`participant-name-${index}-input`}
           placeholder={`Name of participant #${index + 1}`}
+          onChange={handleOnSelectParticipant}
+          {...(participants && {
+            value: participants[index],
+          })}
         />
       ))}
     </Stack>

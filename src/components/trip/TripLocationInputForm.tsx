@@ -32,11 +32,11 @@ const LocationInput = forwardRef<HTMLInputElement, TextFieldProps>(
 interface TripLocationInputFormProps {
   departureLocation?: ILocation;
   arrivalLocation?: ILocation;
-  handleDepartureChange: (
+  handleOnSelectDepartureLocation: (
     _event: React.SyntheticEvent,
     value: ILocation | null,
   ) => void;
-  handleArrivalChange: (
+  handleOnSelectArrivalLocation: (
     _event: React.SyntheticEvent,
     value: ILocation | null,
   ) => void;
@@ -45,8 +45,8 @@ interface TripLocationInputFormProps {
 const TripLocationInputForm = ({
   departureLocation,
   arrivalLocation,
-  handleDepartureChange,
-  handleArrivalChange,
+  handleOnSelectDepartureLocation,
+  handleOnSelectArrivalLocation,
 }: TripLocationInputFormProps) => {
   const EnhancedDepartureCountryInput = withLocationAutocomplete(
     LocationInput,
@@ -76,14 +76,14 @@ const TripLocationInputForm = ({
         value={departureLocation}
         error={!departureLocation?.country}
         helperText="Select a country"
-        onChange={handleDepartureChange}
+        onChange={handleOnSelectDepartureLocation}
       />
       <EnhancedDepartureCityInput
         id="departure-city-input"
         placeholder="City - Start typing..."
         value={departureLocation}
         helperText="Select a city"
-        onChange={handleDepartureChange}
+        onChange={handleOnSelectDepartureLocation}
         disabled={!departureLocation?.country}
       />
       <Typography variant="subtitle2">Arrival location</Typography>
@@ -93,14 +93,14 @@ const TripLocationInputForm = ({
         error={!arrivalLocation?.country}
         helperText="Select a country"
         value={arrivalLocation}
-        onChange={handleArrivalChange}
+        onChange={handleOnSelectArrivalLocation}
       />
       <EnhancedArrivalCityInput
         id="arrival-city-input"
         placeholder="City - Start typing..."
         value={arrivalLocation}
         helperText="Select a city"
-        onChange={handleArrivalChange}
+        onChange={handleOnSelectArrivalLocation}
         disabled={!arrivalLocation?.country}
       />
     </Stack>

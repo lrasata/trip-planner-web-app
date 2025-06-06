@@ -55,7 +55,7 @@ const withLocationAutocomplete = <P extends object>(
       }, DEBOUNCE_TIME);
 
       return () => clearTimeout(timeout);
-    }, [inputValue, fetchUsers]);
+    }, [inputValue]);
 
     return (
       <Autocomplete

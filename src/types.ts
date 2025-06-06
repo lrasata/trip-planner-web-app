@@ -14,6 +14,8 @@ export interface ITrip {
   arrivalLocation?: ILocation;
   departureDate?: string;
   returnDate?: string;
+  participantCount?: number;
+  participants?: IUser[];
 }
 
 export interface ILocation {

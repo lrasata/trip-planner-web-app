@@ -1,5 +1,5 @@
 import { Box, Button, styled } from "@mui/material";
-import { ILocation, IStep, ITrip } from "../types.ts";
+import { ILocation, IStep, ITrip, IUser } from "../types.ts";
 import Typography from "@mui/material/Typography";
 import { ChangeEvent, lazy, Suspense, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -50,7 +50,10 @@ const CreateTripContainer = () => {
     setEditTrip(draftTrip);
   }, [draftTrip]);
 
-  const handleEditTrip = (key: string, value: string | ILocation) => {
+  const handleEditTrip = (
+    key: string,
+    value: string | number | IUser[] | ILocation,
+  ) => {
     setEditTrip((prevState) => ({ ...prevState, [key]: value }));
   };
 
@@ -67,6 +70,13 @@ const CreateTripContainer = () => {
     (key: string) => (_event: any, selectedLocation: ILocation | null) => {
       if (selectedLocation) {
         handleEditTrip(key, selectedLocation);
+      }
+    };
+
+  const handleOnSelectParticipant =
+    (key: string) => (_event: any, selectedUser: IUser | null) => {
+      if (selectedUser) {
+        handleEditTrip(key, [...(editTrip.participants ?? []), selectedUser]);
       }
     };
 
@@ -96,10 +106,12 @@ const CreateTripContainer = () => {
             {...(editTrip.arrivalLocation && {
               arrivalLocation: editTrip.arrivalLocation,
             })}
-            handleDepartureChange={handleLocationInputChange(
+            handleOnSelectDepartureLocation={handleLocationInputChange(
               "departureLocation",
             )}
-            handleArrivalChange={handleLocationInputChange("arrivalLocation")}
+            handleOnSelectArrivalLocation={handleLocationInputChange(
+              "arrivalLocation",
+            )}
           />
         </Suspense>
       ),
@@ -109,7 +121,16 @@ const CreateTripContainer = () => {
       description: `You can update those information later`,
       component: (
         <Suspense fallback={<Spinner />}>
-          <TripParticipantInputForm />
+          <TripParticipantInputForm
+            participantCount={editTrip.participantCount}
+            participants={editTrip.participants}
+            handleOnSelectParticipant={handleOnSelectParticipant(
+              "participants",
+            )}
+            handleInputParticipantCountChange={handleInputChange(
+              "participantCount",
+            )}
+          />
         </Suspense>
       ),
     },

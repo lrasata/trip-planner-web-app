@@ -110,10 +110,12 @@ const EditTripContainer = ({ trip, status, error }: EditTripContainerProps) => {
             {...(tripFormData.arrivalLocation && {
               arrivalLocation: tripFormData.arrivalLocation,
             })}
-            handleDepartureChange={handleLocationInputChange(
+            handleOnSelectDepartureLocation={handleLocationInputChange(
               "departureLocation",
             )}
-            handleArrivalChange={handleLocationInputChange("arrivalLocation")}
+            handleOnSelectArrivalLocation={handleLocationInputChange(
+              "arrivalLocation",
+            )}
           />
           <BasicDatePicker
             value={dayjs(tripFormData.departureDate) ?? ""}

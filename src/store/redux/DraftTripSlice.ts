@@ -8,6 +8,8 @@ const initialState: ITrip = {
   arrivalLocation: undefined,
   departureDate: "",
   returnDate: "",
+  participantCount: undefined,
+  participants: undefined,
 };
 
 const draftTripSlice = createSlice({
