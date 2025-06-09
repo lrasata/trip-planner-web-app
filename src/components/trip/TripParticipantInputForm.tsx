@@ -54,12 +54,13 @@ const TripParticipantInputForm = ({
         id="trip-number-member-input"
         label="Number of participants"
         variant="outlined"
+        type="number"
         required
         value={participantCount}
         onChange={handleInputParticipantCountChange}
         error={!participantCount}
       />
-      {[...Array(participantCount)].map((_, index) => (
+      {[...Array(Number(participantCount))].map((_, index) => (
         <EnhancedParticipantInput
           id={`participant-name-${index}-name-input`}
           key={`participant-name-${index}-input`}

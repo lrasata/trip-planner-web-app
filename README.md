@@ -4,16 +4,12 @@
 
 A modern frontend application built with React, TypeScript, and Vite, designed to provide users with an intuitive interface for planning their trips. This project serves as the frontend counterpart to the [Trip Planner API](https://github.com/lrasata/tripPlannerAPI), aiming to offer seamless integration and user experience.
 
-
-
 ## ✨ Features
 
 - **React & TypeScript**: Leveraging the power of React for building dynamic user interfaces with the type safety of TypeScript.
 - **Vite**: Utilized for its fast and efficient build tooling.
 - **Material-UI (MUI)**: Implemented for consistent and responsive UI components.
 - **Modular Architecture**: Structured codebase for scalability and maintainability.
-
-
 
 ## 🛠️ Tech Stack
 
@@ -22,8 +18,6 @@ A modern frontend application built with React, TypeScript, and Vite, designed t
 - **Build Tool**: Vite
 - **UI Library**: Material-UI (MUI)
 - **Package Manager**: npm
-
-
 
 ## 🚀 Getting Started
 
@@ -55,8 +49,6 @@ A modern frontend application built with React, TypeScript, and Vite, designed t
 
    The application will be accessible at `http://localhost:5173`.
 
-
-
 ## 🔧 Available Scripts
 
 - **Start Development Server:**
@@ -83,13 +75,9 @@ A modern frontend application built with React, TypeScript, and Vite, designed t
   npm run format
   ```
 
-
-
 ## 📌 Future Enhancements
 
 - **Authentication**: Add user authentication and authorization features.
-- **Responsive Design**: Ensure mobile and tablet compatibility.
-
 
 ## 📄 License
 

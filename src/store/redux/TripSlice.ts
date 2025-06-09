@@ -19,15 +19,38 @@ export const fetchTrip = createAsyncThunk(
   "trips/fetchTrip",
   async (arg: { id: number }, { rejectWithValue }) => {
     try {
-      const response = await fetch(`${API_BACKEND_URL}/trips/${arg.id}`, {
+      const tripResponse = await fetch(`${API_BACKEND_URL}/trips/${arg.id}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
       });
-      const data = await response.json();
+
+      if (!tripResponse.ok) throw new Error("Trip fetch failed");
+      const tripData = await tripResponse.json();
+
+      // Extract participantIds from tripData
+      const participantIds = tripData.participantIds;
+
+      // If there are participant IDs, fetch participants in batch
+      let participants = [];
+      if (participantIds && participantIds.length > 0) {
+        const participantsResponse = await fetch(
+          `${API_BACKEND_URL}/users?ids=${participantIds.join(",")}`,
+          {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+          },
+        );
+        if (!participantsResponse.ok)
+          throw new Error("User Participants fetch failed");
+        participants = await participantsResponse.json();
+      }
       return {
-        trip: data,
+        trip: {
+          ...tripData,
+          participants: participants,
+        },
       };
     } catch (error) {
       console.error("Error fetching trip with id: ", error);

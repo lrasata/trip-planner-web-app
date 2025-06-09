@@ -16,6 +16,7 @@ import Spinner from "../components/Spinner.tsx";
 import Box from "@mui/material/Box";
 import { useTheme } from "@mui/material";
 import TripLocationInputForm from "../components/trip/TripLocationInputForm.tsx";
+import TripParticipantInputForm from "../components/trip/TripParticipantInputForm.tsx";
 
 const Dialog = lazy(() => import("../components/Dialog.tsx"));
 
@@ -116,6 +117,16 @@ const EditTripContainer = ({ trip, status, error }: EditTripContainerProps) => {
             handleOnSelectArrivalLocation={handleLocationInputChange(
               "arrivalLocation",
             )}
+          />
+          <TripParticipantInputForm
+            {...(tripFormData.participantCount && {
+              participantCount: tripFormData.participantCount,
+            })}
+            {...(tripFormData.participants && {
+              participants: tripFormData.participants,
+            })}
+            handleOnSelectParticipant={() => {}}
+            handleInputParticipantCountChange={() => {}}
           />
           <BasicDatePicker
             value={dayjs(tripFormData.departureDate) ?? ""}
