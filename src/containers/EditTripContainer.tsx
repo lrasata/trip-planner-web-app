@@ -1,6 +1,6 @@
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
-import { ILocation, ITrip } from "../types.ts";
+import { ILocation, ITrip, IUser } from "../types.ts";
 import Stack from "@mui/material/Stack";
 import BasicDatePicker from "../components/BasicDatePicker.tsx";
 import dayjs, { Dayjs } from "dayjs";
@@ -62,6 +62,15 @@ const EditTripContainer = ({ trip, status, error }: EditTripContainerProps) => {
   const handleDateChange = (key: string) => (date: Dayjs | null) => {
     date && handleEditTrip({ [key]: formatDate(date) });
   };
+
+  const handleOnSelectParticipant =
+    (key: string) => (_event: any, selectedUser: IUser | null) => {
+      if (selectedUser) {
+        handleEditTrip({
+          [key]: [...(tripFormData.participants ?? []), selectedUser],
+        });
+      }
+    };
 
   const handleOnSave = () => {
     // @ts-ignore
@@ -125,8 +134,12 @@ const EditTripContainer = ({ trip, status, error }: EditTripContainerProps) => {
             {...(tripFormData.participants && {
               participants: tripFormData.participants,
             })}
-            handleOnSelectParticipant={() => {}}
-            handleInputParticipantCountChange={() => {}}
+            handleOnSelectParticipant={handleOnSelectParticipant(
+              "participants",
+            )}
+            handleInputParticipantCountChange={handleInputChange(
+              "participantCount",
+            )}
           />
           <BasicDatePicker
             value={dayjs(tripFormData.departureDate) ?? ""}

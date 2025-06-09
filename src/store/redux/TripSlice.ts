@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { API_BACKEND_URL } from "../../constants/constants.ts";
 import {
   existsById,
+  nullToUndefined,
   removeItemById,
   updateItemById,
 } from "../../utils/utils.ts";
@@ -27,7 +28,8 @@ export const fetchTrip = createAsyncThunk(
       });
 
       if (!tripResponse.ok) throw new Error("Trip fetch failed");
-      const tripData = await tripResponse.json();
+      const response = await tripResponse.json();
+      const tripData = nullToUndefined(response);
 
       // Extract participantIds from tripData
       const participantIds = tripData.participantIds;
@@ -77,7 +79,7 @@ export const fetchPlannedTrips = createAsyncThunk(
       });
       const data = await response.json();
       return {
-        plannedTrips: data,
+        plannedTrips: nullToUndefined(data),
       };
     } catch (error) {
       console.error("Error fetching planned trips:", error);
@@ -134,8 +136,12 @@ export const updateTrip = createAsyncThunk(
         }),
       });
       const data = await response.json();
+
       return {
-        trip: data,
+        trip: {
+          ...data,
+          participants: participants,
+        },
       };
     } catch (error) {
       console.error("Error updating trip:", error);

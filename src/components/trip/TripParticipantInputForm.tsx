@@ -51,20 +51,19 @@ const TripParticipantInputForm = ({
   return (
     <Stack spacing={3} sx={{ my: 3 }}>
       <TextField
-        id="trip-number-member-input"
-        label="Number of participants"
+        id={`trip-number-participants-input`}
+        helperText="Number of participants"
         variant="outlined"
-        type="number"
         required
         value={participantCount}
         onChange={handleInputParticipantCountChange}
         error={!participantCount}
       />
-      {[...Array(Number(participantCount))].map((_, index) => (
+      {[...Array(Number(participantCount || 0))].map((_, index) => (
         <EnhancedParticipantInput
           id={`participant-name-${index}-name-input`}
           key={`participant-name-${index}-input`}
-          placeholder={`Name of participant #${index + 1}`}
+          helperText={`Name of participant #${index + 1}`}
           onChange={handleOnSelectParticipant}
           {...(participants && {
             value: participants[index],
