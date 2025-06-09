@@ -55,7 +55,7 @@ const TripParticipantInputForm = ({
         helperText="Number of participants"
         variant="outlined"
         required
-        value={participantCount}
+        value={participantCount ?? ""}
         onChange={handleInputParticipantCountChange}
         error={!participantCount}
       />
