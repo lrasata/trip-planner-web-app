@@ -5,6 +5,8 @@ import TextField, { TextFieldProps } from "@mui/material/TextField";
 import React, { ChangeEvent, forwardRef } from "react";
 import withUserAutocomplete from "../../hoc/withUserAutocomplete.tsx";
 import { IUser } from "../../types.ts";
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 const ParticipantInput = forwardRef<HTMLInputElement, TextFieldProps>(
   (props, ref) => {
@@ -38,6 +40,8 @@ interface Props {
     _event: React.SyntheticEvent,
     value: IUser | null,
   ) => void;
+  handleOnRemoveParticipant?: (participant: IUser) => void;
+  onEdit?: boolean;
 }
 
 const TripParticipantInputForm = ({
@@ -45,6 +49,8 @@ const TripParticipantInputForm = ({
   participants,
   handleInputParticipantCountChange,
   handleOnSelectParticipant,
+  onEdit = false,
+  handleOnRemoveParticipant,
 }: Props) => {
   const EnhancedParticipantInput = withUserAutocomplete(ParticipantInput);
 
@@ -60,15 +66,35 @@ const TripParticipantInputForm = ({
         error={!participantCount}
       />
       {[...Array(Number(participantCount || 0))].map((_, index) => (
-        <EnhancedParticipantInput
-          id={`participant-name-${index}-name-input`}
+        <Stack
+          direction="row"
           key={`participant-name-${index}-input`}
-          helperText={`Name of participant #${index + 1}`}
-          onChange={handleOnSelectParticipant}
-          {...(participants && {
-            value: participants[index],
-          })}
-        />
+          spacing={1}
+          sx={{ alignItems: "center" }}
+        >
+          <EnhancedParticipantInput
+            id={`participant-name-${index}-name-input`}
+            placeholder="Email"
+            helperText={`Participant #${index + 1}`}
+            onChange={handleOnSelectParticipant}
+            {...(participants && {
+              value: participants[index],
+            })}
+            {...(onEdit &&
+              participants && { disabled: participants[index] !== undefined })}
+          />
+          {onEdit &&
+            participants &&
+            participants[index] !== undefined &&
+            handleOnRemoveParticipant && (
+              <IconButton
+                aria-label="delete"
+                onClick={() => handleOnRemoveParticipant(participants[index])}
+              >
+                <DeleteIcon />
+              </IconButton>
+            )}
+        </Stack>
       ))}
     </Stack>
   );

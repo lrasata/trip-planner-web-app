@@ -72,6 +72,15 @@ const EditTripContainer = ({ trip, status, error }: EditTripContainerProps) => {
       }
     };
 
+  const handleOnRemoveParticipant = (key: string) => (userToRemove: IUser) => {
+    const updatedUsers = [...(tripFormData.participants ?? [])].filter(
+      (user) => user.id !== userToRemove.id,
+    );
+    handleEditTrip({
+      [key]: updatedUsers,
+    });
+  };
+
   const handleOnSave = () => {
     // @ts-ignore
     dispatch(updateTrip(tripFormData));
@@ -128,6 +137,7 @@ const EditTripContainer = ({ trip, status, error }: EditTripContainerProps) => {
             )}
           />
           <TripParticipantInputForm
+            onEdit
             {...(tripFormData.participantCount && {
               participantCount: tripFormData.participantCount,
             })}
@@ -139,6 +149,9 @@ const EditTripContainer = ({ trip, status, error }: EditTripContainerProps) => {
             )}
             handleInputParticipantCountChange={handleInputChange(
               "participantCount",
+            )}
+            handleOnRemoveParticipant={handleOnRemoveParticipant(
+              "participants",
             )}
           />
           <BasicDatePicker
