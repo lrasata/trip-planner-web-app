@@ -1,12 +1,14 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { lazy, Suspense } from "react";
 import Spinner from "./components/Spinner.tsx";
+import LoginPage from "./pages/LoginPage.tsx";
 
 const MainLayout = lazy(() => import("./pages/MainLayout.tsx"));
 const ErrorPage = lazy(() => import("./pages/ErrorPage.tsx"));
 const Home = lazy(() => import("./pages/Home.tsx"));
 const AllTrips = lazy(() => import("./pages/AllTrips.tsx"));
 const EditTripPage = lazy(() => import("./pages/EditTripPage.tsx"));
+const ProtectedRoute = lazy(() => import("./containers/ProtectedRoute.tsx"));
 
 const router = createBrowserRouter([
   {
@@ -31,10 +33,20 @@ const router = createBrowserRouter([
         ),
       },
       {
+        path: "login",
+        element: (
+          <Suspense fallback={<Spinner />}>
+            <LoginPage />
+          </Suspense>
+        ),
+      },
+      {
         path: "trips",
         element: (
           <Suspense fallback={<Spinner />}>
-            <AllTrips />
+            <ProtectedRoute>
+              <AllTrips />
+            </ProtectedRoute>
           </Suspense>
         ),
       },
@@ -42,16 +54,14 @@ const router = createBrowserRouter([
         path: "trips/:id",
         element: (
           <Suspense fallback={<Spinner />}>
-            <EditTripPage />
+            <ProtectedRoute>
+              <EditTripPage />
+            </ProtectedRoute>
           </Suspense>
         ),
       },
       {
         path: "settings",
-        element: <></>,
-      },
-      {
-        path: "task-category",
         element: <></>,
       },
     ],

@@ -25,6 +25,7 @@ export const fetchTrip = createAsyncThunk(
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
       });
 
       if (!tripResponse.ok) throw new Error("Trip fetch failed");
@@ -42,6 +43,7 @@ export const fetchTrip = createAsyncThunk(
           {
             method: "GET",
             headers: { "Content-Type": "application/json" },
+            credentials: "include",
           },
         );
         if (!participantsResponse.ok)
@@ -76,6 +78,7 @@ export const fetchPlannedTrips = createAsyncThunk(
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
       });
       const data = await response.json();
       return {
@@ -99,6 +102,7 @@ export const createTrip = createAsyncThunk(
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
         body: JSON.stringify({
           ...body,
           participantIds: [
@@ -128,6 +132,7 @@ export const updateTrip = createAsyncThunk(
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
         body: JSON.stringify({
           ...body,
           participantIds: [
@@ -159,6 +164,7 @@ export const deleteTrip = createAsyncThunk(
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
       });
       return {
         trip: { id: arg.id },

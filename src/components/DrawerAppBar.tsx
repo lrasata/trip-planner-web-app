@@ -38,7 +38,7 @@ const DrawerAppBar = (props: Props) => {
   };
 
   const handleOnClickMenuItem = (href: string) => {
-    if (href === "/log-out") {
+    if (href === "/logout") {
       handleOnClickLogout();
     } else {
       handleOnClickNavigate(href);
