@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { API_USER_ENDPOINT } from "../constants/constants.ts";
+import { useSelector } from "react-redux";
 
 interface IUserResponse {
   id: string;
@@ -10,6 +11,9 @@ interface IUserResponse {
 }
 
 const useIsAuthenticated = () => {
+  // @ts-ignore
+  const isAuthenticated = useSelector((state) => state.auth.isLoggedIn);
+
   const [user, setUser] = useState<IUserResponse | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -25,7 +29,7 @@ const useIsAuthenticated = () => {
       .then(setUser)
       .catch(() => setUser(null))
       .finally(() => setLoading(false));
-  }, []);
+  }, [isAuthenticated]);
 
   return {
     isAuthenticated: user !== null,

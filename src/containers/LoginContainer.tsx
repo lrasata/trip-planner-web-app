@@ -11,6 +11,8 @@ import React, { useState } from "react";
 import { toast } from "react-toastify";
 import { API_LOGIN_ENDPOINT } from "../constants/constants.ts";
 import { useNavigate } from "react-router-dom";
+import { authSliceActions } from "../store/redux/AuthSlice.ts";
+import { useDispatch } from "react-redux";
 
 interface StyledBoxContainerProps extends BoxProps {
   component?: React.ElementType; // React.ElementType can be any HTML or custom component
@@ -29,6 +31,7 @@ const StyledBoxContainer = styled(Box)<StyledBoxContainerProps>(
 );
 
 const LoginContainer = () => {
+  const dispatch = useDispatch();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const navigate = useNavigate();
@@ -71,6 +74,7 @@ const LoginContainer = () => {
         handleError("Login failed");
       } else {
         handleSuccess("Successfully logged in");
+        dispatch(authSliceActions.update({ isLoggedIn: true }));
         navigate("/");
       }
     } catch (error) {

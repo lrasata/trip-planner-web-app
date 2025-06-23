@@ -3,12 +3,17 @@ import { API_LOGOUT_ENDPOINT, APP_NAME } from "../constants/constants.ts";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import useIsAuthenticated from "../hooks/useIsAuthenticated.ts";
+import { useDispatch } from "react-redux";
+import { authSliceActions } from "../store/redux/AuthSlice.ts";
 
 const navItems = [
   {
     title: "Home",
     url: "/",
   },
+];
+
+const authNavItems = [
   {
     title: "All trips",
     url: "/trips",
@@ -17,9 +22,14 @@ const navItems = [
     title: "Settings",
     url: "/settings",
   },
+  { title: "Log out", url: "/logout" },
 ];
 
+const nonAuthNavItems = [{ title: "Log in", url: "/login" }];
+
 const MainNavigationContainer = () => {
+  const dispatch = useDispatch();
+
   const navigate = useNavigate();
   const { isAuthenticated } = useIsAuthenticated();
   const [menuContent, setMenuContent] = useState(navItems);
@@ -35,21 +45,13 @@ const MainNavigationContainer = () => {
     });
 
     navigate("/login");
+    dispatch(authSliceActions.update({ isLoggedIn: false }));
   };
 
   useEffect(() => {
-    const authMenuItem = isAuthenticated
-      ? { title: "Log out", url: "/logout" }
-      : { title: "Log in", url: "/login" };
+    const addMenuItems = isAuthenticated ? authNavItems : nonAuthNavItems;
 
-    setMenuContent((prevState) => {
-      // Remove any existing auth-related item
-      const filtered = prevState.filter(
-        (item) => item.url !== "/login" && item.url !== "/logout",
-      );
-
-      return [...filtered, authMenuItem];
-    });
+    setMenuContent([...navItems, ...addMenuItems]);
   }, [isAuthenticated]);
 
   return (
