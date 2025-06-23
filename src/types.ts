@@ -28,7 +28,7 @@ export interface ILocation {
 
 export interface IUser {
   id: number;
-  name: string;
+  fullName: string;
   email: string;
   role: "ADMIN" | "PARTICIPANT";
 }

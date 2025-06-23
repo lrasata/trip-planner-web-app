@@ -8,7 +8,7 @@ const StyledBox = styled(Box)`
   align-items: center;
 `;
 
-const Brand = ({ height = 300 }) => {
+const Brand = ({ height = 250 }) => {
   return (
     <StyledBox>
       <img src={logo} alt="Trip planner logo" height={height} />

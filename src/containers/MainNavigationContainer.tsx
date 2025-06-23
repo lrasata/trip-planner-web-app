@@ -3,7 +3,6 @@ import { API_LOGOUT_ENDPOINT, APP_NAME } from "../constants/constants.ts";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import useIsAuthenticated from "../hooks/useIsAuthenticated.ts";
-import { useCookies } from "react-cookie";
 
 const navItems = [
   {
@@ -24,8 +23,6 @@ const MainNavigationContainer = () => {
   const navigate = useNavigate();
   const { isAuthenticated } = useIsAuthenticated();
   const [menuContent, setMenuContent] = useState(navItems);
-  // @ts-ignore
-  const [cookies, setCookie, removeCookie] = useCookies(["token"]);
 
   const handleOnClickNavigate = (href: string) => {
     navigate(href);

@@ -1,7 +1,7 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { lazy, Suspense } from "react";
 import Spinner from "./components/Spinner.tsx";
-import LoginPage from "./pages/LoginPage.tsx";
+import LoginOrSignInPage from "./pages/LoginOrSignInPage.tsx";
 
 const MainLayout = lazy(() => import("./pages/MainLayout.tsx"));
 const ErrorPage = lazy(() => import("./pages/ErrorPage.tsx"));
@@ -36,7 +36,7 @@ const router = createBrowserRouter([
         path: "login",
         element: (
           <Suspense fallback={<Spinner />}>
-            <LoginPage />
+            <LoginOrSignInPage />
           </Suspense>
         ),
       },
