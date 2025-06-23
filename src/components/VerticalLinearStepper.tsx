@@ -8,7 +8,6 @@ import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import { IStep } from "../types.ts";
 import { useState } from "react";
-import { useMediaQuery, useTheme } from "@mui/material";
 import Stack from "@mui/material/Stack";
 
 interface VerticalLinearStepperProps {
@@ -23,8 +22,6 @@ const VerticalLinearStepper = ({
   handleOnSubmitStep,
   requiredFieldMissing = false,
 }: VerticalLinearStepperProps) => {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [activeStep, setActiveStep] = useState(0);
 
   const handleNext = () => {
@@ -41,7 +38,7 @@ const VerticalLinearStepper = ({
   };
 
   return (
-    <Box sx={{ width: isMobile ? "100%" : "400px", my: 2 }}>
+    <Box my={2}>
       <Stepper activeStep={activeStep} orientation="vertical">
         {steps.map((step, index) => (
           <Step key={step.label}>

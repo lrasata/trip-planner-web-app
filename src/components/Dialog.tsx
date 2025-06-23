@@ -26,7 +26,13 @@ const Dialog = (props: DialogProps) => {
   };
 
   return (
-    <MuiDialog onClose={handleClose} open={open} fullScreen={isMobile}>
+    <MuiDialog
+      onClose={handleClose}
+      open={open}
+      fullScreen={isMobile}
+      fullWidth
+      maxWidth="sm"
+    >
       <DialogTitle sx={{ m: 0, p: 2 }}>{title}</DialogTitle>
       <IconButton
         aria-label="close"
