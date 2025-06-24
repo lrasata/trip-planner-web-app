@@ -19,8 +19,8 @@ const authNavItems = [
     url: "/trips",
   },
   {
-    title: "Settings",
-    url: "/settings",
+    title: "Profile",
+    url: "/profile",
   },
   { title: "Log out", url: "/logout" },
 ];

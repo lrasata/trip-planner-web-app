@@ -8,6 +8,7 @@ const ErrorPage = lazy(() => import("./pages/ErrorPage.tsx"));
 const Home = lazy(() => import("./pages/Home.tsx"));
 const AllTrips = lazy(() => import("./pages/AllTrips.tsx"));
 const EditTripPage = lazy(() => import("./pages/EditTripPage.tsx"));
+const ProfilePage = lazy(() => import("./pages/ProfilePage.tsx"));
 const ProtectedRoute = lazy(() => import("./containers/ProtectedRoute.tsx"));
 
 const router = createBrowserRouter([
@@ -61,8 +62,14 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "settings",
-        element: <></>,
+        path: "profile",
+        element: (
+          <Suspense fallback={<Spinner />}>
+            <ProtectedRoute>
+              <ProfilePage />
+            </ProtectedRoute>
+          </Suspense>
+        ),
       },
     ],
   },

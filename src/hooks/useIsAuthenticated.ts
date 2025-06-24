@@ -6,7 +6,7 @@ interface IUserResponse {
   id: string;
   email: string;
   fullName: string;
-  role: { name: string }[];
+  role: { name: string };
   tripIds: number[];
 }
 
