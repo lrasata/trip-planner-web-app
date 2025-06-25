@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { API_USER_ENDPOINT } from "../../constants/constants.ts";
 import { nullToUndefined } from "../../utils/utils.ts";
+import { IUser } from "../../types.ts";
 
 const initialState = {
   isLoggedIn: false,
@@ -35,6 +36,35 @@ export const fetchAuthenticatedUser = createAsyncThunk(
   },
 );
 
+export const updateAuthenticatedUser = createAsyncThunk(
+  "auth/updateAuthenticatedUser",
+  async (arg: IUser, { rejectWithValue }) => {
+    const url = new URL(`${API_USER_ENDPOINT}profile`);
+
+    try {
+      const response = await fetch(url.toString(), {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ...arg,
+        }),
+        credentials: "include",
+      });
+      const data = await response.json();
+      return {
+        authenticatedUser: nullToUndefined(data),
+      };
+    } catch (error) {
+      console.error("Error updating authenticated user:", error);
+      return rejectWithValue(
+        "Oops unable to update authenticated user from API",
+      );
+    }
+  },
+);
+
 const authSlice = createSlice({
   name: "authentication",
   initialState: initialState,
@@ -62,6 +92,19 @@ const authSlice = createSlice({
       state.authenticatedUser = action.payload.authenticatedUser;
     });
     builder.addCase(fetchAuthenticatedUser.rejected, (state, action) => {
+      state.status = "failed";
+      // @ts-ignore
+      state.error = action.error.message || "Something went wrong";
+    });
+    builder.addCase(updateAuthenticatedUser.pending, (state) => {
+      state.status = "loading";
+    });
+    builder.addCase(updateAuthenticatedUser.fulfilled, (state, action) => {
+      state.status = "succeeded";
+      // @ts-ignore
+      state.authenticatedUser = action.payload.authenticatedUser;
+    });
+    builder.addCase(updateAuthenticatedUser.rejected, (state, action) => {
       state.status = "failed";
       // @ts-ignore
       state.error = action.error.message || "Something went wrong";

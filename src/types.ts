@@ -30,5 +30,6 @@ export interface IUser {
   id?: number;
   fullName: string;
   email: string;
-  role: string; // "ROLE_SUPER_ADMIN" | "ROLE_ADMIN" | "ROLE_PARTICIPANT";
+  password?: string;
+  role?: string; // "ROLE_SUPER_ADMIN" | "ROLE_ADMIN" | "ROLE_PARTICIPANT";
 }
