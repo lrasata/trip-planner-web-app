@@ -45,7 +45,7 @@ const MainNavigationContainer = () => {
     });
 
     navigate("/login");
-    dispatch(authSliceActions.update({ isLoggedIn: false }));
+    dispatch(authSliceActions.updateIsLoggedInState({ isLoggedIn: false }));
   };
 
   useEffect(() => {

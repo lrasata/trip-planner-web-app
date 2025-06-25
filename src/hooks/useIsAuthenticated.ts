@@ -1,40 +1,26 @@
-import { useEffect, useState } from "react";
-import { API_USER_ENDPOINT } from "../constants/constants.ts";
-import { useSelector } from "react-redux";
-
-interface IUserResponse {
-  id: string;
-  email: string;
-  fullName: string;
-  role: { name: string };
-  tripIds: number[];
-}
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchAuthenticatedUser } from "../store/redux/AuthSlice.ts";
 
 const useIsAuthenticated = () => {
+  const dispatch = useDispatch();
   // @ts-ignore
   const isAuthenticated = useSelector((state) => state.auth.isLoggedIn);
-
-  const [user, setUser] = useState<IUserResponse | null>(null);
-  const [loading, setLoading] = useState(true);
+  // @ts-ignore
+  const authenticatedUser = useSelector(
+    (state) => state.auth.authenticatedUser,
+  );
 
   useEffect(() => {
-    fetch(`${API_USER_ENDPOINT}me`, {
-      method: "GET",
-      credentials: "include",
-    })
-      .then((res) => {
-        if (res.ok) return res.json();
-        throw new Error("Not authenticated");
-      })
-      .then(setUser)
-      .catch(() => setUser(null))
-      .finally(() => setLoading(false));
+    if (isAuthenticated && !authenticatedUser) {
+      // @ts-ignore
+      dispatch(fetchAuthenticatedUser());
+    }
   }, [isAuthenticated]);
 
   return {
-    isAuthenticated: user !== null,
-    user,
-    loading,
+    isAuthenticated,
+    user: authenticatedUser,
   };
 };
 

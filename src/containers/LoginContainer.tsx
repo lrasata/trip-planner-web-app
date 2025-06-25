@@ -74,7 +74,7 @@ const LoginContainer = () => {
         handleError("Login failed");
       } else {
         handleSuccess("Successfully logged in");
-        dispatch(authSliceActions.update({ isLoggedIn: true }));
+        dispatch(authSliceActions.updateIsLoggedInState({ isLoggedIn: true }));
         navigate("/");
       }
     } catch (error) {

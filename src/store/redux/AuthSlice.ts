@@ -1,19 +1,71 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { API_USER_ENDPOINT } from "../../constants/constants.ts";
+import { nullToUndefined } from "../../utils/utils.ts";
 
 const initialState = {
   isLoggedIn: false,
+  authenticatedUser: undefined,
+  status: "idle", // 'idle' | 'loading' | 'succeeded' | 'failed' | 'created' | 'updated' | 'deleted'
+  error: null,
 };
+
+export const fetchAuthenticatedUser = createAsyncThunk(
+  "auth/fetchAuthenticatedUser",
+  async (_, { rejectWithValue }) => {
+    const url = new URL(`${API_USER_ENDPOINT}me`);
+
+    try {
+      const response = await fetch(url.toString(), {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
+      const data = await response.json();
+      return {
+        authenticatedUser: nullToUndefined(data),
+      };
+    } catch (error) {
+      console.error("Error fetching authenticated user:", error);
+      return rejectWithValue(
+        "Oops unable to fetch authenticated user from API",
+      );
+    }
+  },
+);
 
 const authSlice = createSlice({
   name: "authentication",
   initialState: initialState,
   reducers: {
-    update(state, action: PayloadAction<{ isLoggedIn: boolean }>) {
-      Object.assign(state, action.payload);
+    updateIsLoggedInState(
+      state,
+      action: PayloadAction<{ isLoggedIn: boolean }>,
+    ) {
+      state.isLoggedIn = action.payload.isLoggedIn;
+      if (!action.payload.isLoggedIn) {
+        state.authenticatedUser = undefined;
+      }
     },
     reset() {
       return { ...initialState };
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(fetchAuthenticatedUser.pending, (state) => {
+      state.status = "loading";
+    });
+    builder.addCase(fetchAuthenticatedUser.fulfilled, (state, action) => {
+      state.status = "succeeded";
+      // @ts-ignore
+      state.authenticatedUser = action.payload.authenticatedUser;
+    });
+    builder.addCase(fetchAuthenticatedUser.rejected, (state, action) => {
+      state.status = "failed";
+      // @ts-ignore
+      state.error = action.error.message || "Something went wrong";
+    });
   },
 });
 
