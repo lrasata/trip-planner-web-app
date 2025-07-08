@@ -11,6 +11,7 @@ import {
 import React, { useState } from "react";
 import { API_SIGNUP_ENDPOINT } from "../constants/constants.ts";
 import { toast } from "react-toastify";
+import api from "../api/api.ts";
 
 interface StyledBoxContainerProps extends BoxProps {
   component?: React.ElementType; // React.ElementType can be any HTML or custom component
@@ -59,27 +60,18 @@ const SignUpContainer = () => {
   const handleSignInSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
     try {
-      const response = await fetch(API_SIGNUP_ENDPOINT, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ ...inputValue }),
-      });
+      await api.post(API_SIGNUP_ENDPOINT, { ...inputValue });
 
-      if (!response.ok) {
-        handleError("Registration failed");
-      } else {
-        handleSuccess("You are successfully registered. You can now log in");
-        setInputValue((prevState) => ({
-          ...prevState,
-          email: "",
-          password: "",
-          fullName: "",
-        }));
-      }
+      handleSuccess("You are successfully registered. You can now log in");
+      setInputValue((prevState) => ({
+        ...prevState,
+        email: "",
+        password: "",
+        fullName: "",
+      }));
     } catch (error) {
       console.log(error);
+      handleError("Registration failed");
     }
   };
 

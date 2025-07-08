@@ -1,41 +1,45 @@
-# Trip Planner Web App
+# Trip Planner Web App 🚧
 
 > **Status**: 🚧 Under Construction
 
-Trip Planner is a web app built for organizing travel plans such as flights, stays, activities, notes, 
+Trip Planner is a web app built for organizing travel plans such as flights, stays, activities, notes,
 and maps. It supports real-time collaboration, budget tracking, and personal touches like photos.
 
-This project serves as the frontend counterpart to the [Trip Planner API](https://github.com/lrasata/tripPlannerAPI). It is built with React, TypeScript, and 
+This project serves as the frontend counterpart to the [Trip Planner API](https://github.com/lrasata/tripPlannerAPI). It is built with React, TypeScript, and
 Vite, and it is designed to provide users with an intuitive interface.
 
 ## Purpose
-*The Story Behind Trip Planner*
 
-I love to travel and even more than that, I love organizing travel. For me, it feels like a MUST, because I  want to 
-make the best out of a trip, I have got some homework to do. Planning gives me almost as much excitement as the trip 
-itself. But until recently, planning a trip meant writing things down all over my computer : in notes apps, random 
+_The Story Behind Trip Planner_
+
+I love to travel and even more than that, I love organizing travel. For me, it feels like a MUST, because I want to
+make the best out of a trip, I have got some homework to do. Planning gives me almost as much excitement as the trip
+itself. But until recently, planning a trip meant writing things down all over my computer : in notes apps, random
 document, my calendar and my email box.
 
-I always knew there has to be a better way but when I tried different travel apps, but none of them felt right. 
+I always knew there has to be a better way but when I tried different travel apps, but none of them felt right.
 They were either too complicated, too limited, or just not made for the way I think.
 
 So I decided to build my own. Something clean, flexible, and genuinely useful.
 
 ## Features
 
-- Itinerary builder
+- Itinerary builder :bulb:
+- Budget tracking :bulb:
 - Collaborative planning (comments, task assignments)
-- Budget tracking by category
 - Personalization (cover photo, trip notes)
 - Map and timeline views
 - Modular architecture for adding future features easily
 
 ## Dev perspective
-Trip Planner is not only a practical tool. Since there are countless features that could be added from weather integration, 
+
+Trip Planner is not only a practical tool. Since there are countless features that could be added from weather integration,
 AI-powered suggestions, local event feeds, to journals, all that makes this personal project exciting and expandable for full-stack experimentation.
 
 ## Tech Stack
+
 - **Frontend**: React, TypeScript, Emotion CSS, MUI
+
   - **Framework**: React 18
   - **Language**: TypeScript
   - **Build Tool**: Vite
@@ -46,23 +50,23 @@ AI-powered suggestions, local event feeds, to journals, all that makes this pers
 
 ## Why React as framework for the frontend
 
-I chose React for the frontend first and foremost because this is the technology I have most experience with. 
-But also because it offers a powerful combination of flexibility, component-based structure, and strong community 
+I chose React for the frontend first and foremost because this is the technology I have most experience with.
+But also because it offers a powerful combination of flexibility, component-based structure, and strong community
 support making it ideal for building dynamic, interactive web apps like Trip Planner.
 
-*Component-Based Architecture:* React’s reusable components are perfect for building a modular UI which fits the 
+_Component-Based Architecture:_ React’s reusable components are perfect for building a modular UI which fits the
 design of a trip planner with repeating elements such as itinerary items or trip cards.
 
-*Rich Ecosystem & Libraries:* React integrates easily with modern tools like TypeScript, Emotion CSS, and MUI. 
-This let me move quickly with styled components, responsive design, and prebuilt UI elements and keep full control over 
+_Rich Ecosystem & Libraries:_ React integrates easily with modern tools like TypeScript, Emotion CSS, and MUI.
+This let me move quickly with styled components, responsive design, and prebuilt UI elements and keep full control over
 customization.
 
-*Declarative UI:* With React’s declarative approach, I can easily manage complex UI states.
+_Declarative UI:_ With React’s declarative approach, I can easily manage complex UI states.
 
-*Scalability & Maintainability:* This project is designed to grow, and React makes it easy to scale features, 
+_Scalability & Maintainability:_ This project is designed to grow, and React makes it easy to scale features,
 split views into smaller components, and maintain a clean structure as the app gets bigger.
 
-*Strong Dev Tools & Ecosystem:* React’s dev tools, community packages, and support in modern deployment platforms make development and debugging faster and more enjoyable.
+_Strong Dev Tools & Ecosystem:_ React’s dev tools, community packages, and support in modern deployment platforms make development and debugging faster and more enjoyable.
 
 ---
 

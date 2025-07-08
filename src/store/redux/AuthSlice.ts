@@ -2,8 +2,20 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { API_USER_ENDPOINT } from "../../constants/constants.ts";
 import { nullToUndefined } from "../../utils/utils.ts";
 import { IUser } from "../../types.ts";
+import api from "../../api/api.ts";
 
-const initialState = {
+interface AuthState {
+  token: string | null;
+  refreshToken: string | null;
+  isLoggedIn: boolean;
+  authenticatedUser: any;
+  status: string;
+  error: string | null;
+}
+
+const initialState: AuthState = {
+  token: null,
+  refreshToken: null,
   isLoggedIn: false,
   authenticatedUser: undefined,
   status: "idle", // 'idle' | 'loading' | 'succeeded' | 'failed' | 'created' | 'updated' | 'deleted'
@@ -16,14 +28,13 @@ export const fetchAuthenticatedUser = createAsyncThunk(
     const url = new URL(`${API_USER_ENDPOINT}me`);
 
     try {
-      const response = await fetch(url.toString(), {
-        method: "GET",
+      const response = await api.get(url.toString(), {
         headers: {
           "Content-Type": "application/json",
         },
-        credentials: "include",
+        withCredentials: true,
       });
-      const data = await response.json();
+      const data = response.data;
       return {
         authenticatedUser: nullToUndefined(data),
       };
@@ -42,17 +53,18 @@ export const updateAuthenticatedUser = createAsyncThunk(
     const url = new URL(`${API_USER_ENDPOINT}profile`);
 
     try {
-      const response = await fetch(url.toString(), {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await api.put(
+        url.toString(),
+        { ...arg },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
         },
-        body: JSON.stringify({
-          ...arg,
-        }),
-        credentials: "include",
-      });
-      const data = await response.json();
+      );
+
+      const data = response.data;
       return {
         authenticatedUser: nullToUndefined(data),
       };
@@ -69,6 +81,20 @@ const authSlice = createSlice({
   name: "authentication",
   initialState: initialState,
   reducers: {
+    setTokens(
+      state,
+      action: PayloadAction<{
+        token: string | null;
+        refreshToken: string | null;
+      }>,
+    ) {
+      state.token = action.payload.token;
+      state.refreshToken = action.payload.refreshToken;
+    },
+    clearTokens(state) {
+      state.token = null;
+      state.refreshToken = null;
+    },
     updateIsLoggedInState(
       state,
       action: PayloadAction<{ isLoggedIn: boolean }>,

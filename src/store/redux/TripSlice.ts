@@ -7,6 +7,7 @@ import {
   updateItemById,
 } from "../../utils/utils.ts";
 import { ITrip } from "../../types.ts";
+import api from "../../api/api.ts";
 
 const initialTripState = {
   editingTrip: null,
@@ -20,16 +21,11 @@ export const fetchTrip = createAsyncThunk(
   "trips/fetchTrip",
   async (arg: { id: number }, { rejectWithValue }) => {
     try {
-      const tripResponse = await fetch(`${API_BACKEND_URL}/trips/${arg.id}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
+      const tripResponse = await api.get(`${API_BACKEND_URL}/trips/${arg.id}`, {
+        withCredentials: true,
       });
 
-      if (!tripResponse.ok) throw new Error("Trip fetch failed");
-      const response = await tripResponse.json();
+      const response = tripResponse.data;
       const tripData = nullToUndefined(response);
 
       // Extract participantIds from tripData
@@ -38,17 +34,14 @@ export const fetchTrip = createAsyncThunk(
       // If there are participant IDs, fetch participants in batch
       let participants = [];
       if (participantIds && participantIds.length > 0) {
-        const participantsResponse = await fetch(
+        const participantsResponse = await api.get(
           `${API_BACKEND_URL}/users?ids=${participantIds.join(",")}`,
           {
-            method: "GET",
-            headers: { "Content-Type": "application/json" },
-            credentials: "include",
+            withCredentials: true,
           },
         );
-        if (!participantsResponse.ok)
-          throw new Error("User Participants fetch failed");
-        participants = await participantsResponse.json();
+
+        participants = participantsResponse.data;
       }
       return {
         trip: {
@@ -73,14 +66,10 @@ export const fetchPlannedTrips = createAsyncThunk(
     }
 
     try {
-      const response = await fetch(url.toString(), {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
+      const response = await api.get(url.toString(), {
+        withCredentials: true,
       });
-      const data = await response.json();
+      const data = response.data;
       return {
         plannedTrips: nullToUndefined(data),
       };
@@ -97,20 +86,22 @@ export const createTrip = createAsyncThunk(
     const { participants, ...body } = arg;
 
     try {
-      const response = await fetch(`${API_BACKEND_URL}/trips`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({
+      const participantIds = [
+        ...new Set((participants ?? []).map((user) => user.id)),
+      ]; // remove duplicates
+
+      const response = await api.post(
+        `${API_BACKEND_URL}/trips`,
+        {
           ...body,
-          participantIds: [
-            ...new Set((participants ?? []).map((user) => user.id)),
-          ], // remove duplicates
-        }),
-      });
-      const data = await response.json();
+          participantIds,
+        },
+        {
+          withCredentials: true,
+        },
+      );
+
+      const data = response.data;
       return {
         trip: data,
       };
@@ -127,20 +118,22 @@ export const updateTrip = createAsyncThunk(
     const { participants, ...body } = arg;
 
     try {
-      const response = await fetch(`${API_BACKEND_URL}/trips/${arg.id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({
+      const participantIds = [
+        ...new Set((participants ?? []).map((user) => user.id)),
+      ];
+
+      const response = await api.put(
+        `${API_BACKEND_URL}/trips/${arg.id}`,
+        {
           ...body,
-          participantIds: [
-            ...new Set((participants ?? []).map((user) => user.id)),
-          ],
-        }),
-      });
-      const data = await response.json();
+          participantIds,
+        },
+        {
+          withCredentials: true,
+        },
+      );
+
+      const data = response.data;
 
       return {
         trip: {
@@ -159,12 +152,8 @@ export const deleteTrip = createAsyncThunk(
   "trips/deleteTrip",
   async (arg: { id: number }, { rejectWithValue }) => {
     try {
-      await fetch(`${API_BACKEND_URL}/trips/${arg.id}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
+      await api.delete(`${API_BACKEND_URL}/trips/${arg.id}`, {
+        withCredentials: true,
       });
       return {
         trip: { id: arg.id },

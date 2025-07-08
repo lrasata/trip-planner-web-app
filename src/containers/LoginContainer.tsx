@@ -13,6 +13,7 @@ import { API_LOGIN_ENDPOINT } from "../constants/constants.ts";
 import { useNavigate } from "react-router-dom";
 import { authSliceActions } from "../store/redux/AuthSlice.ts";
 import { useDispatch } from "react-redux";
+import api from "../api/api.ts";
 
 interface StyledBoxContainerProps extends BoxProps {
   component?: React.ElementType; // React.ElementType can be any HTML or custom component
@@ -61,24 +62,24 @@ const LoginContainer = () => {
   const handleLoginSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
     try {
-      const response = await fetch(API_LOGIN_ENDPOINT, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({ ...inputValue }),
-      });
+      const response = await api.post(API_LOGIN_ENDPOINT, { ...inputValue });
 
-      if (!response.ok) {
-        handleError("Login failed");
-      } else {
-        handleSuccess("Successfully logged in");
-        dispatch(authSliceActions.updateIsLoggedInState({ isLoggedIn: true }));
-        navigate("/");
-      }
+      handleSuccess("Successfully logged in");
+
+      dispatch(authSliceActions.updateIsLoggedInState({ isLoggedIn: true }));
+
+      const data = response.data;
+      dispatch(
+        authSliceActions.setTokens({
+          token: data.token,
+          refreshToken: data.refreshToken,
+        }),
+      );
+
+      navigate("/");
     } catch (error) {
       console.log(error);
+      handleError("Login failed");
     }
   };
 
