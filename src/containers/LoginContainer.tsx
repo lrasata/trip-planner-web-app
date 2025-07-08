@@ -62,7 +62,11 @@ const LoginContainer = () => {
   const handleLoginSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
     try {
-      const response = await api.post(API_LOGIN_ENDPOINT, { ...inputValue });
+      const response = await api.post(
+        API_LOGIN_ENDPOINT,
+        { ...inputValue },
+        { withCredentials: true },
+      );
 
       handleSuccess("Successfully logged in");
 
