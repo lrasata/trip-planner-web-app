@@ -1,14 +1,9 @@
 import { Navigate } from "react-router-dom";
 import useIsAuthenticated from "../hooks/useIsAuthenticated";
 import React from "react";
-import Spinner from "../components/Spinner.tsx";
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-  const { isAuthenticated, loading } = useIsAuthenticated();
-
-  if (loading) {
-    return <Spinner />;
-  }
+  const { isAuthenticated } = useIsAuthenticated();
 
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;

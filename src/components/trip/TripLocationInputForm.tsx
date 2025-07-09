@@ -1,5 +1,5 @@
 import Stack from "@mui/material/Stack";
-import React, { forwardRef } from "react";
+import { forwardRef, SyntheticEvent } from "react";
 import withLocationAutocomplete from "../../hoc/withLocationAutocomplete.tsx";
 import InputAdornment from "@mui/material/InputAdornment";
 import PlaceIcon from "@mui/icons-material/Place";
@@ -9,37 +9,35 @@ import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 
 const LocationInput = forwardRef<HTMLInputElement, TextFieldProps>(
-  (props, ref) => {
-    return (
-      <TextField
-        variant="outlined"
-        {...props}
-        slotProps={{
-          input: {
-            ref, // <- Forwarded ref from Autocomplete
-            startAdornment: (
-              <InputAdornment position="start">
-                <PlaceIcon />
-              </InputAdornment>
-            ),
-            ...(props.slotProps?.input || {}),
-          },
-        }}
-      />
-    );
-  },
+  ({ onChange, ...props }, ref) => (
+    <TextField
+      variant="outlined"
+      {...props} // no onChange here
+      slotProps={{
+        input: {
+          ref,
+          startAdornment: (
+            <InputAdornment position="start">
+              <PlaceIcon />
+            </InputAdornment>
+          ),
+          ...(props.slotProps?.input || {}),
+        },
+      }}
+    />
+  ),
 );
 
 interface TripLocationInputFormProps {
   departureLocation?: ILocation;
   arrivalLocation?: ILocation;
   handleOnSelectDepartureLocation: (
-    _event: React.SyntheticEvent,
-    value: ILocation | null,
+    _event: SyntheticEvent,
+    selectedLocation: ILocation | null,
   ) => void;
   handleOnSelectArrivalLocation: (
-    _event: React.SyntheticEvent,
-    value: ILocation | null,
+    _event: SyntheticEvent,
+    selectedLocation: ILocation | null,
   ) => void;
 }
 

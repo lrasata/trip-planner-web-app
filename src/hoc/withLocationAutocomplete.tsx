@@ -1,6 +1,8 @@
-import React, {
+import {
   ComponentType,
+  FC,
   memo,
+  SyntheticEvent,
   useCallback,
   useEffect,
   useState,
@@ -25,17 +27,24 @@ interface WithLocationProps {
   error?: boolean;
   helperText?: string;
   disabled?: boolean;
-  onChange?: (_event: React.SyntheticEvent, value: ILocation | null) => void;
+  onChange?: (_event: SyntheticEvent, value: ILocation | null) => void;
 }
 
+// Return a component that accepts all props of WrappedComponent
+// except `onChange`, plus WithLocationProps
 const withLocationAutocomplete = <P extends object>(
   WrappedComponent: ComponentType<P>,
   dataType: DataType,
   countryCode?: string,
-) => {
-  const AutocompleteWrapper = (props: P & WithLocationProps) => {
+): FC<Omit<P, "onChange"> & WithLocationProps> => {
+  const AutocompleteWrapper = (
+    props: Omit<P, "onChange"> & WithLocationProps,
+  ) => {
     const [options, setOptions] = useState<ILocation[]>([]);
     const [inputValue, setInputValue] = useState("");
+
+    // Extract onChange from props to handle in Autocomplete only
+    const { onChange, ...restProps } = props;
 
     const fetchLocations = useCallback(
       async (query: string) => {
@@ -107,23 +116,27 @@ const withLocationAutocomplete = <P extends object>(
           }
         }}
         value={props.value ?? null}
-        onChange={(event, value) => props.onChange?.(event, value)}
+        onChange={(event, value) => onChange?.(event, value)}
         onInputChange={(_, value) => setInputValue(value)}
         disabled={props.disabled}
-        renderInput={(params) => (
-          <WrappedComponent
-            {...(params as unknown as P)}
-            {...(props as P)}
-            disabled={props.disabled}
-            inputProps={params.inputProps}
-            InputLabelProps={params.InputLabelProps}
-            slotProps={{
-              input: {
-                ref: params.InputProps?.ref,
-              },
-            }}
-          />
-        )}
+        renderInput={(params) => {
+          // Omit onChange from WrappedComponent props — explicitly set to undefined
+          return (
+            <WrappedComponent
+              {...(params as unknown as P)}
+              {...restProps}
+              onChange={undefined}
+              disabled={props.disabled}
+              inputProps={params.inputProps}
+              InputLabelProps={params.InputLabelProps}
+              slotProps={{
+                input: {
+                  ref: params.InputProps?.ref,
+                },
+              }}
+            />
+          );
+        }}
         noOptionsText="No matching locations - Please check spelling"
       />
     );

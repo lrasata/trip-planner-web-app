@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAuthenticatedUser } from "../store/redux/AuthSlice.ts";
+import { RootState } from "../store/redux";
 
 const useIsAuthenticated = () => {
   const dispatch = useDispatch();
@@ -8,7 +9,7 @@ const useIsAuthenticated = () => {
   const isAuthenticated = useSelector((state) => state.auth.isLoggedIn);
   // @ts-ignore
   const authenticatedUser = useSelector(
-    (state) => state.auth.authenticatedUser,
+    (state: RootState) => state.auth.authenticatedUser,
   );
 
   useEffect(() => {

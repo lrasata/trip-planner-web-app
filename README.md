@@ -70,7 +70,7 @@ _Strong Dev Tools & Ecosystem:_ React’s dev tools, community packages, and sup
 
 ---
 
-## Getting Started
+## Getting Started - Run locally
 
 ### Prerequisites
 
@@ -125,6 +125,22 @@ _Strong Dev Tools & Ecosystem:_ React’s dev tools, community packages, and sup
   ```bash
   npm run format
   ```
+
+---
+
+## Docker
+
+You can containerize the Trip Planner frontend app using Docker and manage multi-container setups with Docker Compose.
+
+### Using Docker Compose
+
+```bash
+docker-compose up --build
+```
+
+This will build and start services in `docker-compose.yml`. In this file, the web app is set up to be accessible on port `5173` : `http://localhost:5173/`
+
+Make sure Docker is installed and running on your system.
 
 ---
 

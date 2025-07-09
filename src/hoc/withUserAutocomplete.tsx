@@ -1,4 +1,11 @@
-import React, { ComponentType, memo, useEffect, useState } from "react";
+import {
+  ComponentType,
+  FC,
+  memo,
+  SyntheticEvent,
+  useEffect,
+  useState,
+} from "react";
 import Autocomplete from "@mui/material/Autocomplete";
 import { API_BACKEND_URL } from "../constants/constants";
 import { IUser } from "../types";
@@ -12,15 +19,20 @@ interface WithUserProps {
   error?: boolean;
   helperText?: string;
   disabled?: boolean;
-  onChange?: (_event: React.SyntheticEvent, value: IUser | null) => void;
+  onChange?: (_event: SyntheticEvent, value: IUser | null) => void;
 }
 
 const withLocationAutocomplete = <P extends object>(
   WrappedComponent: ComponentType<P>,
-) => {
-  const AutocompleteWrapper = (props: P & WithUserProps) => {
+): FC<Omit<P, "onChange"> & WithUserProps> => {
+  const AutocompleteWrapper: FC<Omit<P, "onChange"> & WithUserProps> = (
+    props,
+  ) => {
     const [options, setOptions] = useState<IUser[]>([]);
     const [inputValue, setInputValue] = useState("");
+
+    // Extract onChange from props to handle in Autocomplete only
+    const { onChange, ...restProps } = props;
 
     const fetchUsers = async (inputValue: string) => {
       const url = `${API_BACKEND_URL}/users?emailContains=${encodeURIComponent(inputValue)}`;
@@ -36,7 +48,7 @@ const withLocationAutocomplete = <P extends object>(
 
         const formatted = json.map((item: IUser) => ({
           id: item.id,
-          name: item.name,
+          name: item.fullName,
           email: item.email,
           role: item.role,
         }));
@@ -62,13 +74,14 @@ const withLocationAutocomplete = <P extends object>(
         options={options}
         getOptionLabel={(option) => option.email}
         value={props.value ?? null}
-        onChange={(event, value) => props.onChange?.(event, value)}
+        onChange={(event, value) => onChange?.(event, value)}
         onInputChange={(_, value) => setInputValue(value)}
         disabled={props.disabled}
         renderInput={(params) => (
           <WrappedComponent
-            {...(params as unknown as P)}
-            {...(props as P)}
+            {...(params as unknown as P)} // <-- Type assertion fix here
+            {...restProps}
+            onChange={undefined} // Prevent clash with Autocomplete's onChange
             disabled={props.disabled}
             inputProps={params.inputProps}
             InputLabelProps={params.InputLabelProps}

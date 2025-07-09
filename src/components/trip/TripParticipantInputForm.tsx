@@ -2,32 +2,30 @@ import Stack from "@mui/material/Stack";
 import InputAdornment from "@mui/material/InputAdornment";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import TextField, { TextFieldProps } from "@mui/material/TextField";
-import React, { ChangeEvent, forwardRef } from "react";
+import { ChangeEvent, forwardRef, SyntheticEvent } from "react";
 import withUserAutocomplete from "../../hoc/withUserAutocomplete.tsx";
 import { IUser } from "../../types.ts";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 const ParticipantInput = forwardRef<HTMLInputElement, TextFieldProps>(
-  (props, ref) => {
-    return (
-      <TextField
-        variant="outlined"
-        {...props}
-        slotProps={{
-          input: {
-            ref, // <- Forwarded ref from Autocomplete
-            startAdornment: (
-              <InputAdornment position="start">
-                <AccountCircleIcon />
-              </InputAdornment>
-            ),
-            ...(props.slotProps?.input || {}),
-          },
-        }}
-      />
-    );
-  },
+  ({ onChange, ...props }, ref) => (
+    <TextField
+      variant="outlined"
+      {...props} // no onChange here
+      slotProps={{
+        input: {
+          ref,
+          startAdornment: (
+            <InputAdornment position="start">
+              <AccountCircleIcon />
+            </InputAdornment>
+          ),
+          ...(props.slotProps?.input || {}),
+        },
+      }}
+    />
+  ),
 );
 
 interface Props {
@@ -37,8 +35,8 @@ interface Props {
     event: ChangeEvent<HTMLInputElement>,
   ) => void;
   handleOnSelectParticipant: (
-    _event: React.SyntheticEvent,
-    value: IUser | null,
+    _event: SyntheticEvent,
+    selectedUser: IUser | null,
   ) => void;
   handleOnRemoveParticipant?: (participant: IUser) => void;
   onEdit?: boolean;

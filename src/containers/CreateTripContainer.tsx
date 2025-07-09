@@ -1,7 +1,14 @@
 import { Box, Button, styled } from "@mui/material";
 import { ILocation, IStep, ITrip, IUser } from "../types.ts";
 import Typography from "@mui/material/Typography";
-import { ChangeEvent, lazy, Suspense, useEffect, useState } from "react";
+import {
+  ChangeEvent,
+  lazy,
+  Suspense,
+  SyntheticEvent,
+  useEffect,
+  useState,
+} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createTrip } from "../store/redux/TripSlice.ts";
 import { Dayjs } from "dayjs";
@@ -67,14 +74,15 @@ const CreateTripContainer = () => {
     };
 
   const handleLocationInputChange =
-    (key: string) => (_event: any, selectedLocation: ILocation | null) => {
+    (key: string) =>
+    (_event: SyntheticEvent, selectedLocation: ILocation | null) => {
       if (selectedLocation) {
         handleEditTrip(key, selectedLocation);
       }
     };
 
   const handleOnSelectParticipant =
-    (key: string) => (_event: any, selectedUser: IUser | null) => {
+    (key: string) => (_event: SyntheticEvent, selectedUser: IUser | null) => {
       if (selectedUser) {
         handleEditTrip(key, [...(editTrip.participants ?? []), selectedUser]);
       }
