@@ -81,6 +81,7 @@ const SignUpContainer = () => {
         Create a new account
       </Typography>
       <TextField
+        id="fullname-signup"
         type="text"
         name="fullName"
         value={fullName}
@@ -90,6 +91,7 @@ const SignUpContainer = () => {
         sx={{ backgroundColor: "white" }}
       />
       <TextField
+        id="email-signup"
         type="email"
         name="email"
         value={email}
@@ -99,6 +101,7 @@ const SignUpContainer = () => {
         sx={{ backgroundColor: "white" }}
       />
       <TextField
+        id="password-signup"
         type="password"
         name="password"
         value={password}
@@ -114,7 +117,12 @@ const SignUpContainer = () => {
         justifyContent="center"
         alignItems="center"
       >
-        <Button variant="contained" type="submit" fullWidth={isMobile}>
+        <Button
+          id="button-submit-signup"
+          variant="contained"
+          type="submit"
+          fullWidth={isMobile}
+        >
           Submit
         </Button>
       </Box>

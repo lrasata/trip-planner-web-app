@@ -183,6 +183,7 @@ const CreateTripContainer = () => {
           Your journey starts here
         </Typography>
         <Button
+          id="create-new-trip"
           variant="contained"
           size="large"
           sx={{ mt: 2 }}

@@ -90,6 +90,7 @@ const LoginContainer = () => {
   return (
     <StyledBoxContainer component="form" onSubmit={handleLoginSubmit}>
       <TextField
+        id="email-login"
         type="email"
         name="email"
         value={email}
@@ -99,6 +100,7 @@ const LoginContainer = () => {
         sx={{ backgroundColor: "white" }}
       />
       <TextField
+        id="password-login"
         type="password"
         name="password"
         value={password}
@@ -114,7 +116,12 @@ const LoginContainer = () => {
         justifyContent="center"
         alignItems="center"
       >
-        <Button variant="contained" type="submit" fullWidth={isMobile}>
+        <Button
+          id="button-submit-login"
+          variant="contained"
+          type="submit"
+          fullWidth={isMobile}
+        >
           Log in
         </Button>
       </Box>
