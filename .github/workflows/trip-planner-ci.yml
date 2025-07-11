@@ -10,6 +10,44 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
 
+    services:
+      database:
+        image: postgres:17
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_DB: tripdb
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: ${{ secrets.SPRING_DATASOURCE_PASSWORD }}
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+      backend:
+        image: lrasata/trip-design-backend-app:latest
+        ports:
+          - 8080:8080
+        env:
+          SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/tripdb
+          SPRING_DATASOURCE_USERNAME: postgres
+          SPRING_DATASOURCE_PASSWORD: ${{ secrets.SPRING_DATASOURCE_PASSWORD }}
+          JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
+          ALLOWED_ORIGIN: http://localhost:5173
+          COOKIE_SECURE_ATTRIBUTE: False
+          COOKIE_SAME_SITE: Lax
+          SUPER_ADMIN_FULLNAME: admin
+          SUPER_ADMIN_EMAIL: admin@admin.com
+          SUPER_ADMIN_PASSWORD: ${{ secrets.SUPER_ADMIN_PASSWORD }}
+          ENVIRONMENT: production
+        options: >-
+          --health-cmd "curl -f http://localhost:8080/actuator/health || exit 1"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+
     steps:
       - name: 🛎️ Checkout repository
         uses: actions/checkout@v4
@@ -29,3 +67,28 @@ jobs:
 
       - name: 🛠 Build
         run: npm run build
+
+      - name: ▶ Start frontend in background
+        run: npm run dev &
+        env:
+          NODE_ENV: development
+          VITE_API_URL: http://localhost:8080
+          VITE_API_CITIES_GEO_DB_URL: https://wft-geo-db.p.rapidapi.com/v1/geo/cities
+          VITE_API_COUNTRIES_GEO_DB_URL: https://wft-geo-db.p.rapidapi.com/v1/geo/countries
+          VITE_GEO_DB_RAPID_API_HOST: wft-geo-db.p.rapidapi.com
+          VITE_GEO_DB_RAPID_API_KEY: ${{ secrets.GEO_DB_RAPID_API_KEY }}
+
+      - name: ⏱ Wait until frontend is ready
+        run: npx wait-on http://localhost:5173
+
+      - name: 🧹 Remove old JS test files
+        run: rm -rf cypress/e2e/*.cy.js cypress/e2e/**/*.cy.js
+
+      - name: 🧪 Run E2E tests with Cypress
+        run: |
+            npx cypress run
+        env:
+          CYPRESS_BASE_URL: http://localhost:5173
+          CYPRESS_TEST_PASSWORD: ${{ secrets.SUPER_ADMIN_PASSWORD }}
+
+

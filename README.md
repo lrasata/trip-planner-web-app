@@ -145,6 +145,26 @@ Make sure Docker is installed and running on your system.
 
 ---
 
+## E2E Testing with Cypress
+
+**Open Cypress Test Runner (interactive)**
+
+```bash
+npm run cypress:open
+```
+
+This opens the Cypress UI where you can run tests interactively, watch them run, and debug.
+
+**Run Cypress Tests in Headless Mode (CI / automated)**
+
+```bash
+npm run cypress:run
+```
+
+This runs all the Cypress tests in headless mode and outputs the results in the terminal.
+
+---
+
 ## License
 
 This project is licensed under the MIT License.

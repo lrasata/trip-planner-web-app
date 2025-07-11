@@ -2,7 +2,7 @@
 
 describe("Home page", () => {
   it("should load correctly", () => {
-    cy.visit("http://localhost:5174");
+    cy.visit("/");
     cy.contains("Trip planner");
     // check the menu
     cy.contains("button", "Home").should("exist");
