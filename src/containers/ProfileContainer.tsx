@@ -9,15 +9,15 @@ import { ChangeEvent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { updateAuthenticatedUser } from "../store/redux/AuthSlice.ts";
 import { toast } from "react-toastify";
+import { AppDispatch, RootState } from "../store/redux";
 
 interface ProfileContainerProps {
   user: IUser;
 }
 
 const ProfileContainer = ({ user }: ProfileContainerProps) => {
-  const dispatch = useDispatch();
-  // @ts-ignore
-  const status = useSelector((state) => state.auth.status);
+  const dispatch = useDispatch<AppDispatch>();
+  const status = useSelector((state: RootState) => state.auth.status);
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -58,7 +58,6 @@ const ProfileContainer = ({ user }: ProfileContainerProps) => {
     };
 
   const handleOnSave = () => {
-    // @ts-ignore
     dispatch(updateAuthenticatedUser(userProfile));
   };
 

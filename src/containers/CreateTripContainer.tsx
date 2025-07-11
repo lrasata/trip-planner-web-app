@@ -15,6 +15,7 @@ import { Dayjs } from "dayjs";
 import { formatDate } from "../utils/utils.ts";
 import Spinner from "../components/Spinner.tsx";
 import { draftTripActions } from "../store/redux/DraftTripSlice.ts";
+import { AppDispatch, RootState } from "../store/redux";
 
 // Lazy import
 const Dialog = lazy(() => import("../components/Dialog.tsx"));
@@ -47,10 +48,9 @@ const StyledBox = styled(Box)(({ theme }) => ({
 }));
 
 const CreateTripContainer = () => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  // @ts-ignore
-  const draftTrip = useSelector((state) => state.draftTrip);
+  const draftTrip = useSelector((state: RootState) => state.draftTrip);
   const [editTrip, setEditTrip] = useState<ITrip>(draftTrip);
 
   useEffect(() => {
@@ -172,7 +172,6 @@ const CreateTripContainer = () => {
   };
 
   const handleOnSubmit = async () => {
-    // @ts-ignore
     dispatch(createTrip(editTrip));
   };
 

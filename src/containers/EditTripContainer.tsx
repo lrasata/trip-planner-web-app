@@ -18,17 +18,18 @@ import Box from "@mui/material/Box";
 import { Card, useTheme } from "@mui/material";
 import TripLocationInputForm from "../components/trip/TripLocationInputForm.tsx";
 import TripParticipantInputForm from "../components/trip/TripParticipantInputForm.tsx";
+import { AppDispatch } from "../store/redux";
 
 const Dialog = lazy(() => import("../components/Dialog.tsx"));
 
 interface EditTripContainerProps {
   trip: ITrip;
   status: string;
-  error?: string;
+  error?: string | null;
 }
 const EditTripContainer = ({ trip, status, error }: EditTripContainerProps) => {
   const theme = useTheme();
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const [tripFormData, setTripFormData] = useState<ITrip>(trip);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -83,13 +84,13 @@ const EditTripContainer = ({ trip, status, error }: EditTripContainerProps) => {
   };
 
   const handleOnSave = () => {
-    // @ts-ignore
     dispatch(updateTrip(tripFormData));
   };
 
   const handleOnDelete = () => {
-    // @ts-ignore
-    dispatch(deleteTrip({ id: tripFormData.id }));
+    if (tripFormData.id) {
+      dispatch(deleteTrip({ id: tripFormData.id }));
+    }
     handleOnCloseDialog();
     navigate("/trips");
   };

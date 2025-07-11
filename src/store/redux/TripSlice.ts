@@ -9,7 +9,14 @@ import {
 import { ITrip } from "../../types.ts";
 import api from "../../api/api.ts";
 
-const initialTripState = {
+interface ITripState {
+  editingTrip: ITrip | null;
+  plannedTrips: ITrip[];
+  pastTrips: ITrip[];
+  status: string;
+  error: string | null;
+}
+const initialTripState: ITripState = {
   editingTrip: null,
   plannedTrips: [],
   pastTrips: [],
@@ -19,7 +26,7 @@ const initialTripState = {
 
 export const fetchTrip = createAsyncThunk(
   "trips/fetchTrip",
-  async (arg: { id: number }, { rejectWithValue }) => {
+  async (arg: { id?: string }, { rejectWithValue }) => {
     try {
       const tripResponse = await api.get(`${API_BACKEND_URL}/trips/${arg.id}`, {
         withCredentials: true,
@@ -175,12 +182,10 @@ const tripSlice = createSlice({
     });
     builder.addCase(fetchPlannedTrips.fulfilled, (state, action) => {
       state.status = "succeeded";
-      // @ts-ignore
       state.plannedTrips = action.payload.plannedTrips;
     });
     builder.addCase(fetchPlannedTrips.rejected, (state, action) => {
       state.status = "failed";
-      // @ts-ignore
       state.error = action.error.message || "Something went wrong";
     });
     builder.addCase(createTrip.pending, (state) => {
@@ -188,12 +193,10 @@ const tripSlice = createSlice({
     });
     builder.addCase(createTrip.fulfilled, (state, action) => {
       state.status = "created";
-      // @ts-ignore
       state.plannedTrips = [...state.plannedTrips, action.payload.trip];
     });
     builder.addCase(createTrip.rejected, (state, action) => {
       state.status = "failed";
-      // @ts-ignore
       state.error = action.error.message || "Something went wrong";
     });
     builder.addCase(updateTrip.pending, (state) => {
@@ -204,7 +207,6 @@ const tripSlice = createSlice({
       const updatedData = { ...action.payload.trip };
 
       if (existsById(state.plannedTrips, updatedData.id)) {
-        // @ts-ignore
         state.plannedTrips = updateItemById(
           [...state.plannedTrips],
           updatedData.id,
@@ -213,7 +215,6 @@ const tripSlice = createSlice({
       }
 
       if (existsById(state.pastTrips, updatedData.id)) {
-        // @ts-ignore
         state.pastTrips = updateItemById(
           [...state.pastTrips],
           updatedData.id,
@@ -225,7 +226,6 @@ const tripSlice = createSlice({
     });
     builder.addCase(updateTrip.rejected, (state, action) => {
       state.status = "failed";
-      // @ts-ignore
       state.error = action.error.message || "Something went wrong";
     });
     builder.addCase(fetchTrip.pending, (state) => {
@@ -233,12 +233,10 @@ const tripSlice = createSlice({
     });
     builder.addCase(fetchTrip.fulfilled, (state, action) => {
       state.status = "succeeded";
-      // @ts-ignore
       state.editingTrip = { ...action.payload.trip };
     });
     builder.addCase(fetchTrip.rejected, (state, action) => {
       state.status = "failed";
-      // @ts-ignore
       state.error = action.error.message || "Something went wrong";
     });
     builder.addCase(deleteTrip.pending, (state) => {
@@ -248,18 +246,15 @@ const tripSlice = createSlice({
       state.status = "deleted";
       const deletedId = action.payload.trip.id;
       if (existsById(state.plannedTrips, deletedId)) {
-        // @ts-ignore
         state.plannedTrips = removeItemById([...state.plannedTrips], deletedId);
       }
 
       if (existsById(state.pastTrips, deletedId)) {
-        // @ts-ignore
         state.pastTrips = removeItemById([...state.pastTrips], deletedId);
       }
     });
     builder.addCase(deleteTrip.rejected, (state, action) => {
       state.status = "failed";
-      // @ts-ignore
       state.error = action.error.message || "Something went wrong";
     });
   },

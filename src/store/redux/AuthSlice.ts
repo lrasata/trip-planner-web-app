@@ -114,12 +114,10 @@ const authSlice = createSlice({
     });
     builder.addCase(fetchAuthenticatedUser.fulfilled, (state, action) => {
       state.status = "succeeded";
-      // @ts-ignore
       state.authenticatedUser = action.payload.authenticatedUser;
     });
     builder.addCase(fetchAuthenticatedUser.rejected, (state, action) => {
       state.status = "failed";
-      // @ts-ignore
       state.error = action.error.message || "Something went wrong";
     });
     builder.addCase(updateAuthenticatedUser.pending, (state) => {
@@ -127,12 +125,10 @@ const authSlice = createSlice({
     });
     builder.addCase(updateAuthenticatedUser.fulfilled, (state, action) => {
       state.status = "succeeded";
-      // @ts-ignore
       state.authenticatedUser = action.payload.authenticatedUser;
     });
     builder.addCase(updateAuthenticatedUser.rejected, (state, action) => {
       state.status = "failed";
-      // @ts-ignore
       state.error = action.error.message || "Something went wrong";
     });
   },

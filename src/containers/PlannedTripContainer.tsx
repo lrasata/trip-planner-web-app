@@ -6,15 +6,16 @@ import { useEffect } from "react";
 import { fetchPlannedTrips } from "../store/redux/TripSlice.ts";
 import { ITrip } from "../types.ts";
 import { useNavigate } from "react-router-dom";
+import { AppDispatch, RootState } from "../store/redux";
 
 const PlannedTripContainer = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  // @ts-ignore
-  const plannedTrips = useSelector((state) => state.trips.plannedTrips);
+  const dispatch = useDispatch<AppDispatch>();
+  const plannedTrips = useSelector(
+    (state: RootState) => state.trips.plannedTrips,
+  );
 
   useEffect(() => {
-    // @ts-ignore
     dispatch(fetchPlannedTrips({ dateFilter: "future" }));
   }, []);
 
