@@ -5,7 +5,7 @@ describe("Home page", () => {
     cy.visit("/");
     cy.contains("Trip planner");
     // check the menu
-    cy.contains("button", "Home").should("exist");
+    cy.contains("button", "Sign up").should("exist");
     cy.contains("button", "Log in").should("exist");
     // check that the logo is loaded
     cy.get('img[alt="Trip planner logo"]')
