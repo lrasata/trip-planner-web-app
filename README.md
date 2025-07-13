@@ -1,4 +1,5 @@
 # Trip Planner Web App 🚧
+
 [![CI](https://github.com/lrasata/trip-planner-web-app/actions/workflows/trip-planner-ci.yml/badge.svg)](https://github.com/lrasata/trip-planner-web-app/actions/workflows/trip-planner-ci.yml)
 
 > **Status**: 🚧 Under Construction

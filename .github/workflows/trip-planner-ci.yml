@@ -47,7 +47,6 @@ jobs:
           --health-timeout=5s
           --health-retries=5
 
-
     steps:
       - name: 🛎️ Checkout repository
         uses: actions/checkout@v4
@@ -81,14 +80,26 @@ jobs:
       - name: ⏱ Wait until frontend is ready
         run: npx wait-on http://localhost:5173
 
+      - name: Check and wait until super admin can log in
+        run: |
+          until curl -s -X POST \
+            -H "Content-Type: application/json" \
+            -d '{"email":"admin@admin.com","password":"'"$SUPER_ADMIN_PASSWORD"'"}' \
+            http://localhost:8080/auth/login | grep -q '"token"'
+          do
+            echo "Waiting for super admin to be ready..."
+            sleep 2
+          done
+        env:
+          SUPER_ADMIN_PASSWORD: ${{ secrets.SUPER_ADMIN_PASSWORD }}
+
+
       - name: 🧹 Remove old JS test files
         run: rm -rf cypress/e2e/*.cy.js cypress/e2e/**/*.cy.js
 
       - name: 🧪 Run E2E tests with Cypress
         run: |
-            npx cypress run
+          npx cypress run
         env:
           CYPRESS_BASE_URL: http://localhost:5173
           CYPRESS_TEST_PASSWORD: ${{ secrets.SUPER_ADMIN_PASSWORD }}
-
-

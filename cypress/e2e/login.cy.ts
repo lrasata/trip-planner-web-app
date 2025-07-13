@@ -13,8 +13,8 @@ describe("Login", () => {
     cy.get('input[id="email-login"]').should("exist");
     cy.get('input[id="password-login"]').should("exist");
     cy.get('button[id="button-submit-login"]')
-        .should("be.visible")
-        .and("contain", "Log in");
+      .should("be.visible")
+      .and("contain", "Log in");
   });
 
   it("should load login page directly", () => {
@@ -23,11 +23,11 @@ describe("Login", () => {
     cy.get('input[id="email-login"]').should("exist");
     cy.get('input[id="password-login"]').should("exist");
     cy.get('button[id="button-submit-login"]')
-        .should("be.visible")
-        .and("contain", "Log in");
+      .should("be.visible")
+      .and("contain", "Log in");
   });
 
-/*  it("should log in successfully and show logged in homepage", () => {
+  it("should log in successfully and show logged in homepage", () => {
     const password = Cypress.env("TEST_PASSWORD");
     expect(password, "TEST_PASSWORD env must be set").to.exist;
 
@@ -37,7 +37,8 @@ describe("Login", () => {
     cy.get('button[id="button-submit-login"]').click();
 
     // expect logged-in home page content
-    cy.contains("Your planned trip").should("exist");
+    // Wait longer for logged-in content
+    cy.contains("Your planned trip", { timeout: 10000 }).should("exist");
     cy.get('button[id="create-new-trip"]').should("exist");
-  });*/
+  });
 });
