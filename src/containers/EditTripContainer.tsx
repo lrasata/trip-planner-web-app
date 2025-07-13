@@ -104,7 +104,7 @@ const EditTripContainer = ({ trip, status, error }: EditTripContainerProps) => {
   };
 
   return (
-    <>
+    <Box py={10}>
       {tripFormData && (
         <Grid container spacing={4}>
           <Grid size={{ xs: 12, md: 8 }}>
@@ -246,7 +246,7 @@ const EditTripContainer = ({ trip, status, error }: EditTripContainerProps) => {
           />
         </Suspense>
       )}
-    </>
+    </Box>
   );
 };
 

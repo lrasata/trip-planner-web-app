@@ -62,7 +62,7 @@ const ProfileContainer = ({ user }: ProfileContainerProps) => {
   };
 
   return (
-    <Box display="flex" justifyContent="center" alignItems="center">
+    <Box display="flex" justifyContent="center" alignItems="center" py={10}>
       <Card sx={{ width: isMobile ? "100%" : "50%" }}>
         <CardContent>
           <Typography variant="h1" color="textSecondary" gutterBottom>

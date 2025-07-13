@@ -6,13 +6,6 @@ import useIsAuthenticated from "../hooks/useIsAuthenticated.ts";
 import { useDispatch } from "react-redux";
 import { authSliceActions } from "../store/redux/AuthSlice.ts";
 
-const navItems = [
-  {
-    title: "Home",
-    url: "/",
-  },
-];
-
 const authNavItems = [
   {
     title: "All trips",
@@ -25,14 +18,19 @@ const authNavItems = [
   { title: "Log out", url: "/logout" },
 ];
 
-const nonAuthNavItems = [{ title: "Log in", url: "/login" }];
+const nonAuthNavItems = [
+  { title: "Sign up", url: "/login" },
+  { title: "Log in", url: "/login" },
+];
 
 const MainNavigationContainer = () => {
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
   const { isAuthenticated } = useIsAuthenticated();
-  const [menuContent, setMenuContent] = useState(navItems);
+  const [menuContent, setMenuContent] = useState<
+    { title: string; url: string }[]
+  >([]);
 
   const handleOnClickNavigate = (href: string) => {
     navigate(href);
@@ -52,7 +50,7 @@ const MainNavigationContainer = () => {
   useEffect(() => {
     const addMenuItems = isAuthenticated ? authNavItems : nonAuthNavItems;
 
-    setMenuContent([...navItems, ...addMenuItems]);
+    setMenuContent([...addMenuItems]);
   }, [isAuthenticated]);
 
   return (

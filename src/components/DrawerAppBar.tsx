@@ -13,6 +13,7 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { useState } from "react";
 import { Container } from "@mui/material";
+import { Link } from "react-router-dom";
 
 interface Props {
   /**
@@ -47,9 +48,16 @@ const DrawerAppBar = (props: Props) => {
 
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
-      <Typography variant="h6" sx={{ my: 2 }}>
+      <Typography
+        variant="h6"
+        color="textPrimary"
+        sx={{ my: 2, textDecoration: "none" }}
+        component={Link}
+        to="/"
+      >
         {props.appName}
       </Typography>
+
       <Divider />
       <List>
         {navItems.map((item) => (
@@ -85,8 +93,14 @@ const DrawerAppBar = (props: Props) => {
             </IconButton>
             <Typography
               variant="h6"
-              component="div"
-              sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
+              color="white"
+              sx={{
+                textDecoration: "none",
+                flexGrow: 1,
+                display: { xs: "none", sm: "block" },
+              }}
+              component={Link}
+              to="/"
             >
               {props.appName}
             </Typography>
@@ -94,7 +108,7 @@ const DrawerAppBar = (props: Props) => {
               {navItems.map((item) => (
                 <Button
                   key={item.title}
-                  sx={{ color: "#fff" }}
+                  sx={{ color: "white" }}
                   onClick={() => handleOnClickMenuItem(item.url)}
                 >
                   {item.title}

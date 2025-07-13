@@ -26,7 +26,7 @@ const AllTripContainer = () => {
   };
 
   return (
-    <Box my={3}>
+    <Box py={10}>
       <Typography variant="h2" gutterBottom color="textSecondary">
         All your trips
       </Typography>

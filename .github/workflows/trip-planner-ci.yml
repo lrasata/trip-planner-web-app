@@ -93,7 +93,6 @@ jobs:
         env:
           SUPER_ADMIN_PASSWORD: ${{ secrets.SUPER_ADMIN_PASSWORD }}
 
-
       - name: 🧹 Remove old JS test files
         run: rm -rf cypress/e2e/*.cy.js cypress/e2e/**/*.cy.js
 

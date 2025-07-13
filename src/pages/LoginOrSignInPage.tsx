@@ -10,7 +10,7 @@ const LoginOrSignInPage = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   return (
-    <Box display="flex" justifyContent="center" alignItems="center">
+    <Box display="flex" justifyContent="center" alignItems="center" py={8}>
       <Card sx={{ width: isMobile ? "100%" : "50%" }}>
         <Brand />
         <LoginContainer />
