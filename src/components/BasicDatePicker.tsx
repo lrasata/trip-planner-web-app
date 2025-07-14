@@ -6,11 +6,12 @@ import { useMediaQuery, useTheme } from "@mui/material";
 import { Dayjs } from "dayjs";
 
 interface Props {
+  id: string;
   label: string;
   value?: Dayjs | null | undefined;
   onChange: (date: Dayjs | null) => void;
 }
-const BasicDatePicker = ({ label, value, onChange }: Props) => {
+const BasicDatePicker = ({ id, label, value, onChange }: Props) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
@@ -25,7 +26,15 @@ const BasicDatePicker = ({ label, value, onChange }: Props) => {
               backgroundColor: "white",
             }}
             onChange={onChange}
-            slotProps={{ field: { clearable: true } }}
+            slotProps={{
+              textField: {
+                id,
+                inputProps: { "data-testid": id },
+              },
+              openPickerButton: {
+                id: `${id}-button`
+              },
+            }}
             {...(value && { value })}
           />
         </DemoItem>

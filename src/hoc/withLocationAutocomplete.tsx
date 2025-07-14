@@ -127,7 +127,10 @@ const withLocationAutocomplete = <P extends object>(
               {...restProps}
               onChange={undefined}
               disabled={props.disabled}
-              inputProps={params.inputProps}
+              inputProps={{
+                ...params.inputProps,
+                id: props.id, // explicitly forward id for e2e testing
+              }}
               InputLabelProps={params.InputLabelProps}
               slotProps={{
                 input: {

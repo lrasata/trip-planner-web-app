@@ -140,11 +140,13 @@ const EditTripContainer = ({ trip, status, error }: EditTripContainerProps) => {
               />
               <Divider />
               <BasicDatePicker
+                id="edit-departure-date-input"
                 value={dayjs(tripFormData.departureDate) ?? ""}
                 label="Departure date"
                 onChange={handleDateChange("departureDate")}
               />
               <BasicDatePicker
+                id="edit-return-date-input"
                 value={dayjs(tripFormData.returnDate) ?? ""}
                 label="Return date"
                 onChange={handleDateChange("returnDate")}

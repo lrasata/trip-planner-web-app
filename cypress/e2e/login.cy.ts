@@ -1,5 +1,7 @@
 /// <reference types="cypress" />
 
+import { logAdmin } from "../support/helpers";
+
 describe("Login", () => {
   it("should navigate to login page when clicking 'Log in'", () => {
     cy.visit("/");
@@ -28,17 +30,7 @@ describe("Login", () => {
   });
 
   it("should log in successfully and show logged in homepage", () => {
-    const password = Cypress.env("TEST_PASSWORD");
-    expect(password, "TEST_PASSWORD env must be set").to.exist;
-
-    cy.visit("/login");
-    cy.get('input[id="email-login"]').type("admin@admin.com");
-    cy.get('input[id="password-login"]').type(password);
-    cy.get('button[id="button-submit-login"]').click();
-
-    // expect logged-in home page content
-    // Wait longer for logged-in content
-    cy.contains("Your planned trip", { timeout: 10000 }).should("exist");
+    logAdmin();
     cy.get('button[id="create-new-trip"]').should("exist");
   });
 });

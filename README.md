@@ -153,7 +153,7 @@ Make sure Docker is installed and running on your system.
 **Open Cypress Test Runner (interactive)**
 
 ```bash
-npm run cypress:open
+npm run cy:open
 ```
 
 This opens the Cypress UI where you can run tests interactively, watch them run, and debug.
@@ -161,7 +161,7 @@ This opens the Cypress UI where you can run tests interactively, watch them run,
 **Run Cypress Tests in Headless Mode (CI / automated)**
 
 ```bash
-npm run cypress:run
+npm run cy:run
 ```
 
 This runs all the Cypress tests in headless mode and outputs the results in the terminal.

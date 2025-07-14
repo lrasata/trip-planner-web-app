@@ -71,23 +71,30 @@ const ProfileContainer = ({ user }: ProfileContainerProps) => {
 
           <Stack spacing={1.5}>
             <ProfileItem
+              id="profile-user-name-input"
               label="Name"
               value={userProfile.fullName}
               type="text"
               onChange={handleInputChange("fullName")}
             />
             <ProfileItem
+              id="profile-user-email-input"
               label="Email"
               value={userProfile.email}
               type="email"
               onChange={handleInputChange("email")}
             />
             <ProfileItem
+              id="profile-user-password-input"
               label="Reset password"
               type="password"
               onChange={handleInputChange("password")}
             />
-            <Button variant="contained" onClick={handleOnSave}>
+            <Button
+              id="submit-profile-update"
+              variant="contained"
+              onClick={handleOnSave}
+            >
               Save changes
             </Button>
           </Stack>
@@ -98,11 +105,13 @@ const ProfileContainer = ({ user }: ProfileContainerProps) => {
 };
 
 const ProfileItem = ({
+  id,
   label,
   value,
   type,
   onChange,
 }: {
+  id: string;
   label: string;
   value?: string;
   type: string;
@@ -112,7 +121,7 @@ const ProfileItem = ({
     <Typography variant="body1" fontWeight={600} gutterBottom={false}>
       {label}
     </Typography>
-    <TextField type={type} value={value} onChange={onChange} />
+    <TextField id={id} type={type} value={value} onChange={onChange} />
   </Stack>
 );
 

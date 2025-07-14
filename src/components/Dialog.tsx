@@ -35,6 +35,7 @@ const Dialog = (props: DialogProps) => {
     >
       <DialogTitle sx={{ m: 0, p: 2 }}>{title}</DialogTitle>
       <IconButton
+        id="close-dialog"
         aria-label="close"
         onClick={handleClose}
         sx={(theme) => ({

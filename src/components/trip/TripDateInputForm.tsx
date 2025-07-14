@@ -17,11 +17,13 @@ const TripDateInputForm = ({
   return (
     <Stack spacing={3} sx={{ my: 3 }}>
       <BasicDatePicker
+        id="trip-departure-date-input"
         value={dayjs(departureDate) ?? ""}
         label="Departure date"
         onChange={handleDepartureDateChange}
       />
       <BasicDatePicker
+        id="trip-return-date-input"
         value={dayjs(returnDate) ?? ""}
         label="Return date"
         onChange={handleReturnDateChange}

@@ -81,7 +81,7 @@ const TripLocationInputForm = ({
           />
           <Typography variant="subtitle2">Arrival country</Typography>
           <EnhancedArrivalCountryInput
-            id="arrrival-country-input"
+            id="arrival-country-input"
             placeholder="Country - Start typing..."
             error={!arrivalLocation?.country}
             helperText="Select a country"
