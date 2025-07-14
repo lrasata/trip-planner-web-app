@@ -109,6 +109,18 @@ const EditTripContainer = ({ trip, status, error }: EditTripContainerProps) => {
         <Grid container spacing={4}>
           <Grid size={{ xs: 12, md: 8 }}>
             <Stack direction="column" spacing={3}>
+              {status === "updated" && (
+                <AutoDismissAlert
+                  severity="success"
+                  message="Changes saved successfully"
+                />
+              )}
+              {status === "failed" && (
+                <AutoDismissAlert
+                  severity="error"
+                  message={error || "Something went wrong"}
+                />
+              )}
               <Typography variant="h2" gutterBottom color="textSecondary">
                 Manage your trip
               </Typography>
@@ -152,18 +164,6 @@ const EditTripContainer = ({ trip, status, error }: EditTripContainerProps) => {
                   "arrivalLocation",
                 )}
               />
-              {status === "updated" && (
-                <AutoDismissAlert
-                  severity="success"
-                  message="Changes saved successfully"
-                />
-              )}
-              {status === "failed" && (
-                <AutoDismissAlert
-                  severity="error"
-                  message={error || "Something went wrong"}
-                />
-              )}
             </Stack>
           </Grid>
           <Grid size={{ xs: 12, md: 4 }}>

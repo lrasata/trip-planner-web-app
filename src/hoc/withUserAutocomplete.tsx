@@ -42,6 +42,7 @@ const withLocationAutocomplete = <P extends object>(
           headers: {
             "Content-Type": "application/json",
           },
+          credentials: "include",
         });
 
         const json = await response.json();

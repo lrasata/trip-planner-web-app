@@ -26,7 +26,6 @@ So I decided to build my own. Something clean, flexible, and genuinely useful.
 
 <img src="./docs/desktop-landing-page.png" alt="trip planner" height="300"><img src="./docs/mobile-landing-page.png" alt="mobile trip planner" height="300">
 
-
 ## Features
 
 - Itinerary builder :bulb:

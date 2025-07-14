@@ -17,7 +17,7 @@ const Home = () => {
   return (
     <>
       {isAuthenticated ? (
-        <Box my={4}>
+        <Box my={8}>
           <Brand />
           <PlannedTripContainer />
           <CreateTripContainer />

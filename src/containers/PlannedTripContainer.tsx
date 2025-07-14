@@ -27,9 +27,17 @@ const PlannedTripContainer = () => {
 
   return (
     <Box my={3}>
-      <Typography variant="h2" gutterBottom color="textSecondary">
-        Your planned trip
-      </Typography>
+      {plannedTrips.length > 0 && (
+        <Typography variant="h2" gutterBottom color="textSecondary">
+          Your planned trips
+        </Typography>
+      )}
+      {plannedTrips.length === 0 && (
+        <Typography variant="h3" gutterBottom color="textSecondary">
+          No trip planned yet. Create a new trip
+        </Typography>
+      )}
+
       {plannedTrips &&
         plannedTrips.length > 0 &&
         plannedTrips.map((trip: ITrip, index: number) => (
