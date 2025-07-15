@@ -10,7 +10,7 @@ type AutoDismissAlertProps = {
 const AutoDismissAlert = ({
   severity,
   message,
-  duration = 10000,
+  duration = 3000,
 }: AutoDismissAlertProps) => {
   const [visible, setVisible] = useState(true);
 

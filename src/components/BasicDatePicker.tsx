@@ -32,7 +32,7 @@ const BasicDatePicker = ({ id, label, value, onChange }: Props) => {
                 inputProps: { "data-testid": id },
               },
               openPickerButton: {
-                id: `${id}-button`
+                id: `${id}-button`,
               },
             }}
             {...(value && { value })}

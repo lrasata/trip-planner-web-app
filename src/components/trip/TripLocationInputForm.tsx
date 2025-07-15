@@ -3,7 +3,7 @@ import { forwardRef, SyntheticEvent } from "react";
 import withLocationAutocomplete from "../../hoc/withLocationAutocomplete.tsx";
 import InputAdornment from "@mui/material/InputAdornment";
 import PlaceIcon from "@mui/icons-material/Place";
-import { ILocation } from "../../types.ts";
+import { ILocation } from "@/types.ts";
 import TextField, { TextFieldProps } from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
