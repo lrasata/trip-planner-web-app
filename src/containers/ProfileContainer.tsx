@@ -3,19 +3,22 @@ import { Card, CardContent, useMediaQuery, useTheme } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
-import { IUser } from "../types.ts";
+import { IRole, IUser } from "../types.ts";
 import TextField from "@mui/material/TextField";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { updateAuthenticatedUser } from "../store/redux/AuthSlice.ts";
 import { toast } from "react-toastify";
-import { AppDispatch, RootState } from "../store/redux";
+import { AppDispatch, RootState } from "@/store/redux";
+import MenuItem from "@mui/material/MenuItem";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
 
 interface ProfileContainerProps {
   user: IUser;
+  roles: IRole[];
 }
 
-const ProfileContainer = ({ user }: ProfileContainerProps) => {
+const ProfileContainer = ({ user, roles }: ProfileContainerProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const status = useSelector((state: RootState) => state.auth.status);
 
@@ -52,6 +55,13 @@ const ProfileContainer = ({ user }: ProfileContainerProps) => {
     });
   };
 
+  const handleSelectChange = (key: string) => (event: SelectChangeEvent) => {
+    const filteredRole: IRole = roles.filter(
+      (role) => role.name === (event.target.value as string),
+    )[0];
+    handleEdit({ [key]: { ...filteredRole } });
+  };
+
   const handleInputChange =
     (key: string) => (e: ChangeEvent<HTMLInputElement>) => {
       handleEdit({ [key]: e.target.value.trim() });
@@ -70,26 +80,35 @@ const ProfileContainer = ({ user }: ProfileContainerProps) => {
           </Typography>
 
           <Stack spacing={1.5}>
-            <ProfileItem
+            <ProfileItemTextInput
               id="profile-user-name-input"
               label="Name"
               value={userProfile.fullName}
               type="text"
               onChange={handleInputChange("fullName")}
             />
-            <ProfileItem
+            <ProfileItemTextInput
               id="profile-user-email-input"
               label="Email"
               value={userProfile.email}
               type="email"
               onChange={handleInputChange("email")}
             />
-            <ProfileItem
+            <ProfileItemTextInput
               id="profile-user-password-input"
               label="Reset password"
               type="password"
               onChange={handleInputChange("password")}
             />
+            {roles.length > 0 && (
+              <ProfileItemSelectInput
+                id="profile-user-role"
+                label="Role"
+                options={roles}
+                onChange={handleSelectChange("role")}
+                value={userProfile.role?.name ?? ""}
+              />
+            )}
             <Button
               id="submit-profile-update"
               variant="contained"
@@ -104,7 +123,7 @@ const ProfileContainer = ({ user }: ProfileContainerProps) => {
   );
 };
 
-const ProfileItem = ({
+const ProfileItemTextInput = ({
   id,
   label,
   value,
@@ -122,6 +141,45 @@ const ProfileItem = ({
       {label}
     </Typography>
     <TextField id={id} type={type} value={value} onChange={onChange} />
+  </Stack>
+);
+
+const ProfileItemSelectInput = ({
+  id,
+  label,
+  value,
+  options,
+  onChange,
+}: {
+  id: string;
+  label: string;
+  value: IRole["name"];
+  options: IRole[];
+  onChange: (event: SelectChangeEvent<IRole["name"]>) => void;
+}) => (
+  <Stack spacing={0.5}>
+    <Typography variant="body1" fontWeight={600} gutterBottom={false}>
+      {label}
+    </Typography>
+    <Select
+      labelId="demo-simple-select-label"
+      id={id}
+      value={value}
+      onChange={onChange}
+      renderValue={(selected) => {
+        const role = options.find((r) => r.name === selected);
+        return role ? role.description : "";
+      }}
+      disabled
+    >
+      {options.map((role: IRole, index) => {
+        return (
+          <MenuItem key={`${index}-${role.name}`} value={role.name}>
+            {role.description}
+          </MenuItem>
+        );
+      })}
+    </Select>
   </Stack>
 );
 

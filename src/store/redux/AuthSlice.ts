@@ -1,14 +1,14 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { API_USER_ENDPOINT } from "../../constants/constants.ts";
-import { nullToUndefined } from "../../utils/utils.ts";
-import { IUser } from "../../types.ts";
+import { API_USER_ENDPOINT } from "@/constants/constants.ts";
+import { nullToUndefined } from "@/utils/utils.ts";
+import { IUser } from "@/types.ts";
 import api from "../../api/api.ts";
 
 interface AuthState {
   token: string | null;
   refreshToken: string | null;
   isLoggedIn: boolean;
-  authenticatedUser: any;
+  authenticatedUser?: IUser;
   status: string;
   error: string | null;
 }

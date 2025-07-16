@@ -26,10 +26,15 @@ export interface ILocation {
   countryCode: string;
 }
 
+export interface IRole {
+  name: "ROLE_SUPER_ADMIN" | "ROLE_ADMIN" | "ROLE_PARTICIPANT";
+  description: string;
+}
+
 export interface IUser {
   id?: number;
   fullName: string;
   email: string;
   password?: string;
-  role?: string; // "ROLE_SUPER_ADMIN" | "ROLE_ADMIN" | "ROLE_PARTICIPANT";
+  role: IRole;
 }

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAuthenticatedUser } from "../store/redux/AuthSlice.ts";
-import { AppDispatch, RootState } from "../store/redux";
+import { AppDispatch, RootState } from "@/store/redux";
 
 const useIsAuthenticated = () => {
   const dispatch = useDispatch<AppDispatch>();
