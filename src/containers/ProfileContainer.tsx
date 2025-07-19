@@ -4,14 +4,14 @@ import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import { IRole, IUser } from "../types.ts";
-import TextField from "@mui/material/TextField";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { updateAuthenticatedUser } from "../store/redux/AuthSlice.ts";
 import { toast } from "react-toastify";
 import { AppDispatch, RootState } from "@/store/redux";
-import MenuItem from "@mui/material/MenuItem";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
+import { SelectChangeEvent } from "@mui/material/Select";
+import ProfileItemTextInput from "@/components/profile/ProfileItemTextInput.tsx";
+import ProfileItemSelectInput from "@/components/profile/ProfileItemSelectInput.tsx";
 
 interface ProfileContainerProps {
   user: IUser;
@@ -122,65 +122,5 @@ const ProfileContainer = ({ user, roles }: ProfileContainerProps) => {
     </Box>
   );
 };
-
-const ProfileItemTextInput = ({
-  id,
-  label,
-  value,
-  type,
-  onChange,
-}: {
-  id: string;
-  label: string;
-  value?: string;
-  type: string;
-  onChange: any;
-}) => (
-  <Stack spacing={0.5}>
-    <Typography variant="body1" fontWeight={600} gutterBottom={false}>
-      {label}
-    </Typography>
-    <TextField id={id} type={type} value={value} onChange={onChange} />
-  </Stack>
-);
-
-const ProfileItemSelectInput = ({
-  id,
-  label,
-  value,
-  options,
-  onChange,
-}: {
-  id: string;
-  label: string;
-  value: IRole["name"];
-  options: IRole[];
-  onChange: (event: SelectChangeEvent<IRole["name"]>) => void;
-}) => (
-  <Stack spacing={0.5}>
-    <Typography variant="body1" fontWeight={600} gutterBottom={false}>
-      {label}
-    </Typography>
-    <Select
-      labelId="demo-simple-select-label"
-      id={id}
-      value={value}
-      onChange={onChange}
-      renderValue={(selected) => {
-        const role = options.find((r) => r.name === selected);
-        return role ? role.description : "";
-      }}
-      disabled
-    >
-      {options.map((role: IRole, index) => {
-        return (
-          <MenuItem key={`${index}-${role.name}`} value={role.name}>
-            {role.description}
-          </MenuItem>
-        );
-      })}
-    </Select>
-  </Stack>
-);
 
 export default ProfileContainer;
