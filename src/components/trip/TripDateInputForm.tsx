@@ -7,12 +7,16 @@ interface ITripDateInputFormProps {
   departureDate?: string;
   handleDepartureDateChange: (date: Dayjs | null) => void;
   handleReturnDateChange: (date: Dayjs | null) => void;
+  invalidDates?: boolean;
+  helperText?: string;
 }
 const TripDateInputForm = ({
   departureDate,
   returnDate,
   handleDepartureDateChange,
   handleReturnDateChange,
+  invalidDates = false,
+  helperText = "",
 }: ITripDateInputFormProps) => {
   return (
     <Stack spacing={3} sx={{ my: 3 }}>
@@ -21,12 +25,16 @@ const TripDateInputForm = ({
         value={dayjs(departureDate) ?? ""}
         label="Departure date"
         onChange={handleDepartureDateChange}
+        hasError={invalidDates}
+        helperText={helperText}
       />
       <BasicDatePicker
         id="trip-return-date-input"
         value={dayjs(returnDate) ?? ""}
         label="Return date"
         onChange={handleReturnDateChange}
+        hasError={invalidDates}
+        helperText={helperText}
       />
     </Stack>
   );

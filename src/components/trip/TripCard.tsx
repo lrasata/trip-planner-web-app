@@ -68,6 +68,7 @@ const TripCard = ({
             )}
           </Stack>
           <Button
+            id={`${name}-trip-manage-button`}
             variant="text"
             startIcon={<BorderColorIcon />}
             onClick={onClick}

@@ -10,8 +10,17 @@ interface Props {
   label: string;
   value?: Dayjs | null | undefined;
   onChange: (date: Dayjs | null) => void;
+  hasError?: boolean;
+  helperText?: string;
 }
-const BasicDatePicker = ({ id, label, value, onChange }: Props) => {
+const BasicDatePicker = ({
+  id,
+  label,
+  value,
+  onChange,
+  hasError = false,
+  helperText = "Invalid date",
+}: Props) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
@@ -29,7 +38,9 @@ const BasicDatePicker = ({ id, label, value, onChange }: Props) => {
             slotProps={{
               textField: {
                 id,
-                inputProps: { "data-testid": id },
+                inputProps: { "data-testid": id, readOnly: false },
+                error: hasError,
+                helperText: hasError ? helperText : undefined,
               },
               openPickerButton: {
                 id: `${id}-button`,

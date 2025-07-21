@@ -18,7 +18,7 @@ import Box from "@mui/material/Box";
 import { Card, useTheme } from "@mui/material";
 import TripLocationInputForm from "../components/trip/TripLocationInputForm.tsx";
 import TripParticipantInputForm from "../components/trip/TripParticipantInputForm.tsx";
-import { AppDispatch } from "../store/redux";
+import { AppDispatch } from "@/store/redux";
 
 const Dialog = lazy(() => import("../components/Dialog.tsx"));
 
@@ -33,6 +33,7 @@ const EditTripContainer = ({ trip, status, error }: EditTripContainerProps) => {
   const navigate = useNavigate();
   const [tripFormData, setTripFormData] = useState<ITrip>(trip);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [invalidDates, setInvalidDates] = useState<boolean>(false);
 
   useEffect(() => {
     setTripFormData(trip);
@@ -62,6 +63,7 @@ const EditTripContainer = ({ trip, status, error }: EditTripContainerProps) => {
     };
 
   const handleDateChange = (key: string) => (date: Dayjs | null) => {
+    setInvalidDates(false);
     date && handleEditTrip({ [key]: formatDate(date) });
   };
 
@@ -84,7 +86,14 @@ const EditTripContainer = ({ trip, status, error }: EditTripContainerProps) => {
   };
 
   const handleOnSave = () => {
-    dispatch(updateTrip(tripFormData));
+    if (
+      dayjs(tripFormData.returnDate).isBefore(dayjs(tripFormData.departureDate))
+    ) {
+      setInvalidDates(true);
+    } else {
+      setInvalidDates(false);
+      dispatch(updateTrip(tripFormData));
+    }
   };
 
   const handleOnDelete = () => {
@@ -125,6 +134,7 @@ const EditTripContainer = ({ trip, status, error }: EditTripContainerProps) => {
                 Manage your trip
               </Typography>
               <TextField
+                id="edit-trip-name-input"
                 type="text"
                 label="Name"
                 value={tripFormData.name || ""}
@@ -133,6 +143,7 @@ const EditTripContainer = ({ trip, status, error }: EditTripContainerProps) => {
                 error={!tripFormData.name}
               />
               <TextField
+                id="edit-trip-description-input"
                 type="text"
                 label="Description"
                 value={tripFormData.description}
@@ -144,12 +155,16 @@ const EditTripContainer = ({ trip, status, error }: EditTripContainerProps) => {
                 value={dayjs(tripFormData.departureDate) ?? ""}
                 label="Departure date"
                 onChange={handleDateChange("departureDate")}
+                hasError={invalidDates}
+                helperText="Invalid date"
               />
               <BasicDatePicker
                 id="edit-return-date-input"
                 value={dayjs(tripFormData.returnDate) ?? ""}
                 label="Return date"
                 onChange={handleDateChange("returnDate")}
+                hasError={invalidDates}
+                helperText="Invalid date"
               />
               <Divider />
               <TripLocationInputForm

@@ -58,7 +58,7 @@ const VerticalLinearStepper = ({
                 <Button
                   variant="contained"
                   onClick={handleNext}
-                  disabled={requiredFieldMissing}
+                  disabled={requiredFieldMissing && index === steps.length - 1}
                 >
                   {index === steps.length - 1 ? "Finish" : "Continue"}
                 </Button>

@@ -11,11 +11,11 @@ import {
 } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createTrip } from "../store/redux/TripSlice.ts";
-import { Dayjs } from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import { formatDate } from "../utils/utils.ts";
 import Spinner from "../components/Spinner.tsx";
 import { draftTripActions } from "../store/redux/DraftTripSlice.ts";
-import { AppDispatch, RootState } from "../store/redux";
+import { AppDispatch, RootState } from "@/store/redux";
 
 // Lazy import
 const Dialog = lazy(() => import("../components/Dialog.tsx"));
@@ -52,10 +52,24 @@ const CreateTripContainer = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const draftTrip = useSelector((state: RootState) => state.draftTrip);
   const [editTrip, setEditTrip] = useState<ITrip>(draftTrip);
+  const [invalidDates, setInvalidDates] = useState<boolean>(false);
 
   useEffect(() => {
     setEditTrip(draftTrip);
   }, [draftTrip]);
+
+  useEffect(() => {
+    const isDepartureValid = dayjs(editTrip.departureDate).isValid();
+    const isReturnValid = dayjs(editTrip.returnDate).isValid();
+
+    if (!isDepartureValid || !isReturnValid) {
+      setInvalidDates(true);
+    } else {
+      setInvalidDates(
+        dayjs(editTrip.returnDate).isBefore(dayjs(editTrip.departureDate)),
+      );
+    }
+  }, [editTrip.departureDate, editTrip.returnDate]);
 
   const handleEditTrip = (
     key: string,
@@ -152,6 +166,8 @@ const CreateTripContainer = () => {
             departureDate={editTrip.departureDate}
             handleDepartureDateChange={handleDateChange("departureDate")}
             handleReturnDateChange={handleDateChange("returnDate")}
+            invalidDates={invalidDates}
+            helperText="This date is invalid"
           />
         </Suspense>
       ),
@@ -174,6 +190,13 @@ const CreateTripContainer = () => {
   const handleOnSubmit = async () => {
     dispatch(createTrip(editTrip));
   };
+
+  // form cannot be submit if following requirements are not met
+  const isAbleToSubmit =
+    !editTrip.name ||
+    !editTrip.departureDate ||
+    !editTrip.returnDate ||
+    dayjs(editTrip.returnDate).isBefore(dayjs(editTrip.departureDate));
 
   return (
     <>
@@ -203,7 +226,7 @@ const CreateTripContainer = () => {
                 steps={steps}
                 handleOnClickNextStep={handleStateUpdate}
                 handleOnSubmitStep={handleOnSubmit}
-                requiredFieldMissing={!editTrip.name}
+                requiredFieldMissing={isAbleToSubmit}
               />
             }
           />
