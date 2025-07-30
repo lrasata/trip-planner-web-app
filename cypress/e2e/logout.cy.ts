@@ -20,7 +20,7 @@ describe("Log out", () => {
       .and("contain", "Log in");
 
     // Menu for authenticated user
-    cy.contains("button", "All trips").should("not.exist");
+    cy.contains("button", "Your trips").should("not.exist");
     cy.contains("button", "Profile").should("not.exist");
     cy.contains("button", "Log out").should("not.exist");
   });

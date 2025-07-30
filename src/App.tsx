@@ -42,7 +42,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "trips",
+        path: "all-trips",
         element: (
           <Suspense fallback={<Spinner />}>
             <ProtectedRoute>

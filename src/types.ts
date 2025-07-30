@@ -38,3 +38,12 @@ export interface IUser {
   password?: string;
   role: IRole;
 }
+
+export interface TripPaginatedResponse {
+  content: ITrip[];
+  page: number;
+  size: number;
+  totalElements: number;
+  totalPages: number;
+  last: boolean;
+}

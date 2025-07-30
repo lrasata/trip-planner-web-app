@@ -1,25 +1,24 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { API_BACKEND_URL } from "../../constants/constants.ts";
+import { API_BACKEND_URL } from "@/constants/constants.ts";
 import {
   existsById,
   nullToUndefined,
   removeItemById,
   updateItemById,
-} from "../../utils/utils.ts";
-import { ITrip } from "../../types.ts";
+} from "@/utils/utils.ts";
+import { ITrip, TripPaginatedResponse } from "@/types.ts";
 import api from "../../api/api.ts";
+import { AxiosResponse } from "axios";
 
 interface ITripState {
   editingTrip: ITrip | null;
-  plannedTrips: ITrip[];
-  pastTrips: ITrip[];
+  trips: ITrip[];
   status: string;
   error: string | null;
 }
 const initialTripState: ITripState = {
   editingTrip: null,
-  plannedTrips: [],
-  pastTrips: [],
+  trips: [],
   status: "idle", // 'idle' | 'loading' | 'succeeded' | 'failed' | 'created' | 'updated' | 'deleted'
   error: null,
 };
@@ -63,22 +62,27 @@ export const fetchTrip = createAsyncThunk(
   },
 );
 
-export const fetchPlannedTrips = createAsyncThunk(
-  "trips/fetchPlannedTrips",
-  async (arg: { dateFilter?: string }, { rejectWithValue }) => {
+export const fetchTrips = createAsyncThunk(
+  "trips/fetchTrips",
+  async (
+    arg: { dateFilter?: string; keyword?: string },
+    { rejectWithValue },
+  ) => {
     const url = new URL(`${API_BACKEND_URL}/trips`);
 
-    if (arg && arg.dateFilter) {
-      url.searchParams.set("dateFilter", arg.dateFilter);
-    }
+    arg?.dateFilter && url.searchParams.set("dateFilter", arg.dateFilter);
+    arg?.keyword && url.searchParams.set("keyword", arg.keyword);
 
     try {
-      const response = await api.get(url.toString(), {
-        withCredentials: true,
-      });
-      const data = response.data;
+      const response: AxiosResponse<TripPaginatedResponse> = await api.get(
+        url.toString(),
+        {
+          withCredentials: true,
+        },
+      );
+      const data = response.data.content;
       return {
-        plannedTrips: nullToUndefined(data),
+        trips: nullToUndefined(data),
       };
     } catch (error) {
       console.error("Error fetching planned trips:", error);
@@ -177,14 +181,14 @@ const tripSlice = createSlice({
   initialState: initialTripState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(fetchPlannedTrips.pending, (state) => {
+    builder.addCase(fetchTrips.pending, (state) => {
       state.status = "loading";
     });
-    builder.addCase(fetchPlannedTrips.fulfilled, (state, action) => {
+    builder.addCase(fetchTrips.fulfilled, (state, action) => {
       state.status = "succeeded";
-      state.plannedTrips = action.payload.plannedTrips;
+      state.trips = action.payload.trips;
     });
-    builder.addCase(fetchPlannedTrips.rejected, (state, action) => {
+    builder.addCase(fetchTrips.rejected, (state, action) => {
       state.status = "failed";
       state.error = action.error.message || "Something went wrong";
     });
@@ -193,7 +197,7 @@ const tripSlice = createSlice({
     });
     builder.addCase(createTrip.fulfilled, (state, action) => {
       state.status = "created";
-      state.plannedTrips = [...state.plannedTrips, action.payload.trip];
+      state.trips = [...state.trips, action.payload.trip];
     });
     builder.addCase(createTrip.rejected, (state, action) => {
       state.status = "failed";
@@ -206,17 +210,9 @@ const tripSlice = createSlice({
       state.status = "updated";
       const updatedData = { ...action.payload.trip };
 
-      if (existsById(state.plannedTrips, updatedData.id)) {
-        state.plannedTrips = updateItemById(
-          [...state.plannedTrips],
-          updatedData.id,
-          updatedData,
-        );
-      }
-
-      if (existsById(state.pastTrips, updatedData.id)) {
-        state.pastTrips = updateItemById(
-          [...state.pastTrips],
+      if (existsById(state.trips, updatedData.id)) {
+        state.trips = updateItemById(
+          [...state.trips],
           updatedData.id,
           updatedData,
         );
@@ -245,12 +241,8 @@ const tripSlice = createSlice({
     builder.addCase(deleteTrip.fulfilled, (state, action) => {
       state.status = "deleted";
       const deletedId = action.payload.trip.id;
-      if (existsById(state.plannedTrips, deletedId)) {
-        state.plannedTrips = removeItemById([...state.plannedTrips], deletedId);
-      }
-
-      if (existsById(state.pastTrips, deletedId)) {
-        state.pastTrips = removeItemById([...state.pastTrips], deletedId);
+      if (existsById(state.trips, deletedId)) {
+        state.trips = removeItemById([...state.trips], deletedId);
       }
     });
     builder.addCase(deleteTrip.rejected, (state, action) => {

@@ -8,7 +8,7 @@ describe("Update trip", () => {
     createTrip(tripName);
 
     // visit all-trips
-    cy.contains("button", "All trips").click();
+    cy.contains("button", "Your trips").click();
     // created Trip is listed
     cy.contains(tripName, { timeout: 3000 }).should("exist");
 

@@ -1,4 +1,4 @@
-import { ITrip } from "../../types.ts";
+import { ITrip } from "@/types.ts";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const initialState: ITrip = {

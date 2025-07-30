@@ -8,8 +8,8 @@ import { authSliceActions } from "../store/redux/AuthSlice.ts";
 
 const authNavItems = [
   {
-    title: "All trips",
-    url: "/trips",
+    title: "Your trips",
+    url: "/all-trips",
   },
   {
     title: "Profile",
