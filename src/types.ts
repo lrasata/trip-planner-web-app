@@ -47,3 +47,11 @@ export interface TripPaginatedResponse {
   totalPages: number;
   last: boolean;
 }
+
+export interface IPagination {
+  currentPage: number;
+  sizePerPage: number;
+  totalElements: number;
+  totalPages: number;
+  isLastPage: boolean;
+}

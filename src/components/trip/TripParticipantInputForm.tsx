@@ -4,7 +4,7 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import TextField, { TextFieldProps } from "@mui/material/TextField";
 import { ChangeEvent, forwardRef, SyntheticEvent } from "react";
 import withUserAutocomplete from "../../hoc/withUserAutocomplete.tsx";
-import { IUser } from "../../types.ts";
+import { IUser } from "@/types.ts";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 
@@ -63,37 +63,42 @@ const TripParticipantInputForm = ({
         onChange={handleInputParticipantCountChange}
         error={!participantCount}
       />
-      {[...Array(Number(participantCount || 0))].map((_, index) => (
-        <Stack
-          direction="row"
-          key={`participant-name-${index}-input`}
-          spacing={1}
-          sx={{ alignItems: "center" }}
-        >
-          <EnhancedParticipantInput
-            id={`participant-name-${index}-name-input`}
-            placeholder="Email"
-            helperText={`Participant #${index + 1}`}
-            onChange={handleOnSelectParticipant}
-            {...(participants && {
-              value: participants[index],
-            })}
-            {...(onEdit &&
-              participants && { disabled: participants[index] !== undefined })}
-          />
-          {onEdit &&
-            participants &&
-            participants[index] !== undefined &&
-            handleOnRemoveParticipant && (
-              <IconButton
-                aria-label="delete"
-                onClick={() => handleOnRemoveParticipant(participants[index])}
-              >
-                <DeleteIcon />
-              </IconButton>
-            )}
-        </Stack>
-      ))}
+      {Array.from(
+        { length: Math.max(0, Number(participantCount)) },
+        (_, index) => (
+          <Stack
+            direction="row"
+            key={`participant-name-${index}-input`}
+            spacing={1}
+            sx={{ alignItems: "center" }}
+          >
+            <EnhancedParticipantInput
+              id={`participant-name-${index}-name-input`}
+              placeholder="Email"
+              helperText={`Participant #${index + 1}`}
+              onChange={handleOnSelectParticipant}
+              {...(participants && {
+                value: participants[index],
+              })}
+              {...(onEdit &&
+                participants && {
+                  disabled: participants[index] !== undefined,
+                })}
+            />
+            {onEdit &&
+              participants &&
+              participants[index] !== undefined &&
+              handleOnRemoveParticipant && (
+                <IconButton
+                  aria-label="delete"
+                  onClick={() => handleOnRemoveParticipant(participants[index])}
+                >
+                  <DeleteIcon />
+                </IconButton>
+              )}
+          </Stack>
+        ),
+      )}
     </Stack>
   );
 };

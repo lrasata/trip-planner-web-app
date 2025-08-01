@@ -14,3 +14,4 @@ export const GEO_DB_HOST = `${import.meta.env.VITE_GEO_DB_RAPID_API_HOST}`;
 export const GEO_DB_API_KEY = `${import.meta.env.VITE_GEO_DB_RAPID_API_KEY}`;
 
 export const SEARCH_QUERY_PARAMETER = "search";
+export const PAGE_QUERY_PARAMETER = "page";

@@ -6,7 +6,7 @@ import {
   removeItemById,
   updateItemById,
 } from "@/utils/utils.ts";
-import { ITrip, TripPaginatedResponse } from "@/types.ts";
+import { IPagination, ITrip, TripPaginatedResponse } from "@/types.ts";
 import api from "../../api/api.ts";
 import { AxiosResponse } from "axios";
 
@@ -15,12 +15,15 @@ interface ITripState {
   trips: ITrip[];
   status: string;
   error: string | null;
+  pagination: IPagination | null;
 }
+
 const initialTripState: ITripState = {
   editingTrip: null,
   trips: [],
   status: "idle", // 'idle' | 'loading' | 'succeeded' | 'failed' | 'created' | 'updated' | 'deleted'
   error: null,
+  pagination: null,
 };
 
 export const fetchTrip = createAsyncThunk(
@@ -65,13 +68,20 @@ export const fetchTrip = createAsyncThunk(
 export const fetchTrips = createAsyncThunk(
   "trips/fetchTrips",
   async (
-    arg: { dateFilter?: string; keyword?: string },
+    arg: {
+      dateFilter?: string;
+      keyword?: string;
+      page?: number;
+      size?: number;
+    },
     { rejectWithValue },
   ) => {
     const url = new URL(`${API_BACKEND_URL}/trips`);
 
     arg?.dateFilter && url.searchParams.set("dateFilter", arg.dateFilter);
     arg?.keyword && url.searchParams.set("keyword", arg.keyword);
+    arg?.page && url.searchParams.set("page", String(arg.page));
+    arg?.size && url.searchParams.set("size", String(arg.size));
 
     try {
       const response: AxiosResponse<TripPaginatedResponse> = await api.get(
@@ -83,6 +93,13 @@ export const fetchTrips = createAsyncThunk(
       const data = response.data.content;
       return {
         trips: nullToUndefined(data),
+        pagination: {
+          currentPage: response.data.page,
+          sizePerPage: response.data.size,
+          totalElements: response.data.totalElements,
+          totalPages: response.data.totalPages,
+          isLastPage: response.data.last,
+        },
       };
     } catch (error) {
       console.error("Error fetching planned trips:", error);
@@ -187,6 +204,7 @@ const tripSlice = createSlice({
     builder.addCase(fetchTrips.fulfilled, (state, action) => {
       state.status = "succeeded";
       state.trips = action.payload.trips;
+      state.pagination = action.payload.pagination;
     });
     builder.addCase(fetchTrips.rejected, (state, action) => {
       state.status = "failed";

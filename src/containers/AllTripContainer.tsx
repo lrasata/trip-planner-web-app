@@ -1,37 +1,50 @@
 import TripCard from "../components/trip/TripCard.tsx";
 import Typography from "@mui/material/Typography";
-import { Box } from "@mui/material";
+import { Box, Pagination } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { fetchTrips } from "../store/redux/TripSlice.ts";
-import { ITrip } from "../types.ts";
+import { IPagination, ITrip } from "../types.ts";
 import { useNavigate } from "react-router-dom";
 import { AppDispatch, RootState } from "@/store/redux";
 import SearchBarContainer from "@/containers/SearchBarContainer.tsx";
 import Spinner from "@/components/Spinner.tsx";
+import useQueryParams from "@/hooks/useQueryParams.ts";
+import { PAGE_QUERY_PARAMETER } from "@/constants/constants.ts";
 
 const AllTripContainer = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const trips: ITrip[] = useSelector((state: RootState) => state.trips.trips);
+  const pagination: IPagination | null = useSelector(
+    (state: RootState) => state.trips.pagination,
+  );
   const status: string = useSelector((state: RootState) => state.trips.status);
   const searchKeyword: string = useSelector(
     (state: RootState) => state.filter.searchKeyword,
   );
+  const { getQueryParamByKey, setQueryParam } = useQueryParams();
+  // fetch page from url if exists
+  const pageQueryParam = getQueryParamByKey(PAGE_QUERY_PARAMETER);
   const [searchFilter, setSearchFilter] = useState<string>(searchKeyword);
 
   useEffect(() => {
-    if (searchFilter !== "") {
-      dispatch(fetchTrips({ keyword: searchFilter }));
-    } else {
-      dispatch(fetchTrips({}));
-    }
-  }, [searchFilter]);
+    dispatch(
+      fetchTrips({
+        keyword: searchFilter,
+        ...(pageQueryParam !== "" && { page: Number(pageQueryParam) - 1 || 0 }),
+      }),
+    );
+  }, [searchFilter, pageQueryParam]);
 
   const handleOnClickNavigate = (taskId: number | undefined) => {
     if (taskId) {
       navigate(`/trips/${taskId}`);
     }
+  };
+
+  const handleOnChangePage = (_event: ChangeEvent<unknown>, page: number) => {
+    setQueryParam(PAGE_QUERY_PARAMETER, String(page));
   };
 
   return (
@@ -54,6 +67,17 @@ const AllTripContainer = () => {
               />
             </Box>
           ))}
+          {pagination && (
+            <Box my={3} justifyContent="center" display="flex">
+              <Pagination
+                count={pagination.totalPages}
+                page={pagination.currentPage + 1}
+                color="primary"
+                size="large"
+                onChange={handleOnChangePage}
+              />
+            </Box>
+          )}
         </>
       )}
       {status === "succeeded" && trips.length === 0 && (
