@@ -5,8 +5,20 @@ import { ITrip } from "../../types";
 
 // ---------------- Mocks (MUST be before importing SUT) ----------------
 
+// Mock useQueryParams; we control return values per test
+const mockGetQueryParamByKey = vi.fn();
+const mockSetQueryParam = vi.fn();
+const mockRemoveQueryParamByKey = vi.fn();
+
+vi.mock("@/hooks/useQueryParams.ts", () => ({
+  default: () => ({
+    getQueryParamByKey: mockGetQueryParamByKey,
+    setQueryParam: mockSetQueryParam,
+    removeQueryParamByKey: mockRemoveQueryParamByKey,
+  }),
+}));
+
 // TripCard: mock the Vite-resolved absolute path.
-// If your project resolves differently, you can add another vi.mock with the exact specifier used.
 vi.mock("/src/components/trip/TripCard.tsx", () => {
   const React = require("react");
   return {
@@ -16,7 +28,6 @@ vi.mock("/src/components/trip/TripCard.tsx", () => {
   };
 });
 
-// If you still want to cover the relative import too, you can keep this as well:
 vi.mock("../components/trip/TripCard.tsx", () => {
   const React = require("react");
   return {
@@ -26,7 +37,6 @@ vi.mock("../components/trip/TripCard.tsx", () => {
   };
 });
 
-// SearchBarContainer: simple stub that calls the handler when clicked
 vi.mock("@/containers/SearchBarContainer.tsx", () => {
   const React = require("react");
   return {
@@ -43,7 +53,6 @@ vi.mock("@/containers/SearchBarContainer.tsx", () => {
   };
 });
 
-// Spinner
 vi.mock("@/components/Spinner.tsx", () => {
   const React = require("react");
   return {
@@ -55,9 +64,9 @@ vi.mock("@/components/Spinner.tsx", () => {
 
 // fetchTrips: thunk-shaped mock (createAsyncThunk returns a function)
 const fetchTripsMock = vi.fn((args: any) => {
-  // Return a thunk that resolves; we don’t need to simulate inner dispatches here.
   return () => Promise.resolve({ type: "trips/fetchTrips", meta: { args } });
 });
+
 vi.mock("../store/redux/TripSlice.ts", () => ({
   fetchTrips: fetchTripsMock,
 }));
@@ -77,7 +86,6 @@ vi.mock("react-redux", () => ({
     }),
 }));
 
-// useNavigate
 const mockNavigate = vi.fn();
 vi.mock("react-router-dom", () => ({
   useNavigate: () => mockNavigate,
@@ -106,7 +114,6 @@ describe("AllTripContainer", () => {
   it("dispatches fetchTrips with empty object if searchFilter is empty on mount", () => {
     mockSearchKeyword = "";
     render(<AllTripContainer />);
-    // Initial dispatch call for fetchTrips({}) on mount (empty searchFilter)
 
     expect(mockDispatch).toHaveBeenCalled();
     expect(typeof mockDispatch.mock.calls[0][0]).toBe("function");

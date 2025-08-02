@@ -2,11 +2,7 @@ import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
-// SUT
-import SearchBarContainer from "@/containers/SearchBarContainer";
-
 // ---- Mocks ----
-
 // Keep a mutable state that useSelector will read
 let mockState: { filter: { searchKeyword: string } } = {
   filter: { searchKeyword: "" },
@@ -41,7 +37,6 @@ vi.mock("@/hooks/useQueryParams.ts", () => ({
   }),
 }));
 
-// Replace the real SearchBar with a small stub so we can see props & trigger handleSearch
 vi.mock("@/components/SearchBar.tsx", () => {
   return {
     __esModule: true,
@@ -56,6 +51,9 @@ vi.mock("@/components/SearchBar.tsx", () => {
     ),
   };
 });
+
+// SUT
+import SearchBarContainer from "@/containers/SearchBarContainer";
 
 // ---- Helpers ----
 
