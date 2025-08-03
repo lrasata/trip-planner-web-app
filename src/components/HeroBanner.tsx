@@ -1,6 +1,8 @@
 import { Box, Typography, Button, styled } from "@mui/material";
 import { motion } from "framer-motion";
 import Brand from "../components/Brand";
+import {Button as KoaButton, defaultTheme} from "koa-ui-design-system"
+import { ThemeProvider } from "@emotion/react"
 
 const StyledHero = styled(Box)(() => ({
   position: "relative",
@@ -80,6 +82,9 @@ const HeroBanner = ({ onClick }: HeroBannerProps) => {
           >
             Get Started
           </Button>
+          <ThemeProvider theme={defaultTheme}>
+          <KoaButton>Button</KoaButton>
+          </ThemeProvider>
         </motion.div>
       </Content>
     </StyledHero>
