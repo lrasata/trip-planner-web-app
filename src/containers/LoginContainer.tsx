@@ -1,7 +1,6 @@
 import {
   Box,
   BoxProps,
-  Button,
   styled,
   TextField,
   useMediaQuery,
@@ -14,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 import { authSliceActions } from "../store/redux/AuthSlice.ts";
 import { useDispatch } from "react-redux";
 import api from "../api/api.ts";
+import KoaButton from "@/components/koa-ui/KoaButton.tsx";
 
 interface StyledBoxContainerProps extends BoxProps {
   component?: React.ElementType; // React.ElementType can be any HTML or custom component
@@ -116,14 +116,9 @@ const LoginContainer = () => {
         justifyContent="center"
         alignItems="center"
       >
-        <Button
-          id="button-submit-login"
-          variant="contained"
-          type="submit"
-          fullWidth={isMobile}
-        >
+        <KoaButton id="button-submit-login" type="submit" fullWidth={isMobile}>
           Log in
-        </Button>
+        </KoaButton>
       </Box>
     </StyledBoxContainer>
   );

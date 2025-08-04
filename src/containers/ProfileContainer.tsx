@@ -2,7 +2,6 @@ import Box from "@mui/material/Box";
 import { Card, CardContent, useMediaQuery, useTheme } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
-import Button from "@mui/material/Button";
 import { IRole, IUser } from "../types.ts";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -12,6 +11,7 @@ import { AppDispatch, RootState } from "@/store/redux";
 import { SelectChangeEvent } from "@mui/material/Select";
 import ProfileItemTextInput from "@/components/profile/ProfileItemTextInput.tsx";
 import ProfileItemSelectInput from "@/components/profile/ProfileItemSelectInput.tsx";
+import KoaButton from "@/components/koa-ui/KoaButton.tsx";
 
 interface ProfileContainerProps {
   user: IUser;
@@ -109,13 +109,9 @@ const ProfileContainer = ({ user, roles }: ProfileContainerProps) => {
                 value={userProfile.role?.name ?? ""}
               />
             )}
-            <Button
-              id="submit-profile-update"
-              variant="contained"
-              onClick={handleOnSave}
-            >
+            <KoaButton id="submit-profile-update" onClick={handleOnSave}>
               Save changes
-            </Button>
+            </KoaButton>
           </Stack>
         </CardContent>
       </Card>

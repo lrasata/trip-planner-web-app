@@ -7,9 +7,9 @@ import InsertInvitationIcon from "@mui/icons-material/InsertInvitation";
 import { ITrip } from "@/types.ts";
 import dayjs from "dayjs";
 import Stack from "@mui/material/Stack";
-import Button from "@mui/material/Button";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import getLocationText from "@/utils/getLocationText.ts";
+import KoaButton from "@/components/koa-ui/KoaButton.tsx";
 
 const TripCard = ({
   name,
@@ -67,14 +67,14 @@ const TripCard = ({
               />
             )}
           </Stack>
-          <Button
+          <KoaButton
             id={`${name}-trip-manage-button`}
             variant="text"
             startIcon={<BorderColorIcon />}
             onClick={onClick}
           >
             Manage
-          </Button>
+          </KoaButton>
         </Box>
       </CardContent>
     </Card>

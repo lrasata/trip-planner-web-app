@@ -3,12 +3,12 @@ import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import StepContent from "@mui/material/StepContent";
-import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import { IStep } from "../types.ts";
 import { useState } from "react";
 import Stack from "@mui/material/Stack";
+import KoaButton from "@/components/koa-ui/KoaButton.tsx";
 
 interface VerticalLinearStepperProps {
   steps: IStep[];
@@ -55,20 +55,19 @@ const VerticalLinearStepper = ({
               {step.component && step.component}
               <Typography>{step.description}</Typography>
               <Stack direction="row" spacing={1} mt={1}>
-                <Button
-                  variant="contained"
+                <KoaButton
                   onClick={handleNext}
                   disabled={requiredFieldMissing && index === steps.length - 1}
                 >
                   {index === steps.length - 1 ? "Finish" : "Continue"}
-                </Button>
-                <Button
-                  variant="outlined"
+                </KoaButton>
+                <KoaButton
+                  variant="outline"
                   disabled={index === 0}
                   onClick={handleBack}
                 >
                   Back
-                </Button>
+                </KoaButton>
               </Stack>
             </StepContent>
           </Step>

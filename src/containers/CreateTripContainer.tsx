@@ -1,4 +1,4 @@
-import { Box, Button, styled } from "@mui/material";
+import { Box, styled } from "@mui/material";
 import { ILocation, IStep, ITrip, IUser } from "../types.ts";
 import Typography from "@mui/material/Typography";
 import {
@@ -16,6 +16,7 @@ import { formatDate } from "../utils/utils.ts";
 import Spinner from "../components/Spinner.tsx";
 import { draftTripActions } from "../store/redux/DraftTripSlice.ts";
 import { AppDispatch, RootState } from "@/store/redux";
+import KoaButton from "@/components/koa-ui/KoaButton.tsx";
 
 // Lazy import
 const Dialog = lazy(() => import("../components/Dialog.tsx"));
@@ -201,18 +202,12 @@ const CreateTripContainer = () => {
   return (
     <>
       <StyledBox>
-        <Typography variant="h1" gutterBottom color="textSecondary">
+        <Typography variant="h1" gutterBottom color="textSecondary" mb={2}>
           Your journey starts here
         </Typography>
-        <Button
-          id="create-new-trip"
-          variant="contained"
-          size="large"
-          sx={{ mt: 2 }}
-          onClick={handleOnOpenDialog}
-        >
+        <KoaButton id="create-new-trip" onClick={handleOnOpenDialog}>
           Create a new trip
-        </Button>
+        </KoaButton>
       </StyledBox>
 
       {isDialogOpen && (
