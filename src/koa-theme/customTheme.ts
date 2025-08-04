@@ -1,4 +1,6 @@
 import { createTheme } from "koa-ui-design-system";
+import { fonts } from "@/koa-theme/fonts.ts";
+import { typography } from "@/koa-theme/typography.ts";
 
 const customTheme = createTheme({
   colors: {
@@ -22,9 +24,8 @@ const customTheme = createTheme({
       backdrop: "rgba(0, 0, 0, 0.4)",
     },
   },
-  fonts: {
-    fontFamily: '"Baloo 2", "Poppins", "Quicksand", sans-serif',
-  },
+  fonts,
+  typography,
 });
 
 export default customTheme;

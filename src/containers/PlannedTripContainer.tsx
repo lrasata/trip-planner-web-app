@@ -1,5 +1,4 @@
 import TripCard from "../components/trip/TripCard.tsx";
-import Typography from "@mui/material/Typography";
 import { Box } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
@@ -7,6 +6,7 @@ import { fetchTrips } from "../store/redux/TripSlice.ts";
 import { ITrip } from "../types.ts";
 import { useNavigate } from "react-router-dom";
 import { AppDispatch, RootState } from "@/store/redux";
+import KoaTypography from "@/components/koa-ui/KoaTypography.tsx";
 
 const PlannedTripContainer = () => {
   const navigate = useNavigate();
@@ -26,14 +26,14 @@ const PlannedTripContainer = () => {
   return (
     <Box my={3}>
       {plannedTrips.length > 0 && (
-        <Typography variant="h2" gutterBottom color="textSecondary">
+        <KoaTypography variant="h2" component="h2" color="secondary">
           Your planned trips
-        </Typography>
+        </KoaTypography>
       )}
       {plannedTrips.length === 0 && (
-        <Typography variant="h3" gutterBottom color="textSecondary">
+        <KoaTypography variant="h3" component="h3" color="secondary">
           No trip planned yet. Create a new trip
-        </Typography>
+        </KoaTypography>
       )}
 
       {plannedTrips &&

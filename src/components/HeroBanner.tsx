@@ -1,7 +1,8 @@
-import { Box, Typography, styled } from "@mui/material";
+import { Box, styled } from "@mui/material";
 import { motion } from "framer-motion";
 import Brand from "../components/Brand";
 import KoaButton from "../components/koa-ui/KoaButton";
+import KoaTypography from "@/components/koa-ui/KoaTypography.tsx";
 
 const StyledHero = styled(Box)(() => ({
   position: "relative",
@@ -66,13 +67,9 @@ const HeroBanner = ({ onClick }: HeroBannerProps) => {
             <Brand />
           </BrandWrapper>
 
-          <Typography
-            variant="h2"
-            component="h1"
-            sx={{ fontWeight: "bold", mb: 4, color: "white" }}
-          >
+          <KoaTypography variant="h1" component="h1" color="inverted">
             Where journeys begin with a single click
-          </Typography>
+          </KoaTypography>
           <KoaButton variant="secondary" onClick={onClick}>
             Get started
           </KoaButton>

@@ -1,5 +1,4 @@
 import { Box, Card, CardContent } from "@mui/material";
-import Typography from "@mui/material/Typography";
 import IconWithLabel from "../IconWithLabel.tsx";
 import FlightTakeoffIcon from "@mui/icons-material/FlightTakeoff";
 import FlightLandIcon from "@mui/icons-material/FlightLand";
@@ -10,6 +9,7 @@ import Stack from "@mui/material/Stack";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import getLocationText from "@/utils/getLocationText.ts";
 import KoaButton from "@/components/koa-ui/KoaButton.tsx";
+import KoaTypography from "@/components/koa-ui/KoaTypography.tsx";
 
 const TripCard = ({
   name,
@@ -30,13 +30,11 @@ const TripCard = ({
       <CardContent sx={{ padding: 3 }}>
         <Box display="flex" justifyContent="space-between">
           <Stack direction="column" spacing={1}>
-            <Typography variant="h3" gutterBottom>
+            <KoaTypography variant="h1" component="h3" color="primary">
               {name}
-            </Typography>
+            </KoaTypography>
             {description && (
-              <Typography variant="body1" gutterBottom>
-                {description}
-              </Typography>
+              <KoaTypography variant="body1">{description}</KoaTypography>
             )}
             {departureDate && returnDate && (
               <IconWithLabel
