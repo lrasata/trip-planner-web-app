@@ -4,7 +4,7 @@ import { ILocation, ITrip, IUser } from "../types.ts";
 import Stack from "@mui/material/Stack";
 import BasicDatePicker from "../components/BasicDatePicker.tsx";
 import dayjs, { Dayjs } from "dayjs";
-import Button from "@mui/material/Button";
+import KoaButton from "@/components/koa-ui/KoaButton.tsx";
 import { ChangeEvent, lazy, Suspense, useEffect, useState } from "react";
 import { formatDate } from "../utils/utils.ts";
 import { useDispatch } from "react-redux";
@@ -209,25 +209,17 @@ const EditTripContainer = ({ trip, status, error }: EditTripContainerProps) => {
                 />
               </Card>
 
-              <Button
-                variant="contained"
-                onClick={handleOnSave}
-                disabled={!tripFormData.name}
-              >
+              <KoaButton onClick={handleOnSave} disabled={!tripFormData.name}>
                 Save updates
-              </Button>
-              <Button variant="outlined" onClick={() => navigate(-1)}>
+              </KoaButton>
+              <KoaButton variant="outline" onClick={() => navigate(-1)}>
                 Back
-              </Button>
+              </KoaButton>
 
               <Divider />
-              <Button
-                variant="outlined"
-                onClick={handleOnOpenDialog}
-                color="error"
-              >
+              <KoaButton variant="danger" onClick={handleOnOpenDialog}>
                 Permanently delete
-              </Button>
+              </KoaButton>
             </Stack>
           </Grid>
         </Grid>
@@ -247,16 +239,12 @@ const EditTripContainer = ({ trip, status, error }: EditTripContainerProps) => {
                   Be aware that this action cannot be undone
                 </Typography>
                 <Stack direction="row" spacing={1} mt={3}>
-                  <Button
-                    variant="contained"
-                    onClick={handleOnDelete}
-                    color="error"
-                  >
+                  <KoaButton onClick={handleOnDelete} color="error">
                     Permanently delete
-                  </Button>
-                  <Button variant="outlined" onClick={handleOnCloseDialog}>
+                  </KoaButton>
+                  <KoaButton variant="outline" onClick={handleOnCloseDialog}>
                     Cancel
-                  </Button>
+                  </KoaButton>
                 </Stack>
               </Box>
             }

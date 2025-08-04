@@ -2,7 +2,6 @@ import Typography from "@mui/material/Typography";
 import {
   Box,
   BoxProps,
-  Button,
   styled,
   TextField,
   useMediaQuery,
@@ -12,6 +11,7 @@ import React, { useState } from "react";
 import { API_SIGNUP_ENDPOINT } from "../constants/constants.ts";
 import { toast } from "react-toastify";
 import api from "../api/api.ts";
+import KoaButton from "@/components/koa-ui/KoaButton.tsx";
 
 interface StyledBoxContainerProps extends BoxProps {
   component?: React.ElementType; // React.ElementType can be any HTML or custom component
@@ -117,14 +117,9 @@ const SignUpContainer = () => {
         justifyContent="center"
         alignItems="center"
       >
-        <Button
-          id="button-submit-signup"
-          variant="contained"
-          type="submit"
-          fullWidth={isMobile}
-        >
+        <KoaButton id="button-submit-signup" type="submit" fullWidth={isMobile}>
           Submit
-        </Button>
+        </KoaButton>
       </Box>
     </StyledBoxContainer>
   );

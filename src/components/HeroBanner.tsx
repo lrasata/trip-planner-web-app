@@ -1,8 +1,7 @@
-import { Box, Typography, Button, styled } from "@mui/material";
+import { Box, Typography, styled } from "@mui/material";
 import { motion } from "framer-motion";
 import Brand from "../components/Brand";
-import {Button as KoaButton, defaultTheme} from "koa-ui-design-system"
-import { ThemeProvider } from "@emotion/react"
+import KoaButton from "../components/koa-ui/KoaButton";
 
 const StyledHero = styled(Box)(() => ({
   position: "relative",
@@ -41,13 +40,13 @@ const BrandWrapper = styled(Box)(({ theme }) => ({
   width: "fit-content",
   height: "fit-content",
   borderRadius: "50%",
-  backgroundColor: "rgba(255, 255, 255, 0.3)",
+  backgroundColor: "rgba(255, 255, 255, 0.5)",
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
   margin: "0 auto",
   marginBottom: theme.spacing(4),
-  boxShadow: "0 0 10px rgba(0,0,0,0.3)",
+  boxShadow: "0 0 5px rgba(0,0,0,0.1)",
 }));
 
 interface HeroBannerProps {
@@ -74,17 +73,9 @@ const HeroBanner = ({ onClick }: HeroBannerProps) => {
           >
             Where journeys begin with a single click
           </Typography>
-          <Button
-            variant="contained"
-            color="secondary"
-            size="large"
-            onClick={onClick}
-          >
-            Get Started
-          </Button>
-          <ThemeProvider theme={defaultTheme}>
-          <KoaButton>Button</KoaButton>
-          </ThemeProvider>
+          <KoaButton variant="secondary" onClick={onClick}>
+            Get started
+          </KoaButton>
         </motion.div>
       </Content>
     </StyledHero>
