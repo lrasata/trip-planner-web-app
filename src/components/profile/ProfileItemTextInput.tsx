@@ -1,6 +1,6 @@
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import TextField from "@mui/material/TextField";
+import KoaTextField from "@/components/koa-ui/KoaTextField.tsx";
 
 interface ProfileItemTextInputProps {
   id: string;
@@ -20,12 +20,12 @@ const ProfileItemTextInput = ({
     <Typography variant="body1" fontWeight={600} gutterBottom={false}>
       {label}
     </Typography>
-    <TextField
+    <KoaTextField
       id={id}
       type={type}
       value={value}
       onChange={onChange}
-      inputProps={{ "data-testid": id }}
+      data-testid={id}
     />
   </Stack>
 );

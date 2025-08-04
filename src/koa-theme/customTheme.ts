@@ -17,8 +17,8 @@ const customTheme = createTheme({
       contrastText: "#1F2937", // Black text for readability (contrast ratio ≈ 11.9:1)
     },
     background: {
-      default: "#F5F5F5",
-      surface: "#FFFFFF", // ex: for Card background color
+      default: "#FFFFFF",
+      surface: "#f5f5f5", // ex: for Card background color
       hover: "#e5e7eb",
       press: "#e0e0e0",
       backdrop: "rgba(0, 0, 0, 0.4)",

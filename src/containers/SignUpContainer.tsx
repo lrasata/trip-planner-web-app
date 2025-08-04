@@ -1,17 +1,11 @@
-import {
-  Box,
-  BoxProps,
-  styled,
-  TextField,
-  useMediaQuery,
-  useTheme,
-} from "@mui/material";
+import { Box, BoxProps, styled, useMediaQuery, useTheme } from "@mui/material";
 import React, { useState } from "react";
 import { API_SIGNUP_ENDPOINT } from "../constants/constants.ts";
 import { toast } from "react-toastify";
 import api from "../api/api.ts";
 import KoaButton from "@/components/koa-ui/KoaButton.tsx";
 import KoaTypography from "@/components/koa-ui/KoaTypography.tsx";
+import KoaTextField from "@/components/koa-ui/KoaTextField.tsx";
 
 interface StyledBoxContainerProps extends BoxProps {
   component?: React.ElementType; // React.ElementType can be any HTML or custom component
@@ -80,7 +74,7 @@ const SignUpContainer = () => {
       <KoaTypography variant="h3" component="h1">
         Create a new account
       </KoaTypography>
-      <TextField
+      <KoaTextField
         id="fullname-signup"
         type="text"
         name="fullName"
@@ -88,9 +82,8 @@ const SignUpContainer = () => {
         placeholder="Enter your name"
         onChange={handleOnChange}
         label="fullName"
-        sx={{ backgroundColor: "white" }}
       />
-      <TextField
+      <KoaTextField
         id="email-signup"
         type="email"
         name="email"
@@ -98,9 +91,8 @@ const SignUpContainer = () => {
         placeholder="Enter your email"
         onChange={handleOnChange}
         label="Email"
-        sx={{ backgroundColor: "white" }}
       />
-      <TextField
+      <KoaTextField
         id="password-signup"
         type="password"
         name="password"
@@ -108,7 +100,6 @@ const SignUpContainer = () => {
         placeholder="Enter your password"
         onChange={handleOnChange}
         label="Password"
-        sx={{ backgroundColor: "white" }}
       />
       <Box
         display="flex"

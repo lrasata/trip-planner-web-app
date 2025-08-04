@@ -1,10 +1,10 @@
-import SearchBar from "@/components/SearchBar.tsx";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/redux";
 import { useEffect, useState } from "react";
 import useQueryParams from "@/hooks/useQueryParams.ts";
 import { SEARCH_QUERY_PARAMETER } from "@/constants/constants.ts";
 import { filterActions } from "@/store/redux/FilterSlice.ts";
+import KoaSearchBar from "@/components/koa-ui/KoaSearchBar.tsx";
 
 interface SearchBarContainerProps {
   handleFilterChange: (search: string) => void;
@@ -60,7 +60,11 @@ const SearchBarContainer = ({
   };
 
   return (
-    <SearchBar inputSearchText={inputSearch} handleSearch={handleInputSearch} />
+    <KoaSearchBar
+      id="search-bar"
+      searchedText={inputSearch}
+      handleSearch={handleInputSearch}
+    />
   );
 };
 

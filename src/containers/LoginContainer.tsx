@@ -1,11 +1,4 @@
-import {
-  Box,
-  BoxProps,
-  styled,
-  TextField,
-  useMediaQuery,
-  useTheme,
-} from "@mui/material";
+import { Box, BoxProps, styled, useMediaQuery, useTheme } from "@mui/material";
 import React, { useState } from "react";
 import { toast } from "react-toastify";
 import { API_LOGIN_ENDPOINT } from "../constants/constants.ts";
@@ -14,6 +7,7 @@ import { authSliceActions } from "../store/redux/AuthSlice.ts";
 import { useDispatch } from "react-redux";
 import api from "../api/api.ts";
 import KoaButton from "@/components/koa-ui/KoaButton.tsx";
+import KoaTextField from "@/components/koa-ui/KoaTextField.tsx";
 
 interface StyledBoxContainerProps extends BoxProps {
   component?: React.ElementType; // React.ElementType can be any HTML or custom component
@@ -89,7 +83,7 @@ const LoginContainer = () => {
 
   return (
     <StyledBoxContainer component="form" onSubmit={handleLoginSubmit}>
-      <TextField
+      <KoaTextField
         id="email-login"
         type="email"
         name="email"
@@ -97,9 +91,8 @@ const LoginContainer = () => {
         placeholder="Enter your email"
         onChange={handleOnChange}
         label="Email"
-        sx={{ backgroundColor: "white" }}
       />
-      <TextField
+      <KoaTextField
         id="password-login"
         type="password"
         name="password"
@@ -107,7 +100,6 @@ const LoginContainer = () => {
         placeholder="Enter your password"
         onChange={handleOnChange}
         label="Password"
-        sx={{ backgroundColor: "white" }}
       />
       <Box
         display="flex"

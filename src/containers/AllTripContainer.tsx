@@ -1,5 +1,4 @@
 import TripCard from "../components/trip/TripCard.tsx";
-import Typography from "@mui/material/Typography";
 import { Box, Pagination } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { ChangeEvent, useEffect, useState } from "react";
@@ -11,6 +10,7 @@ import SearchBarContainer from "@/containers/SearchBarContainer.tsx";
 import Spinner from "@/components/Spinner.tsx";
 import useQueryParams from "@/hooks/useQueryParams.ts";
 import { PAGE_QUERY_PARAMETER } from "@/constants/constants.ts";
+import KoaTypography from "@/components/koa-ui/KoaTypography.tsx";
 
 const AllTripContainer = () => {
   const navigate = useNavigate();
@@ -49,16 +49,16 @@ const AllTripContainer = () => {
 
   return (
     <Box py={10}>
-      <Typography variant="h2" gutterBottom color="textSecondary">
+      <KoaTypography variant="h1" component="h1" color="secondary">
         All your trips
-      </Typography>
+      </KoaTypography>
       <SearchBarContainer handleFilterChange={setSearchFilter} />
       {status === "loading" && <Spinner />}
       {status === "succeeded" && trips.length > 0 && (
         <>
-          <Typography variant="body1" gutterBottom color="textSecondary" mt={1}>
+          <KoaTypography variant="body1" color="secondary">
             Display {trips.length} results
-          </Typography>
+          </KoaTypography>
           {trips.map((trip: ITrip, index: number) => (
             <Box my={2} key={`${trip.name}-${index}`}>
               <TripCard
@@ -81,9 +81,9 @@ const AllTripContainer = () => {
         </>
       )}
       {status === "succeeded" && trips.length === 0 && (
-        <Typography variant="body1" color="textSecondary" my={1}>
+        <KoaTypography variant="body1" color="secondary" component="div">
           No trip found.
-        </Typography>
+        </KoaTypography>
       )}
     </Box>
   );

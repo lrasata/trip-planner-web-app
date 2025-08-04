@@ -4,7 +4,7 @@ import Stack from "@mui/material/Stack";
 import BasicDatePicker from "../components/BasicDatePicker.tsx";
 import dayjs, { Dayjs } from "dayjs";
 import KoaButton from "@/components/koa-ui/KoaButton.tsx";
-import { ChangeEvent, lazy, Suspense, useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { formatDate } from "../utils/utils.ts";
 import { useDispatch } from "react-redux";
 import { deleteTrip, updateTrip } from "../store/redux/TripSlice.ts";
@@ -12,15 +12,13 @@ import { useNavigate } from "react-router-dom";
 import AutoDismissAlert from "../components/AutoDismissAlert.tsx";
 import Divider from "@mui/material/Divider";
 import Grid from "@mui/material/Grid";
-import Spinner from "../components/Spinner.tsx";
 import Box from "@mui/material/Box";
-import { Card, useTheme } from "@mui/material";
+import { Card } from "@mui/material";
 import TripLocationInputForm from "../components/trip/TripLocationInputForm.tsx";
 import TripParticipantInputForm from "../components/trip/TripParticipantInputForm.tsx";
 import { AppDispatch } from "@/store/redux";
 import KoaTypography from "@/components/koa-ui/KoaTypography.tsx";
-
-const Dialog = lazy(() => import("../components/Dialog.tsx"));
+import KoaDialog from "@/components/koa-ui/KoaDialog.tsx";
 
 interface EditTripContainerProps {
   trip: ITrip;
@@ -28,7 +26,6 @@ interface EditTripContainerProps {
   error?: string | null;
 }
 const EditTripContainer = ({ trip, status, error }: EditTripContainerProps) => {
-  const theme = useTheme();
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const [tripFormData, setTripFormData] = useState<ITrip>(trip);
@@ -101,7 +98,7 @@ const EditTripContainer = ({ trip, status, error }: EditTripContainerProps) => {
       dispatch(deleteTrip({ id: tripFormData.id }));
     }
     handleOnCloseDialog();
-    navigate("/trips");
+    navigate("/all-trips");
   };
 
   const handleOnOpenDialog = () => {
@@ -109,6 +106,8 @@ const EditTripContainer = ({ trip, status, error }: EditTripContainerProps) => {
   };
 
   const handleOnCloseDialog = () => {
+    console.log("Closing dialog");
+
     setIsDialogOpen(false);
   };
 
@@ -225,31 +224,29 @@ const EditTripContainer = ({ trip, status, error }: EditTripContainerProps) => {
         </Grid>
       )}
       {isDialogOpen && (
-        <Suspense fallback={<Spinner />}>
-          <Dialog
-            open={isDialogOpen}
-            onClose={handleOnCloseDialog}
-            title="Delete a trip"
-            content={
-              <Box py={1} sx={{ minWidth: theme.spacing(56) }}>
-                <KoaTypography variant="body1" component="div">
-                  Please confirm the deletion of this trip.
-                </KoaTypography>
-                <KoaTypography variant="body1" color="danger">
-                  Be aware that this action cannot be undone
-                </KoaTypography>
-                <Stack direction="row" spacing={1} mt={3}>
-                  <KoaButton onClick={handleOnDelete} color="error">
-                    Permanently delete
-                  </KoaButton>
-                  <KoaButton variant="outline" onClick={handleOnCloseDialog}>
-                    Cancel
-                  </KoaButton>
-                </Stack>
-              </Box>
-            }
-          />
-        </Suspense>
+        <KoaDialog
+          isOpen={isDialogOpen}
+          cancel={{
+            label: "Cancel",
+            variant: "outline",
+            onClick: handleOnCloseDialog,
+          }}
+          submit={{
+            label: "Delete",
+            variant: "danger",
+            onClick: handleOnDelete,
+          }}
+          title="Delete a trip"
+        >
+          <>
+            <KoaTypography variant="body1" component="div">
+              Please confirm the deletion of this trip.
+            </KoaTypography>
+            <KoaTypography variant="body1" color="danger">
+              Be aware that this action cannot be undone
+            </KoaTypography>
+          </>
+        </KoaDialog>
       )}
     </Box>
   );
