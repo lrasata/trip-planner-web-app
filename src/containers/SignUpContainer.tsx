@@ -1,4 +1,3 @@
-import Typography from "@mui/material/Typography";
 import {
   Box,
   BoxProps,
@@ -12,6 +11,7 @@ import { API_SIGNUP_ENDPOINT } from "../constants/constants.ts";
 import { toast } from "react-toastify";
 import api from "../api/api.ts";
 import KoaButton from "@/components/koa-ui/KoaButton.tsx";
+import KoaTypography from "@/components/koa-ui/KoaTypography.tsx";
 
 interface StyledBoxContainerProps extends BoxProps {
   component?: React.ElementType; // React.ElementType can be any HTML or custom component
@@ -77,9 +77,9 @@ const SignUpContainer = () => {
 
   return (
     <StyledBoxContainer component="form" onSubmit={handleSignInSubmit}>
-      <Typography variant="h5" component="h1" align="center">
+      <KoaTypography variant="h3" component="h1">
         Create a new account
-      </Typography>
+      </KoaTypography>
       <TextField
         id="fullname-signup"
         type="text"

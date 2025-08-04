@@ -1,4 +1,3 @@
-import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import { ILocation, ITrip, IUser } from "../types.ts";
 import Stack from "@mui/material/Stack";
@@ -19,6 +18,7 @@ import { Card, useTheme } from "@mui/material";
 import TripLocationInputForm from "../components/trip/TripLocationInputForm.tsx";
 import TripParticipantInputForm from "../components/trip/TripParticipantInputForm.tsx";
 import { AppDispatch } from "@/store/redux";
+import KoaTypography from "@/components/koa-ui/KoaTypography.tsx";
 
 const Dialog = lazy(() => import("../components/Dialog.tsx"));
 
@@ -130,9 +130,9 @@ const EditTripContainer = ({ trip, status, error }: EditTripContainerProps) => {
                   message={error || "Something went wrong"}
                 />
               )}
-              <Typography variant="h2" gutterBottom color="textSecondary">
+              <KoaTypography variant="h1" component="h1" color="secondary">
                 Manage your trip
-              </Typography>
+              </KoaTypography>
               <TextField
                 id="edit-trip-name-input"
                 type="text"
@@ -186,9 +186,9 @@ const EditTripContainer = ({ trip, status, error }: EditTripContainerProps) => {
           <Grid size={{ xs: 12, md: 4 }}>
             <Stack spacing={2}>
               <Card sx={{ padding: 2 }}>
-                <Typography variant="h3" gutterBottom color="textSecondary">
+                <KoaTypography variant="h2" component="h2" color="secondary">
                   Participants
-                </Typography>
+                </KoaTypography>
                 <TripParticipantInputForm
                   onEdit
                   {...(tripFormData.participantCount && {
@@ -232,12 +232,12 @@ const EditTripContainer = ({ trip, status, error }: EditTripContainerProps) => {
             title="Delete a trip"
             content={
               <Box py={1} sx={{ minWidth: theme.spacing(56) }}>
-                <Typography variant="body1" gutterBottom>
+                <KoaTypography variant="body1" component="div">
                   Please confirm the deletion of this trip.
-                </Typography>
-                <Typography variant="body1" color="error" gutterBottom>
+                </KoaTypography>
+                <KoaTypography variant="body1" color="danger">
                   Be aware that this action cannot be undone
-                </Typography>
+                </KoaTypography>
                 <Stack direction="row" spacing={1} mt={3}>
                   <KoaButton onClick={handleOnDelete} color="error">
                     Permanently delete

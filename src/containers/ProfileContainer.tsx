@@ -1,6 +1,5 @@
 import Box from "@mui/material/Box";
 import { Card, CardContent, useMediaQuery, useTheme } from "@mui/material";
-import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
 import { IRole, IUser } from "../types.ts";
 import { ChangeEvent, useEffect, useState } from "react";
@@ -12,6 +11,7 @@ import { SelectChangeEvent } from "@mui/material/Select";
 import ProfileItemTextInput from "@/components/profile/ProfileItemTextInput.tsx";
 import ProfileItemSelectInput from "@/components/profile/ProfileItemSelectInput.tsx";
 import KoaButton from "@/components/koa-ui/KoaButton.tsx";
+import KoaTypography from "@/components/koa-ui/KoaTypography.tsx";
 
 interface ProfileContainerProps {
   user: IUser;
@@ -75,9 +75,9 @@ const ProfileContainer = ({ user, roles }: ProfileContainerProps) => {
     <Box display="flex" justifyContent="center" alignItems="center" py={10}>
       <Card sx={{ width: isMobile ? "100%" : "50%" }}>
         <CardContent>
-          <Typography variant="h1" color="textSecondary" gutterBottom>
+          <KoaTypography variant="h1" component="h1" color="secondary">
             User profile
-          </Typography>
+          </KoaTypography>
 
           <Stack spacing={1.5}>
             <ProfileItemTextInput
