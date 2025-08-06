@@ -101,7 +101,7 @@ const EditTripContainer = ({ trip, status, error }: EditTripContainerProps) => {
       dispatch(deleteTrip({ id: tripFormData.id }));
     }
     handleOnCloseDialog();
-    navigate("/trips");
+    navigate("/all-trips");
   };
 
   const handleOnOpenDialog = () => {

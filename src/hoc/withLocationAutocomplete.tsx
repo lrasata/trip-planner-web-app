@@ -8,12 +8,7 @@ import {
   useState,
 } from "react";
 import Autocomplete from "@mui/material/Autocomplete";
-import {
-  API_CITIES_GEO_DB_URL,
-  API_COUNTRIES_GEO_DB_URL,
-  GEO_DB_API_KEY,
-  GEO_DB_HOST,
-} from "../constants/constants";
+import { API_LOCATIONS } from "../constants/constants";
 import { ILocation } from "../types";
 
 const DEBOUNCE_TIME = 700; // milliseconds
@@ -51,24 +46,16 @@ const withLocationAutocomplete = <P extends object>(
         if (!query) return;
 
         let url = "";
-        const urlQuery = `namePrefix=${encodeURIComponent(query)}&limit=10`;
+        const urlQuery = `dataType=${encodeURIComponent(dataType)}&namePrefix=${encodeURIComponent(query)}`; // API_LOCATIONS
 
-        switch (dataType) {
-          case "country":
-            url = `${API_COUNTRIES_GEO_DB_URL}?${urlQuery}`;
-            break;
-          case "city":
-            url = `${API_CITIES_GEO_DB_URL}?countryIds=${countryCode}&${urlQuery}`;
-            break;
+        if (dataType === "city") {
+          url = `${API_LOCATIONS}?countryCode=${countryCode}&${urlQuery}`;
+        } else {
+          url = `${API_LOCATIONS}?${urlQuery}`;
         }
 
         try {
-          const response = await fetch(url, {
-            headers: {
-              "X-RapidAPI-Key": GEO_DB_API_KEY,
-              "X-RapidAPI-Host": GEO_DB_HOST,
-            },
-          });
+          const response = await fetch(url);
 
           const json = await response.json();
           const data = json.data;

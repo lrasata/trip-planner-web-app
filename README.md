@@ -96,7 +96,14 @@ _Strong Dev Tools & Ecosystem:_ React’s dev tools, community packages, and sup
    npm install
    ```
 
-3. **Start the development server:**
+3. **Set environment variables:**
+
+   ```text
+   VITE_API_URL=http://localhost:8080
+   VITE_API_LOCATIONS=https://<api-id>.execute-api.<aws-region>.amazonaws.com/prod/locations
+   ```
+
+4. **Start the development server:**
 
    ```bash
    npm run dev

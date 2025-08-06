@@ -8,10 +8,7 @@ export const API_LOGOUT_ENDPOINT = `${API_BACKEND_BASE_URL}/auth/logout`;
 export const API_REFRESH_TOKEN_ENDPOINT = `${API_BACKEND_BASE_URL}/auth/refresh-token`;
 export const API_USER_ENDPOINT = `${API_BACKEND_URL}/users/`;
 
-export const API_CITIES_GEO_DB_URL = `${import.meta.env.VITE_API_CITIES_GEO_DB_URL}`;
-export const API_COUNTRIES_GEO_DB_URL = `${import.meta.env.VITE_API_COUNTRIES_GEO_DB_URL}`;
-export const GEO_DB_HOST = `${import.meta.env.VITE_GEO_DB_RAPID_API_HOST}`;
-export const GEO_DB_API_KEY = `${import.meta.env.VITE_GEO_DB_RAPID_API_KEY}`;
+export const API_LOCATIONS = `${import.meta.env.VITE_API_LOCATIONS}`;
 
 export const SEARCH_QUERY_PARAMETER = "search";
 export const PAGE_QUERY_PARAMETER = "page";
