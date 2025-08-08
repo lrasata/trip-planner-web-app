@@ -7,11 +7,11 @@ import SignUpContainer from "../containers/SignUpContainer.tsx";
 
 const LoginOrSignInPage = () => {
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   return (
     <Box display="flex" justifyContent="center" alignItems="center" py={8}>
-      <Card sx={{ width: isMobile ? "100%" : "50%" }}>
+      <Card sx={{ width: isMobile ? "90%" : "50%" }}>
         <Brand />
         <LoginContainer />
         <Divider />

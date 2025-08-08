@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { useEffect } from "react";
 import { fetchTrip } from "../store/redux/TripSlice.ts";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../store/redux";
+import { AppDispatch, RootState } from "@/store/redux";
 
 const EditTripPage = () => {
   const { id } = useParams();
