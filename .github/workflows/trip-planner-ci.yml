@@ -72,10 +72,7 @@ jobs:
         env:
           NODE_ENV: development
           VITE_API_URL: http://localhost:8080
-          VITE_API_CITIES_GEO_DB_URL: https://wft-geo-db.p.rapidapi.com/v1/geo/cities
-          VITE_API_COUNTRIES_GEO_DB_URL: https://wft-geo-db.p.rapidapi.com/v1/geo/countries
-          VITE_GEO_DB_RAPID_API_HOST: wft-geo-db.p.rapidapi.com
-          VITE_GEO_DB_RAPID_API_KEY: ${{ secrets.GEO_DB_RAPID_API_KEY }}
+          VITE_API_CITIES_GEO_DB_URL: https://glggj50z83.execute-api.eu-central-1.amazonaws.com/prod/locations
 
       - name: ⏱ Wait until frontend is ready
         run: npx wait-on http://localhost:5173
