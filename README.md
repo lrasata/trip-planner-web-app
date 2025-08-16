@@ -1,8 +1,7 @@
-# Trip Planner Web App 🚧
+# Trip Planner Web App
 
 [![CI](https://github.com/lrasata/trip-planner-web-app/actions/workflows/trip-planner-ci.yml/badge.svg)](https://github.com/lrasata/trip-planner-web-app/actions/workflows/trip-planner-ci.yml)
 
-> **Status**: 🚧 Under Construction
 
 Trip Planner is a web app built for organizing travel plans such as flights, stays, activities, notes,
 and maps. It supports real-time collaboration, budget tracking, and personal touches like photos.
@@ -72,7 +71,6 @@ split views into smaller components, and maintain a clean structure as the app g
 
 _Strong Dev Tools & Ecosystem:_ React’s dev tools, community packages, and support in modern deployment platforms make development and debugging faster and more enjoyable.
 
----
 
 ## Getting Started - Run locally
 
@@ -137,7 +135,6 @@ _Strong Dev Tools & Ecosystem:_ React’s dev tools, community packages, and sup
   npm run format
   ```
 
----
 
 ## Docker
 
@@ -152,8 +149,6 @@ docker-compose up --build
 This will build and start services in `docker-compose.yml`. In this file, the web app is set up to be accessible on port `5173` : `http://localhost:5173/`
 
 Make sure Docker is installed and running on your system.
-
----
 
 ## E2E Testing with Cypress
 
@@ -172,8 +167,6 @@ npm run cy:run
 ```
 
 This runs all the Cypress tests in headless mode and outputs the results in the terminal.
-
----
 
 ## License
 
