@@ -34,7 +34,7 @@ jobs:
           SPRING_DATASOURCE_USERNAME: postgres
           SPRING_DATASOURCE_PASSWORD: ${{ secrets.SPRING_DATASOURCE_PASSWORD }}
           JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
-          ALLOWED_ORIGIN: http://localhost:5173
+          ALLOWED_ORIGINS: http://localhost:5173
           COOKIE_SECURE_ATTRIBUTE: False
           COOKIE_SAME_SITE: Lax
           SUPER_ADMIN_FULLNAME: admin
