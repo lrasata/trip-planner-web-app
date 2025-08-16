@@ -2,7 +2,6 @@
 
 [![CI](https://github.com/lrasata/trip-planner-web-app/actions/workflows/trip-planner-ci.yml/badge.svg)](https://github.com/lrasata/trip-planner-web-app/actions/workflows/trip-planner-ci.yml)
 
-
 Trip Planner is a web app built for organizing travel plans such as flights, stays, activities, notes,
 and maps. It supports real-time collaboration, budget tracking, and personal touches like photos.
 
@@ -71,7 +70,6 @@ split views into smaller components, and maintain a clean structure as the app g
 
 _Strong Dev Tools & Ecosystem:_ React’s dev tools, community packages, and support in modern deployment platforms make development and debugging faster and more enjoyable.
 
-
 ## Getting Started - Run locally
 
 ### Prerequisites
@@ -134,7 +132,6 @@ _Strong Dev Tools & Ecosystem:_ React’s dev tools, community packages, and sup
   ```bash
   npm run format
   ```
-
 
 ## Docker
 
