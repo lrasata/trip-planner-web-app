@@ -9,7 +9,7 @@ const useQueryParams = () => {
   );
 
   useEffect(() => {
-    setAllQueryParams(Object.fromEntries(searchParams));
+    setAllQueryParams(Object.fromEntries(searchParams.entries()));
   }, [searchParams]);
 
   const getQueryParamByKey = (key: string) => {
