@@ -1,15 +1,21 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { lazy, Suspense } from "react";
-import Spinner from "./components/Spinner.tsx";
-import LoginOrSignInPage from "./pages/LoginOrSignInPage.tsx";
+import Spinner from "@/shared/components/Spinner.tsx";
+import LoginOrSignInPage from "./app/features/auth/pages/LoginOrSignInPage.tsx";
 
-const MainLayout = lazy(() => import("./pages/MainLayout.tsx"));
-const ErrorPage = lazy(() => import("./pages/ErrorPage.tsx"));
-const Home = lazy(() => import("./pages/Home.tsx"));
-const AllTrips = lazy(() => import("./pages/AllTrips.tsx"));
-const EditTripPage = lazy(() => import("./pages/EditTripPage.tsx"));
-const ProfilePage = lazy(() => import("./pages/ProfilePage.tsx"));
-const ProtectedRoute = lazy(() => import("./containers/ProtectedRoute.tsx"));
+const MainLayout = lazy(() => import("./shared/pages/MainLayout.tsx"));
+const ErrorPage = lazy(() => import("./shared/pages/ErrorPage.tsx"));
+const Home = lazy(() => import("./shared/pages/Home.tsx"));
+const AllTrips = lazy(() => import("./app/features/trip/pages/AllTrips.tsx"));
+const EditTripPage = lazy(
+  () => import("./app/features/trip/pages/EditTripPage.tsx"),
+);
+const ProfilePage = lazy(
+  () => import("./app/features/user-profile/pages/ProfilePage.tsx"),
+);
+const ProtectedRoute = lazy(
+  () => import("./shared/containers/ProtectedRoute.tsx"),
+);
 
 const router = createBrowserRouter([
   {

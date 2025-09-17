@@ -2,8 +2,8 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App.tsx";
 import { Provider } from "react-redux";
-import store from "./store/redux";
-import { injectStore } from "./api/api";
+import store from "./shared/store/redux/index.ts";
+import { injectStore } from "./shared/api/api.ts";
 import "./main.css";
 
 // Inject store's dispatch and token getter into api
