@@ -1,6 +1,6 @@
 import { Box, Card, CardContent } from "@mui/material";
 import Typography from "@mui/material/Typography";
-import IconWithLabel from "../../../../shared/components/IconWithLabel.tsx";
+import IconWithLabel from "@/shared/components/IconWithLabel.tsx";
 import FlightTakeoffIcon from "@mui/icons-material/FlightTakeoff";
 import FlightLandIcon from "@mui/icons-material/FlightLand";
 import InsertInvitationIcon from "@mui/icons-material/InsertInvitation";
