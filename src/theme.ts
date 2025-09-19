@@ -48,6 +48,8 @@ const themeOptions: ThemeOptions = {
         root: {
           borderRadius: "20px",
           padding: "8px 16px",
+          textTransform: "none",
+          fontSize: "1rem",
         },
       },
     },

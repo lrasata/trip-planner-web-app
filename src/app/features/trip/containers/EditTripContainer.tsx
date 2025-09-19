@@ -14,10 +14,10 @@ import Spinner from "@/shared/components/Spinner.tsx";
 import Box from "@mui/material/Box";
 import { Card, useTheme } from "@mui/material";
 import { AppDispatch } from "@/shared/store/redux/index.ts";
-import Banner from "@/shared/components/Banner.tsx";
 import EditDatesAndDestinations from "@/app/features/trip/components/edit/EditDatesAndDestinations.tsx";
 import EditParticipants from "@/app/features/trip/components/edit/EditParticipants.tsx";
 import EditNameAndDescription from "@/app/features/trip/components/edit/EditNameAndDescription.tsx";
+import BannerContainer from "@/app/features/trip/containers/BannerContainer.tsx";
 
 const Dialog = lazy(() => import("@/shared/components/Dialog.tsx"));
 
@@ -113,11 +113,11 @@ const EditTripContainer = ({ trip, status, error }: EditTripContainerProps) => {
 
   return (
     <>
-      <Banner />
+      <BannerContainer />
       <Box pt={40} pb={10}>
         {tripFormData && (
           <Stack spacing={3}>
-            <Card sx={{ padding: 3, minHeight: 100 }}>
+            <Card sx={{ padding: 3, minHeight: 100, zIndex: 1 }}>
               <EditNameAndDescription
                 trip={tripFormData}
                 handleInputChange={handleInputChange}

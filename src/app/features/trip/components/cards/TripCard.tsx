@@ -28,54 +28,57 @@ const TripCard = ({
   return (
     <Card>
       <CardContent sx={{ padding: 3 }}>
-        <Box display="flex" justifyContent="space-between">
-          <Stack direction="column" spacing={1}>
+        <Stack direction="column" spacing={1}>
+          <Box
+            display="flex"
+            flexDirection="row"
+            justifyContent="space-between"
+          >
             <Typography variant="h3" gutterBottom>
               {name}
             </Typography>
-            {description && (
-              <Typography variant="body1" gutterBottom>
-                {description}
-              </Typography>
-            )}
-            {departureDate && returnDate && (
-              <IconWithLabel
-                icon={
-                  <InsertInvitationIcon color="secondary" fontSize="small" />
-                }
-                label={`${dayjs(departureDate).format("DD MMMM  YYYY")} - ${dayjs(returnDate).format("DD MMMM YYYY")}`}
-              />
-            )}
-            {departureLocation && (
-              <IconWithLabel
-                icon={<FlightTakeoffIcon color="secondary" fontSize="small" />}
-                label={
-                  <>
-                    <strong>Departure:</strong> {departureLocationText}
-                  </>
-                }
-              />
-            )}
-            {arrivalLocation && (
-              <IconWithLabel
-                icon={<FlightLandIcon color="secondary" fontSize="small" />}
-                label={
-                  <>
-                    <strong>Arrival:</strong> {arrivalLocationText}
-                  </>
-                }
-              />
-            )}
-          </Stack>
-          <Button
-            id={`${name}-trip-manage-button`}
-            variant="text"
-            startIcon={<BorderColorIcon />}
-            onClick={onClick}
-          >
-            Manage
-          </Button>
-        </Box>
+            <Button
+              id={`${name}-trip-manage-button`}
+              variant="outlined"
+              startIcon={<BorderColorIcon />}
+              onClick={onClick}
+            >
+              Manage
+            </Button>
+          </Box>
+
+          {description && (
+            <Typography variant="body1" gutterBottom>
+              {description}
+            </Typography>
+          )}
+          {departureDate && returnDate && (
+            <IconWithLabel
+              icon={<InsertInvitationIcon color="secondary" fontSize="small" />}
+              label={`${dayjs(departureDate).format("DD MMMM  YYYY")} - ${dayjs(returnDate).format("DD MMMM YYYY")}`}
+            />
+          )}
+          {departureLocation && (
+            <IconWithLabel
+              icon={<FlightTakeoffIcon color="secondary" fontSize="small" />}
+              label={
+                <>
+                  <strong>Departure:</strong> {departureLocationText}
+                </>
+              }
+            />
+          )}
+          {arrivalLocation && (
+            <IconWithLabel
+              icon={<FlightLandIcon color="secondary" fontSize="small" />}
+              label={
+                <>
+                  <strong>Arrival:</strong> {arrivalLocationText}
+                </>
+              }
+            />
+          )}
+        </Stack>
       </CardContent>
     </Card>
   );

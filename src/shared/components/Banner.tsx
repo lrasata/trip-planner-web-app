@@ -1,4 +1,5 @@
 import { Box, styled } from "@mui/material";
+import React from "react";
 
 const StyledBanner = styled(Box)(() => {
   return {
@@ -12,12 +13,27 @@ const StyledBanner = styled(Box)(() => {
     backgroundImage: "url('/background.png')",
     backgroundSize: "cover",
     backgroundPosition: "center",
-    zIndex: -1,
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "start",
+    alignItems: "center", // center horizontally
   };
 });
 
-const Banner = () => {
-  return <StyledBanner />;
+const Content = styled(Box)(({ theme }) => ({
+  position: "relative",
+  marginTop: theme.spacing(10),
+}));
+
+interface BannerProps {
+  children?: React.ReactNode;
+}
+const Banner = ({ children }: BannerProps) => {
+  return (
+    <StyledBanner>
+      <Content>{children}</Content>
+    </StyledBanner>
+  );
 };
 
 export default Banner;
