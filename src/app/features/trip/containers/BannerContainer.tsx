@@ -2,44 +2,89 @@ import React, { useState } from "react";
 import Banner from "@/shared/components/Banner.tsx";
 import ImagePicker from "@/shared/components/ImagePicker.tsx";
 import LoadingOverlay from "@/shared/components/LoadingOverlay.tsx";
+import {API_UPLOAD_MEDIA} from "@/shared/constants/constants.ts";
+import {useSelector} from "react-redux";
+import {RootState} from "@/shared/store/redux";
+import {IUser} from "@/types.ts";
+
+const getPresignedUrl = async (
+    file: File,
+    user: IUser
+): Promise<{ upload_url: string; file_key: string } | undefined> => {
+    try {
+        const [filenameWithoutExt, extension] = file.name.split(".")
+        const queryParams = {
+            userId: user.id,
+            filename: filenameWithoutExt,
+            ext: extension,
+        };
+
+        const params = new URLSearchParams();
+        for (const [key, value] of Object.entries(queryParams)) {
+            params.append(key, value as string);
+        }
+
+        const response = await fetch(`${API_UPLOAD_MEDIA}?${params}`, {
+            method: "GET",
+            headers: {
+                "x-api-gateway-auth": "", // TODO this has to be removed after set up in Cloudfront
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error(`Get presigned url failed: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+
+        return {
+            upload_url: data["upload_url"],
+            file_key: data["file_key"],
+        };
+    } catch (error) {
+        console.error(error);
+        return undefined;
+    }
+};
+
 
 const BannerContainer = () => {
   const [loading, setLoading] = useState(false);
+    const authenticatedUser = useSelector(
+        (state: RootState) => state.auth.authenticatedUser,
+    );
 
-  const simulateLoad = () => {
+
+  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-    }, 3000); // Simulate a 3-second process
-  };
-
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
 
-    if (file && file.type.startsWith("image/")) {
+    if (file && file.type.startsWith("image/") && authenticatedUser) {
       try {
-        simulateLoad();
-        /*            const formData = new FormData();
-            formData.append("image", file); // 'image' is the field name expected by your backend
+          const presignedUrlData = await getPresignedUrl(file, authenticatedUser);
 
-            const response = await fetch("https://your-api.com/upload", {
-                method: "POST",
-                body: formData,
-                // Do NOT set Content-Type manually — browser sets it correctly with boundary
-                // headers: {
-                //   "Content-Type": "multipart/form-data", ❌ Don't do this with FormData
-                // },
-            });
+          if (presignedUrlData && presignedUrlData.upload_url && presignedUrlData.file_key) {
+              const { upload_url, file_key } = presignedUrlData;
 
-            if (!response.ok) {
-                throw new Error(`Upload failed: ${response.statusText}`);
-            }
+              const response = await fetch(upload_url, {
+                  method: "PUT",
+                  body: file,
+                  headers: {
+                      "Content-Type": file.type,
+                  }
+              });
 
-            const data = await response.json();*/
-        console.log("Upload success:", file.name);
-        // You can do something with the response, e.g., show a success message or store the URL
+              if (!response.ok) {
+                  throw new Error(`Upload failed: ${response.statusText} , file_key ${file_key}`);
+              }
+
+              console.log("Upload success: ", file_key);
+              setLoading(false);
+          }
+
       } catch (error) {
-        console.error("Upload error:", error);
+        console.error("Upload error: ", error);
+          setLoading(false);
       }
     }
   };
