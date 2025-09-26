@@ -25,10 +25,7 @@ const getPresignedUrl = async (
         }
 
         const response = await fetch(`${API_UPLOAD_MEDIA}?${params}`, {
-            method: "GET",
-            headers: {
-                "x-api-gateway-auth": "", // TODO this has to be removed after set up in Cloudfront
-            },
+            method: "GET"
         });
 
         if (!response.ok) {
