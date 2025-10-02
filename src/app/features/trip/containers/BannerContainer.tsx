@@ -3,20 +3,17 @@ import Banner from "@/shared/components/Banner.tsx";
 import ImagePicker from "@/shared/components/ImagePicker.tsx";
 import LoadingOverlay from "@/shared/components/LoadingOverlay.tsx";
 import { API_UPLOAD_MEDIA } from "@/shared/constants/constants.ts";
-import { useSelector } from "react-redux";
-import { RootState } from "@/shared/store/redux";
+
 const getPresignedUrl = async (
   tripId: number,
-  file: File,
-  username: string,
+  file: File
 ): Promise<{ upload_url: string; file_key: string } | undefined> => {
   try {
     const [filenameWithoutExt, extension] = file.name.split(".");
     const queryParams = {
-      tripId: tripId,
-      filename: filenameWithoutExt,
-      ext: extension,
-      createdBy: username,
+      trip_id: tripId,
+      file_key: filenameWithoutExt,
+      ext: extension
     };
 
     const params = new URLSearchParams();
@@ -46,9 +43,6 @@ const getPresignedUrl = async (
 
 const BannerContainer = ({ tripId }: { tripId: number }) => {
   const [loading, setLoading] = useState(false);
-  const authenticatedUser = useSelector(
-    (state: RootState) => state.auth.authenticatedUser,
-  );
 
   const handleFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -56,12 +50,11 @@ const BannerContainer = ({ tripId }: { tripId: number }) => {
     setLoading(true);
     const file = event.target.files?.[0];
 
-    if (file && file.type.startsWith("image/") && authenticatedUser) {
+    if (file && file.type.startsWith("image/")) {
       try {
         const presignedUrlData = await getPresignedUrl(
           tripId,
-          file,
-          authenticatedUser.fullName,
+          file
         );
 
         if (
