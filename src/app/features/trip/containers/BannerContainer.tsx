@@ -2,86 +2,95 @@ import React, { useState } from "react";
 import Banner from "@/shared/components/Banner.tsx";
 import ImagePicker from "@/shared/components/ImagePicker.tsx";
 import LoadingOverlay from "@/shared/components/LoadingOverlay.tsx";
-import {API_UPLOAD_MEDIA} from "@/shared/constants/constants.ts";
-import {useSelector} from "react-redux";
-import {RootState} from "@/shared/store/redux";
-import {IUser} from "@/types.ts";
-
+import { API_UPLOAD_MEDIA } from "@/shared/constants/constants.ts";
+import { useSelector } from "react-redux";
+import { RootState } from "@/shared/store/redux";
 const getPresignedUrl = async (
-    file: File,
-    user: IUser
+  tripId: number,
+  file: File,
+  username: string,
 ): Promise<{ upload_url: string; file_key: string } | undefined> => {
-    try {
-        const [filenameWithoutExt, extension] = file.name.split(".")
-        const queryParams = {
-            userId: user.id,
-            filename: filenameWithoutExt,
-            ext: extension,
-        };
+  try {
+    const [filenameWithoutExt, extension] = file.name.split(".");
+    const queryParams = {
+      tripId: tripId,
+      filename: filenameWithoutExt,
+      ext: extension,
+      createdBy: username,
+    };
 
-        const params = new URLSearchParams();
-        for (const [key, value] of Object.entries(queryParams)) {
-            params.append(key, value as string);
-        }
-
-        const response = await fetch(`${API_UPLOAD_MEDIA}?${params}`, {
-            method: "GET"
-        });
-
-        if (!response.ok) {
-            throw new Error(`Get presigned url failed: ${response.statusText}`);
-        }
-
-        const data = await response.json();
-
-        return {
-            upload_url: data["upload_url"],
-            file_key: data["file_key"],
-        };
-    } catch (error) {
-        console.error(error);
-        return undefined;
+    const params = new URLSearchParams();
+    for (const [key, value] of Object.entries(queryParams)) {
+      params.append(key, value as string);
     }
+
+    const response = await fetch(`${API_UPLOAD_MEDIA}?${params}`, {
+      method: "GET",
+    });
+
+    if (!response.ok) {
+      throw new Error(`Get presigned url failed: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+
+    return {
+      upload_url: data["upload_url"],
+      file_key: data["file_key"],
+    };
+  } catch (error) {
+    console.error(error);
+    return undefined;
+  }
 };
 
-
-const BannerContainer = () => {
+const BannerContainer = ({ tripId }: { tripId: number }) => {
   const [loading, setLoading] = useState(false);
-    const authenticatedUser = useSelector(
-        (state: RootState) => state.auth.authenticatedUser,
-    );
+  const authenticatedUser = useSelector(
+    (state: RootState) => state.auth.authenticatedUser,
+  );
 
-
-  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     setLoading(true);
     const file = event.target.files?.[0];
 
     if (file && file.type.startsWith("image/") && authenticatedUser) {
       try {
-          const presignedUrlData = await getPresignedUrl(file, authenticatedUser);
+        const presignedUrlData = await getPresignedUrl(
+          tripId,
+          file,
+          authenticatedUser.fullName,
+        );
 
-          if (presignedUrlData && presignedUrlData.upload_url && presignedUrlData.file_key) {
-              const { upload_url, file_key } = presignedUrlData;
+        if (
+          presignedUrlData &&
+          presignedUrlData.upload_url &&
+          presignedUrlData.file_key
+        ) {
+          const { upload_url, file_key } = presignedUrlData;
 
-              const response = await fetch(upload_url, {
-                  method: "PUT",
-                  body: file,
-                  headers: {
-                      "Content-Type": file.type,
-                  }
-              });
+          const response = await fetch(upload_url, {
+            method: "PUT",
+            body: file,
+            headers: {
+              "Content-Type": file.type,
+            },
+          });
 
-              if (!response.ok) {
-                  throw new Error(`Upload failed: ${response.statusText} , file_key ${file_key}`);
-              }
-
-              console.log("Upload success: ", file_key);
-              setLoading(false);
+          if (!response.ok) {
+            throw new Error(
+              `Upload failed: ${response.statusText} , file_key ${file_key}`,
+            );
           }
 
+          console.log("Upload success: ", file_key);
+          setLoading(false);
+        }
       } catch (error) {
         console.error("Upload error: ", error);
-          setLoading(false);
+        setLoading(false);
       }
     }
   };

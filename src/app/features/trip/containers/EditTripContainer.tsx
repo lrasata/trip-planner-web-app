@@ -113,7 +113,7 @@ const EditTripContainer = ({ trip, status, error }: EditTripContainerProps) => {
 
   return (
     <>
-      <BannerContainer />
+      {trip.id && <BannerContainer tripId={trip.id} />}
       <Box pt={40} pb={10}>
         {tripFormData && (
           <Stack spacing={3}>
