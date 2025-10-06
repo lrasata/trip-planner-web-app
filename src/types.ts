@@ -22,7 +22,7 @@ export interface ITrip {
   returnDate?: string;
   participantCount?: number;
   participants?: IUser[];
-  metadata?: Metadata[];
+  metadata: Metadata[];
 }
 
 export interface ILocation {

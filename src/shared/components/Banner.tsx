@@ -2,7 +2,7 @@ import { Box, styled } from "@mui/material";
 import React from "react";
 
 interface StyledBannerProps {
-  imageUrl?: string;
+  imageUrl: string;
 }
 
 const StyledBanner = styled(Box, {
@@ -15,7 +15,7 @@ const StyledBanner = styled(Box, {
   marginRight: "-50vw",
   width: "100vw",
   height: "45vh",
-  backgroundImage: `url(${imageUrl || "/background.png"})`,
+  backgroundImage: `url(${imageUrl})`,
   backgroundSize: "cover",
   backgroundPosition: "center",
   display: "flex",
@@ -31,7 +31,7 @@ const Content = styled(Box)(({ theme }) => ({
 
 interface BannerProps {
   children?: React.ReactNode;
-  imageUrl?: string;
+  imageUrl: string;
 }
 const Banner = ({ children, imageUrl }: BannerProps) => {
   return (

@@ -8,6 +8,8 @@ import {
 } from "@/shared/constants/constants.ts";
 import { ITrip } from "@/types.ts";
 
+const DEFAULT_IMAGE_URL = "/background.png";
+
 const getPresignedUrl = async (
   tripId: number,
   file: File,
@@ -96,7 +98,11 @@ const BannerContainer = ({ trip }: BannerContainerProps) => {
   return (
     <>
       <Banner
-        imageUrl={`${API_BACKEND_URL}/${trip.metadata && trip.metadata[0].fileKey}`}
+        imageUrl={
+          trip.metadata.length > 0
+            ? `${API_BACKEND_URL}/${trip.metadata[0].fileKey}`
+            : DEFAULT_IMAGE_URL
+        }
       >
         <ImagePicker handleFileChange={handleFileChange} />
       </Banner>
