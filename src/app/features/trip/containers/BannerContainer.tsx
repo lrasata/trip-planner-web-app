@@ -2,18 +2,22 @@ import React, { useState } from "react";
 import Banner from "@/shared/components/Banner.tsx";
 import ImagePicker from "@/shared/components/ImagePicker.tsx";
 import LoadingOverlay from "@/shared/components/LoadingOverlay.tsx";
-import { API_UPLOAD_MEDIA } from "@/shared/constants/constants.ts";
+import {
+  API_BACKEND_URL,
+  API_UPLOAD_MEDIA,
+} from "@/shared/constants/constants.ts";
+import { ITrip } from "@/types.ts";
 
 const getPresignedUrl = async (
   tripId: number,
-  file: File
+  file: File,
 ): Promise<{ upload_url: string; file_key: string } | undefined> => {
   try {
     const [filenameWithoutExt, extension] = file.name.split(".");
     const queryParams = {
       trip_id: tripId,
       file_key: filenameWithoutExt,
-      ext: extension
+      ext: extension,
     };
 
     const params = new URLSearchParams();
@@ -41,7 +45,11 @@ const getPresignedUrl = async (
   }
 };
 
-const BannerContainer = ({ tripId }: { tripId: number }) => {
+interface BannerContainerProps {
+  trip: ITrip;
+}
+
+const BannerContainer = ({ trip }: BannerContainerProps) => {
   const [loading, setLoading] = useState(false);
 
   const handleFileChange = async (
@@ -50,12 +58,9 @@ const BannerContainer = ({ tripId }: { tripId: number }) => {
     setLoading(true);
     const file = event.target.files?.[0];
 
-    if (file && file.type.startsWith("image/")) {
+    if (file && file.type.startsWith("image/") && trip.id) {
       try {
-        const presignedUrlData = await getPresignedUrl(
-          tripId,
-          file
-        );
+        const presignedUrlData = await getPresignedUrl(trip.id, file);
 
         if (
           presignedUrlData &&
@@ -90,7 +95,9 @@ const BannerContainer = ({ tripId }: { tripId: number }) => {
 
   return (
     <>
-      <Banner>
+      <Banner
+        imageUrl={`${API_BACKEND_URL}/${trip.metadata && trip.metadata[0].fileKey}`}
+      >
         <ImagePicker handleFileChange={handleFileChange} />
       </Banner>
       <LoadingOverlay visible={loading} message="Uploading image..." />
