@@ -33,6 +33,8 @@ jobs:
       - name: Configure AWS credentials (OIDC)
         id: configure-aws
         uses: aws-actions/configure-aws-credentials@v4
+        env:
+          ACTIONS_STEP_DEBUG: true
         with:
           role-to-assume: arn:aws:iam::387836084035:role/githubTripWebPlannerApp
           aws-region: eu-central-1
