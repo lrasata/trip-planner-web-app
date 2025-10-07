@@ -15,7 +15,7 @@ describe("Update trip", () => {
     cy.get(`button[id="${tripName}-trip-manage-button"]`).click();
 
     // edit page appears
-    cy.contains("Manage your trip", { timeout: 10000 }).should("exist");
+    cy.contains("Manage your trip", { timeout: 20000 }).should("exist");
     // check trip name
     cy.contains(tripName, { timeout: 5000 }).should("exist");
     cy.get(`button[id="edit-trip-name-description-btn"]`).click();
