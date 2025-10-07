@@ -56,6 +56,7 @@ export const fetchTrip = createAsyncThunk(
         trip: {
           ...tripData,
           participants: participants,
+          metadata: [...tripData.metadataList],
         },
       };
     } catch (error) {

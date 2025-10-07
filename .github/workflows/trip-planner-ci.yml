@@ -6,6 +6,10 @@ on:
   pull_request:
     branches: [main]
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
@@ -25,29 +29,21 @@ jobs:
           --health-timeout 5s
           --health-retries 5
 
-      backend:
-        image: lrasata/trip-planner-backend-app:1.0.0
-        ports:
-          - 8080:8080
-        env:
-          SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/tripdb
-          SPRING_DATASOURCE_USERNAME: postgres
-          SPRING_DATASOURCE_PASSWORD: ${{ secrets.SPRING_DATASOURCE_PASSWORD }}
-          JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
-          ALLOWED_ORIGINS: http://localhost:5173
-          COOKIE_SECURE_ATTRIBUTE: False
-          COOKIE_SAME_SITE: Lax
-          SUPER_ADMIN_FULLNAME: admin
-          SUPER_ADMIN_EMAIL: admin@admin.com
-          SUPER_ADMIN_PASSWORD: ${{ secrets.SUPER_ADMIN_PASSWORD }}
-          ENVIRONMENT: production
-        options: >-
-          --health-cmd "curl -f http://localhost:8080/actuator/health || exit 1"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=5
-
     steps:
+      - name: Print GitHub OIDC token
+        run: echo $ACTIONS_ID_TOKEN_REQUEST
+
+      - name: Configure AWS credentials (OIDC)
+        id: configure-aws
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::387836084035:role/githubTripWebPlannerApp
+          aws-region: eu-central-1
+          output-env-credentials: true
+
+      - name: Verify AWS identity
+        run: aws sts get-caller-identity
+
       - name: 🛎️ Checkout repository
         uses: actions/checkout@v4
 
@@ -66,6 +62,32 @@ jobs:
 
       - name: 🛠 Build
         run: npm run build
+
+      - name: ▶ Start backend container with AWS credentials
+        run: |
+          docker run -d \
+            --name backend \
+            -p 8080:8080 \
+            -e SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/tripdb \
+            -e SPRING_DATASOURCE_USERNAME=postgres \
+            -e SPRING_DATASOURCE_PASSWORD=${{ secrets.SPRING_DATASOURCE_PASSWORD }} \
+            -e JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }} \
+            -e ALLOWED_ORIGINS=http://localhost:5173 \
+            -e COOKIE_SECURE_ATTRIBUTE=False \
+            -e COOKIE_SAME_SITE=Lax \
+            -e SUPER_ADMIN_FULLNAME=admin \
+            -e SUPER_ADMIN_EMAIL=admin@admin.com \
+            -e SUPER_ADMIN_PASSWORD=${{ secrets.SUPER_ADMIN_PASSWORD }} \
+            -e ENVIRONMENT=production \
+            -e AWS_REGION=eu-central-1 \
+            -e DYNAMODB_TABLE_NAME=staging-files-metadata \
+            -e S3_BUCKET_NAME=staging-trip-planner-app-media-uploads-bucket \
+            -e AWS_ACCESS_KEY_ID=${{ steps.configure-aws.outputs.AWS_ACCESS_KEY_ID }} \
+            -e AWS_SECRET_ACCESS_KEY=${{ steps.configure-aws.outputs.AWS_SECRET_ACCESS_KEY }} \
+            -e AWS_SESSION_TOKEN=${{ steps.configure-aws.outputs.AWS_SESSION_TOKEN }} \
+            lrasata/trip-planner-backend-app:1.1.0-rc2
+        env:
+          POSTGRES_HOST: localhost
 
       - name: ▶ Start frontend in background
         run: npm run dev &
@@ -94,8 +116,7 @@ jobs:
         run: rm -rf cypress/e2e/*.cy.js cypress/e2e/**/*.cy.js
 
       - name: 🧪 Run E2E tests with Cypress
-        run: |
-          npx cypress run
+        run: npx cypress run
         env:
           CYPRESS_BASE_URL: http://localhost:5173
           CYPRESS_TEST_PASSWORD: ${{ secrets.SUPER_ADMIN_PASSWORD }}

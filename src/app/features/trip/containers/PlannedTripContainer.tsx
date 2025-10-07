@@ -1,4 +1,4 @@
-import TripCard from "../components/TripCard.tsx";
+import TripCard from "../components/cards/TripCard.tsx";
 import Typography from "@mui/material/Typography";
 import { Box } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";

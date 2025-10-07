@@ -1,8 +1,6 @@
 import Typography from "@mui/material/Typography";
-import TextField from "@mui/material/TextField";
 import { ILocation, ITrip, IUser } from "@/types.ts";
 import Stack from "@mui/material/Stack";
-import BasicDatePicker from "@/shared/components/BasicDatePicker.tsx";
 import dayjs, { Dayjs } from "dayjs";
 import Button from "@mui/material/Button";
 import { ChangeEvent, lazy, Suspense, useEffect, useState } from "react";
@@ -12,13 +10,14 @@ import { deleteTrip, updateTrip } from "@/shared/store/redux/TripSlice.ts";
 import { useNavigate } from "react-router-dom";
 import AutoDismissAlert from "@/shared/components/AutoDismissAlert.tsx";
 import Divider from "@mui/material/Divider";
-import Grid from "@mui/material/Grid";
 import Spinner from "@/shared/components/Spinner.tsx";
 import Box from "@mui/material/Box";
 import { Card, useTheme } from "@mui/material";
-import TripLocationInputForm from "@/app/features/trip/components/TripLocationInputForm.tsx";
-import TripParticipantInputForm from "@/app/features/trip/components/TripParticipantInputForm.tsx";
 import { AppDispatch } from "@/shared/store/redux/index.ts";
+import EditDatesAndDestinations from "@/app/features/trip/components/edit/EditDatesAndDestinations.tsx";
+import EditParticipants from "@/app/features/trip/components/edit/EditParticipants.tsx";
+import EditNameAndDescription from "@/app/features/trip/components/edit/EditNameAndDescription.tsx";
+import TripBannerContainer from "@/app/features/trip/containers/TripBannerContainer.tsx";
 
 const Dialog = lazy(() => import("@/shared/components/Dialog.tsx"));
 
@@ -113,114 +112,48 @@ const EditTripContainer = ({ trip, status, error }: EditTripContainerProps) => {
   };
 
   return (
-    <Box py={10}>
-      {tripFormData && (
-        <Grid container spacing={4}>
-          <Grid size={{ xs: 12, md: 8 }}>
-            <Stack direction="column" spacing={3}>
-              {status === "updated" && (
-                <AutoDismissAlert
-                  severity="success"
-                  message="Changes saved successfully"
-                />
-              )}
-              {status === "failed" && (
-                <AutoDismissAlert
-                  severity="error"
-                  message={error || "Something went wrong"}
-                />
-              )}
-              <Typography variant="h2" gutterBottom color="textSecondary">
-                Manage your trip
-              </Typography>
-              <TextField
-                id="edit-trip-name-input"
-                type="text"
-                label="Name"
-                value={tripFormData.name || ""}
-                onChange={handleInputChange("name")}
-                required
-                error={!tripFormData.name}
+    <>
+      {trip.id && <TripBannerContainer trip={trip} />}
+      <Box pt={40} pb={10}>
+        {tripFormData && (
+          <Stack spacing={3}>
+            <Card sx={{ padding: 3, minHeight: 100, zIndex: 1 }}>
+              <EditNameAndDescription
+                trip={tripFormData}
+                handleInputChange={handleInputChange}
+                handleOnSave={handleOnSave}
               />
-              <TextField
-                id="edit-trip-description-input"
-                type="text"
-                label="Description"
-                value={tripFormData.description}
-                onChange={handleInputChange("description")}
+            </Card>
+            {status === "updated" && (
+              <AutoDismissAlert
+                severity="success"
+                message="Changes saved successfully"
               />
-              <Divider />
-              <BasicDatePicker
-                id="edit-departure-date-input"
-                value={dayjs(tripFormData.departureDate) ?? ""}
-                label="Departure date"
-                onChange={handleDateChange("departureDate")}
-                hasError={invalidDates}
-                helperText="Invalid date"
+            )}
+            {status === "failed" && (
+              <AutoDismissAlert
+                severity="error"
+                message={error || "Something went wrong"}
               />
-              <BasicDatePicker
-                id="edit-return-date-input"
-                value={dayjs(tripFormData.returnDate) ?? ""}
-                label="Return date"
-                onChange={handleDateChange("returnDate")}
-                hasError={invalidDates}
-                helperText="Invalid date"
-              />
-              <Divider />
-              <TripLocationInputForm
-                {...(tripFormData.departureLocation && {
-                  departureLocation: tripFormData.departureLocation,
-                })}
-                {...(tripFormData.arrivalLocation && {
-                  arrivalLocation: tripFormData.arrivalLocation,
-                })}
-                handleOnSelectDepartureLocation={handleLocationInputChange(
-                  "departureLocation",
-                )}
-                handleOnSelectArrivalLocation={handleLocationInputChange(
-                  "arrivalLocation",
-                )}
-              />
-            </Stack>
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            <Stack spacing={2}>
-              <Card sx={{ padding: 2 }}>
-                <Typography variant="h3" gutterBottom color="textSecondary">
-                  Participants
-                </Typography>
-                <TripParticipantInputForm
-                  onEdit
-                  {...(tripFormData.participantCount && {
-                    participantCount: tripFormData.participantCount,
-                  })}
-                  {...(tripFormData.participants && {
-                    participants: tripFormData.participants,
-                  })}
-                  handleOnSelectParticipant={handleOnSelectParticipant(
-                    "participants",
-                  )}
-                  handleInputParticipantCountChange={handleInputChange(
-                    "participantCount",
-                  )}
-                  handleOnRemoveParticipant={handleOnRemoveParticipant(
-                    "participants",
-                  )}
-                />
-              </Card>
+            )}
+            <EditDatesAndDestinations
+              trip={tripFormData}
+              invalidDates={invalidDates}
+              handleDateChange={handleDateChange}
+              handleLocationInputChange={handleLocationInputChange}
+              handleOnSave={handleOnSave}
+            />
+            <Divider />
+            <EditParticipants
+              trip={tripFormData}
+              handleInputChange={handleInputChange}
+              handleOnSelectParticipant={handleOnSelectParticipant}
+              handleOnRemoveParticipant={handleOnRemoveParticipant}
+              handleOnSave={handleOnSave}
+            />
 
-              <Button
-                variant="contained"
-                onClick={handleOnSave}
-                disabled={!tripFormData.name}
-              >
-                Save updates
-              </Button>
-              <Button variant="outlined" onClick={() => navigate(-1)}>
-                Back
-              </Button>
-
-              <Divider />
+            <Divider />
+            <Stack direction="row" spacing={2}>
               <Button
                 variant="outlined"
                 onClick={handleOnOpenDialog}
@@ -228,42 +161,45 @@ const EditTripContainer = ({ trip, status, error }: EditTripContainerProps) => {
               >
                 Permanently delete
               </Button>
+              <Button variant="outlined" onClick={() => navigate(-1)}>
+                Back
+              </Button>
             </Stack>
-          </Grid>
-        </Grid>
-      )}
-      {isDialogOpen && (
-        <Suspense fallback={<Spinner />}>
-          <Dialog
-            open={isDialogOpen}
-            onClose={handleOnCloseDialog}
-            title="Delete a trip"
-            content={
-              <Box py={1} sx={{ minWidth: theme.spacing(56) }}>
-                <Typography variant="body1" gutterBottom>
-                  Please confirm the deletion of this trip.
-                </Typography>
-                <Typography variant="body1" color="error" gutterBottom>
-                  Be aware that this action cannot be undone
-                </Typography>
-                <Stack direction="row" spacing={1} mt={3}>
-                  <Button
-                    variant="contained"
-                    onClick={handleOnDelete}
-                    color="error"
-                  >
-                    Permanently delete
-                  </Button>
-                  <Button variant="outlined" onClick={handleOnCloseDialog}>
-                    Cancel
-                  </Button>
-                </Stack>
-              </Box>
-            }
-          />
-        </Suspense>
-      )}
-    </Box>
+          </Stack>
+        )}
+        {isDialogOpen && (
+          <Suspense fallback={<Spinner />}>
+            <Dialog
+              open={isDialogOpen}
+              onClose={handleOnCloseDialog}
+              title="Delete a trip"
+              content={
+                <Box py={1} sx={{ minWidth: theme.spacing(56) }}>
+                  <Typography variant="body1" gutterBottom>
+                    Please confirm the deletion of this trip.
+                  </Typography>
+                  <Typography variant="body1" color="error" gutterBottom>
+                    Be aware that this action cannot be undone
+                  </Typography>
+                  <Stack direction="row" spacing={1} mt={3}>
+                    <Button
+                      variant="contained"
+                      onClick={handleOnDelete}
+                      color="error"
+                    >
+                      Permanently delete
+                    </Button>
+                    <Button variant="outlined" onClick={handleOnCloseDialog}>
+                      Cancel
+                    </Button>
+                  </Stack>
+                </Box>
+              }
+            />
+          </Suspense>
+        )}
+      </Box>
+    </>
   );
 };
 

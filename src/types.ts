@@ -6,6 +6,12 @@ export interface IStep {
   component?: ReactElement;
 }
 
+export interface ITripMetadata {
+  tripId: number;
+  fileKey: string;
+  thumbnailKey: string;
+}
+
 export interface ITrip {
   id?: number;
   name: string;
@@ -16,6 +22,7 @@ export interface ITrip {
   returnDate?: string;
   participantCount?: number;
   participants?: IUser[];
+  metadata: ITripMetadata[];
 }
 
 export interface ILocation {
