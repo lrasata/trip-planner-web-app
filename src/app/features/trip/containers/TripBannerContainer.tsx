@@ -51,7 +51,7 @@ interface BannerContainerProps {
   trip: ITrip;
 }
 
-const BannerContainer = ({ trip }: BannerContainerProps) => {
+const TripBannerContainer = ({ trip }: BannerContainerProps) => {
   const [loading, setLoading] = useState(false);
 
   const handleFileChange = async (
@@ -84,8 +84,6 @@ const BannerContainer = ({ trip }: BannerContainerProps) => {
               `Upload failed: ${response.statusText} , file_key ${file_key}`,
             );
           }
-
-          console.log("Upload success: ", file_key);
           setLoading(false);
         }
       } catch (error) {
@@ -111,4 +109,4 @@ const BannerContainer = ({ trip }: BannerContainerProps) => {
   );
 };
 
-export default BannerContainer;
+export default TripBannerContainer;

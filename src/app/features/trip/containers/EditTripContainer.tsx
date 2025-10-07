@@ -17,7 +17,7 @@ import { AppDispatch } from "@/shared/store/redux/index.ts";
 import EditDatesAndDestinations from "@/app/features/trip/components/edit/EditDatesAndDestinations.tsx";
 import EditParticipants from "@/app/features/trip/components/edit/EditParticipants.tsx";
 import EditNameAndDescription from "@/app/features/trip/components/edit/EditNameAndDescription.tsx";
-import BannerContainer from "@/app/features/trip/containers/BannerContainer.tsx";
+import TripBannerContainer from "@/app/features/trip/containers/TripBannerContainer.tsx";
 
 const Dialog = lazy(() => import("@/shared/components/Dialog.tsx"));
 
@@ -113,7 +113,7 @@ const EditTripContainer = ({ trip, status, error }: EditTripContainerProps) => {
 
   return (
     <>
-      {trip.id && <BannerContainer trip={trip} />}
+      {trip.id && <TripBannerContainer trip={trip} />}
       <Box pt={40} pb={10}>
         {tripFormData && (
           <Stack spacing={3}>
