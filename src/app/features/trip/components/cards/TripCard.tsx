@@ -19,7 +19,7 @@ const TripCard = ({
   departureDate,
   returnDate,
   onClick,
-}: ITrip & {
+}: Omit<ITrip, "metadata"> & {
   onClick: () => void;
 }) => {
   const departureLocationText = getLocationText(departureLocation);
