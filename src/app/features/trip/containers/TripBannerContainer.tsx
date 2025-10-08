@@ -7,6 +7,9 @@ import {
   API_UPLOAD_MEDIA,
 } from "@/shared/constants/constants.ts";
 import { ITrip } from "@/types.ts";
+import { fetchTrip } from "@/shared/store/redux/TripSlice.ts";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/shared/store/redux";
 
 const DEFAULT_IMAGE_URL = "/background.png";
 
@@ -20,6 +23,7 @@ const getPresignedUrl = async (
       trip_id: tripId,
       file_key: filenameWithoutExt,
       ext: extension,
+      resource: "trips",
     };
 
     const params = new URLSearchParams();
@@ -53,6 +57,7 @@ interface BannerContainerProps {
 
 const TripBannerContainer = ({ trip }: BannerContainerProps) => {
   const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch<AppDispatch>();
 
   const handleFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -83,7 +88,11 @@ const TripBannerContainer = ({ trip }: BannerContainerProps) => {
             throw new Error(
               `Upload failed: ${response.statusText} , file_key ${file_key}`,
             );
+          } else {
+            console.log("refetch trip");
+            trip.id && dispatch(fetchTrip({ id: trip.id }));
           }
+
           setLoading(false);
         }
       } catch (error) {
@@ -97,8 +106,8 @@ const TripBannerContainer = ({ trip }: BannerContainerProps) => {
     <>
       <Banner
         imageUrl={
-          trip.metadata.length > 0
-            ? `${API_BACKEND_URL}/${trip.metadata[0].fileKey}`
+          trip.metadata && trip.metadata.length > 0
+            ? `${API_BACKEND_URL}/${trip.metadata[trip.metadata.length - 1].fileKey}`
             : DEFAULT_IMAGE_URL
         }
       >

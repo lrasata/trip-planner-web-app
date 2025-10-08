@@ -28,7 +28,7 @@ const initialTripState: ITripState = {
 
 export const fetchTrip = createAsyncThunk(
   "trips/fetchTrip",
-  async (arg: { id?: string }, { rejectWithValue }) => {
+  async (arg: { id: number }, { rejectWithValue }) => {
     try {
       const tripResponse = await api.get(`${API_BACKEND_URL}/trips/${arg.id}`, {
         withCredentials: true,

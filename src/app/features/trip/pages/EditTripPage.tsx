@@ -13,7 +13,7 @@ const EditTripPage = () => {
   const error = useSelector((state: RootState) => state.trips.error);
 
   useEffect(() => {
-    dispatch(fetchTrip({ id }));
+    dispatch(fetchTrip({ id: Number(id) }));
   }, []);
 
   return (
