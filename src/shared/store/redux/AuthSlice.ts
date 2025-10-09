@@ -13,13 +13,19 @@ interface AuthState {
   error: string | null;
 }
 
+const persistedIsLoggedIn = localStorage.getItem("isLoggedIn");
+
+const preloadedAuthState = persistedIsLoggedIn
+  ? { isLoggedIn: JSON.parse(persistedIsLoggedIn) }
+  : { isLoggedIn: false };
+
 const initialState: AuthState = {
   token: null,
   refreshToken: null,
-  isLoggedIn: false,
   authenticatedUser: undefined,
   status: "idle", // 'idle' | 'loading' | 'succeeded' | 'failed' | 'created' | 'updated' | 'deleted'
   error: null,
+  ...preloadedAuthState,
 };
 
 export const fetchAuthenticatedUser = createAsyncThunk(
@@ -90,10 +96,19 @@ const authSlice = createSlice({
     ) {
       state.token = action.payload.token;
       state.refreshToken = action.payload.refreshToken;
+      state.isLoggedIn = !!action.payload.token;
+
+      // Save only isLoggedIn to localStorage
+      localStorage.setItem("isLoggedIn", JSON.stringify(state.isLoggedIn));
     },
     clearTokens(state) {
       state.token = null;
       state.refreshToken = null;
+      state.isLoggedIn = false;
+      state.authenticatedUser = undefined;
+
+      // Remove from localStorage
+      localStorage.removeItem("isLoggedIn");
     },
     updateIsLoggedInState(
       state,
@@ -103,6 +118,8 @@ const authSlice = createSlice({
       if (!action.payload.isLoggedIn) {
         state.authenticatedUser = undefined;
       }
+      // Keep storage in sync
+      localStorage.setItem("isLoggedIn", JSON.stringify(state.isLoggedIn));
     },
     reset() {
       return { ...initialState };
