@@ -9,7 +9,8 @@ export interface IStep {
 export interface ITripMetadata {
   tripId: number;
   fileKey: string;
-  thumbnailKey: string;
+  thumbnailKey?: string;
+  selected?: boolean;
 }
 
 export interface ITrip {
@@ -22,7 +23,7 @@ export interface ITrip {
   returnDate?: string;
   participantCount?: number;
   participants?: IUser[];
-  metadata: ITripMetadata[];
+  metadataList: ITripMetadata[];
 }
 
 export interface ILocation {

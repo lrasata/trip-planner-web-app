@@ -102,15 +102,18 @@ const TripBannerContainer = ({ trip }: BannerContainerProps) => {
     }
   };
 
+  const getSelectedImageUrl = (trip: ITrip) => {
+    if (!trip?.metadataList?.length) return DEFAULT_IMAGE_URL;
+
+    const selected = trip.metadataList.find((metadata) => metadata.selected);
+    const fileKey = selected ? selected.fileKey : trip.metadataList[0].fileKey;
+
+    return `${API_BACKEND_URL}/${fileKey}`;
+  };
+
   return (
     <>
-      <Banner
-        imageUrl={
-          trip.metadata && trip.metadata.length > 0
-            ? `${API_BACKEND_URL}/${trip.metadata[trip.metadata.length - 1].fileKey}`
-            : DEFAULT_IMAGE_URL
-        }
-      >
+      <Banner imageUrl={getSelectedImageUrl(trip)}>
         <ImagePicker handleFileChange={handleFileChange} />
       </Banner>
       <LoadingOverlay visible={loading} message="Uploading image..." />

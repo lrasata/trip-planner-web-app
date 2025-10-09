@@ -1,7 +1,7 @@
 {
   "name": "trip-planner-web-app",
   "private": true,
-  "version": "1.1.0-rc2",
+  "version": "1.1.0-rc3",
   "scripts": {
     "dev": "vite --port 5173",
     "build": "tsc -b && vite build",

@@ -10,7 +10,7 @@ const initialState: ITrip = {
   returnDate: "",
   participantCount: undefined,
   participants: undefined,
-  metadata: [],
+  metadataList: [],
 };
 
 const draftTripSlice = createSlice({
