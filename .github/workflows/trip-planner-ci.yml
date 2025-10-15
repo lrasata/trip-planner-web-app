@@ -30,7 +30,7 @@ jobs:
           --health-retries 5
 
       backend:
-        image: lrasata/trip-planner-backend-app:1.1.0-rc2
+        image: lrasata/trip-planner-backend-app:1.1.0-rc5
         ports:
           - 8080:8080
         env:
