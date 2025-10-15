@@ -1,13 +1,15 @@
 import { Box, styled } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import Typography from "@mui/material/Typography";
 
-interface StyledBannerProps {
+interface BannerProps {
+  children?: React.ReactNode;
   imageUrl: string;
 }
 
 const StyledBanner = styled(Box, {
   shouldForwardProp: (prop) => prop !== "imageUrl",
-})<StyledBannerProps>(({ imageUrl }) => ({
+})<{ imageUrl?: string }>(({ imageUrl, theme }) => ({
   position: "absolute",
   left: "50%",
   right: "50%",
@@ -15,7 +17,8 @@ const StyledBanner = styled(Box, {
   marginRight: "-50vw",
   width: "100vw",
   height: "45vh",
-  backgroundImage: `url(${imageUrl})`,
+  backgroundImage: imageUrl ? `url(${imageUrl})` : "none",
+  backgroundColor: imageUrl ? "transparent" : theme.palette.background.default, // fallback
   backgroundSize: "cover",
   backgroundPosition: "center",
   display: "flex",
@@ -29,14 +32,37 @@ const Content = styled(Box)(({ theme }) => ({
   marginTop: theme.spacing(10),
 }));
 
-interface BannerProps {
-  children?: React.ReactNode;
-  imageUrl: string;
-}
 const Banner = ({ children, imageUrl }: BannerProps) => {
+  const [isValid, setIsValid] = useState(true);
+
+  useEffect(() => {
+    if (!imageUrl) return;
+    const img = new Image();
+    img.src = imageUrl;
+
+    img.onload = () => setIsValid(true);
+    img.onerror = () => {
+      console.warn(`⚠️ Failed to load banner image: ${imageUrl}`);
+      setIsValid(false);
+    };
+  }, [imageUrl]);
+
   return (
-    <StyledBanner imageUrl={imageUrl}>
-      <Content>{children}</Content>
+    <StyledBanner imageUrl={isValid ? imageUrl : undefined}>
+      <Content>
+        {children}
+        {!isValid && (
+          <Typography
+            color="textSecondary"
+            sx={{
+              textAlign: "center",
+            }}
+            my={2}
+          >
+            Unable to display image
+          </Typography>
+        )}
+      </Content>
     </StyledBanner>
   );
 };
