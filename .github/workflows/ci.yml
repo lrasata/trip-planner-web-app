@@ -1,4 +1,4 @@
-name: Trip-Planner-CI
+name: Build and test Web app
 
 on:
   push:

@@ -89,7 +89,6 @@ const TripBannerContainer = ({ trip }: BannerContainerProps) => {
               `Upload failed: ${response.statusText} , file_key ${file_key}`,
             );
           } else {
-            console.log("refetch trip");
             trip.id && dispatch(fetchTrip({ id: trip.id }));
           }
 
