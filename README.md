@@ -1,6 +1,6 @@
 # Trip Planner Web App
 
-[![CI](https://github.com/lrasata/trip-planner-web-app/actions/workflows/trip-planner-ci.yml/badge.svg)](https://github.com/lrasata/trip-planner-web-app/actions/workflows/trip-planner-ci.yml)
+[![CI](https://github.com/lrasata/trip-planner-web-app/actions/workflows/ci.yml/badge.svg)](https://github.com/lrasata/trip-planner-web-app/actions/workflows/ci.yml)
 
 Trip Planner is a web app built for organizing travel plans such as flights, stays, activities, notes,
 and maps. It supports real-time collaboration, budget tracking, and personal touches like photos.
