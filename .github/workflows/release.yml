@@ -5,21 +5,14 @@ on:
     tags:
       - '*'  # triggers on any tag push
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   ci:
     runs-on: ubuntu-latest
     steps:
-      # AWS credentials
-      - name: Configure AWS credentials (OIDC)
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: arn:aws:iam::387836084035:role/githubTripWebPlannerApp
-          aws-region: eu-central-1
-          output-env-credentials: true
-
-      - name: Verify AWS identity
-        run: aws sts get-caller-identity
-
       # Checkout repo
       - uses: actions/checkout@v4
 
@@ -37,10 +30,10 @@ jobs:
 
       # Upload build folder for next job
       - name: Upload build artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: react-build
-          path: build/
+          path: dist/
 
   release:
     needs: ci
@@ -51,13 +44,25 @@ jobs:
     steps:
       # Download build folder
       - name: Download build artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: react-build
+          path: dist
+
+      # AWS credentials
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::387836084035:role/githubTripWebPlannerApp
+          aws-region: eu-central-1
+          output-env-credentials: true
+
+      - name: Verify AWS identity
+        run: aws sts get-caller-identity
 
       # Sync to S3
       - name: Sync build to S3
-        run: aws s3 sync build/ s3://$BUCKET --delete
+        run: aws s3 sync dist/ s3://$BUCKET --delete
 
       # Invalidate CloudFront
       - name: Invalidate CloudFront cache
