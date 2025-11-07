@@ -3,7 +3,7 @@ name: Staging - Build and Deploy React App
 on:
   push:
     tags:
-      - '*'  # triggers on any tag push
+      - "*" # triggers on any tag push
 
 permissions:
   id-token: write

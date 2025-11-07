@@ -19,11 +19,15 @@ const getPresignedUrl = async (
 ): Promise<{ upload_url: string; file_key: string } | undefined> => {
   try {
     const [filenameWithoutExt, extension] = file.name.split(".");
+
+    const mimeType = file.type || "application/octet-stream";
+
     const queryParams = {
-      trip_id: tripId,
+      id: tripId,
       file_key: filenameWithoutExt,
       ext: extension,
       resource: "trips",
+      mimeType,
     };
 
     const params = new URLSearchParams();
