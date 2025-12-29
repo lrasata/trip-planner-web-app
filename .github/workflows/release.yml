@@ -4,6 +4,15 @@ on:
   push:
     tags:
       - "*" # triggers on any tag push
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Which environment ?"
+        required: true
+        type: choice
+        options:
+          - staging
+          - ephemeral
 
 permissions:
   id-token: write
@@ -11,6 +20,7 @@ permissions:
 
 jobs:
   ci:
+    environment: ${{ github.event.inputs.environment || 'staging' }}
     runs-on: ubuntu-latest
     steps:
       # Checkout repo
@@ -41,17 +51,18 @@ jobs:
 
   release:
     needs: ci
+    environment: ${{ github.event.inputs.environment || 'staging' }}
     runs-on: ubuntu-latest
     env:
-      BUCKET: ${{ secrets.STAGING_REACT_APP_S3_BUCKET }}
-      DIST_ID: ${{ secrets.STAGING_REACT_APP_CLOUDFRONT_ID }}
+      BUCKET: ${{ secrets.REACT_APP_S3_BUCKET }}
+      DIST_ID: ${{ secrets.REACT_APP_CLOUDFRONT_ID }}
     steps:
       # Download build folder
       - name: Download build artifact
         uses: actions/download-artifact@v4
         with:
           name: react-build
-          path: dist
+          path: dist/
 
       # AWS credentials
       - name: Configure AWS credentials (OIDC)
@@ -70,5 +81,5 @@ jobs:
 
       # Invalidate CloudFront
       - name: Invalidate CloudFront cache
-        if: env.DIST_ID != 'null'
+        if: env.DIST_ID != ''
         run: aws cloudfront create-invalidation --distribution-id $DIST_ID --paths "/*"
